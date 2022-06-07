@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import Button from '../components/general/Button';
-import Logo from '../components/general/Logo';
-import Page from '../components/general/Page';
+import Button from '../components/Button';
+import Logo from '../components/Logo';
+import Page from '../components/Page';
 
 const Home: NextPage = () => {
   return (
-    <Page bgImage="images/bg-home.jpg">
+    <Page bgImage="/images/bg-home.jpg">
       <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center">
         <div className="flex flex-col gap-y-4 items-center lg:items-start w-full lg:w-auto">
           <Logo />
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
           <Image
             src="/images/killuarender.png"
             alt="Killua"
-            layout='responsive'
+            layout="responsive"
             width={712}
             height={1122}
           />
