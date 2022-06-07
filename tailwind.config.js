@@ -52,7 +52,7 @@ module.exports = {
         'monospace',
       ],
       cursive: ['Finger Paint', 'cursive'],
-      roboto: ['Robot', 'sans'],
+      roboto: ['Roboto', 'sans'],
     },
   },
   plugins: [],
