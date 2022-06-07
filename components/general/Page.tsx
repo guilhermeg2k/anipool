@@ -10,7 +10,7 @@ const Page = ({ children, bgImage }: PageProps) => {
         className="absolute h-full w-full bg-cover bg-no-repeat bg-center z-0"
         style={{ backgroundImage: `url('${bgImage}')` }}
       />
-      <div className="absolute p-4">{children}</div>
+      <div className="absolute h-full w-full px-4">{children}</div>
     </>
   );
 };
