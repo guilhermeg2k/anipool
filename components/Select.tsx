@@ -7,7 +7,7 @@ interface SelectOption {
   value: any;
 }
 
-interface SelectInputProps {
+interface SelectProps {
   value: any;
   label?: string;
   fullWidth?: boolean;
@@ -15,22 +15,19 @@ interface SelectInputProps {
   onChange: (value: any) => void;
 }
 
-const SelectInput = ({
+const Select = ({
   value,
   label = '',
   fullWidth = false,
   options,
   onChange = () => {},
-}: SelectInputProps) => {
+}: SelectProps) => {
   const selectButton = useMemo(() => {
     const selectedOption = options.find((option) => option.value === value);
     return (
       <div className="flex justify-between items-center">
         <span>{selectedOption ? selectedOption.label : label}</span>
-        <SelectorIcon
-          className="h-5 w-5 text-neutral-500 group-focus:text-indigo-600 group-hover:text-indigo-900"
-          aria-hidden="true"
-        />
+        <SelectorIcon className="h-5 w-5 text-neutral-500" aria-hidden="true" />
       </div>
     );
   }, [label, value, options]);
@@ -40,7 +37,7 @@ const SelectInput = ({
       <Listbox.Option
         key={index}
         value={option.value}
-        className="hover:bg-indigo-500 cursor-pointer p-2 text-neutral-700 
+        className="hover:bg-indigo-500 cursor-pointer p-2 text-neutral-600 
                   hover:text-white last:rounded-b"
       >
         {option.label}
@@ -53,8 +50,8 @@ const SelectInput = ({
   return (
     <Listbox value={value} onChange={onChange}>
       <Listbox.Button
-        className={`group text-left p-2 rounded-sm border text-neutral-700 
-                  hover:text-indigo-900 border-neutral-300 focus:border-indigo-600 
+        className={`group text-left p-2 rounded-sm border text-neutral-600 
+                  border-neutral-300 focus:border-indigo-600 
                   hover:border-indigo-900 ${size}`}
       >
         {selectButton}
@@ -77,4 +74,4 @@ const SelectInput = ({
   );
 };
 
-export default SelectInput;
+export default Select;

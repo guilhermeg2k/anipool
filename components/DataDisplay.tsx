@@ -6,7 +6,7 @@ interface DataDisplayProps {
 
 const DataDisplay = ({ children }: DataDisplayProps) => {
   return (
-    <div className={`p-2 border text-neutral-700 border-neutral-300`}>
+    <div className={`p-2 border text-neutral-600 border-neutral-300`}>
       {children}
     </div>
   );

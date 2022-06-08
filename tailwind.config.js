@@ -55,5 +55,5 @@ module.exports = {
       roboto: ['Roboto', 'sans'],
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
