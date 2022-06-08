@@ -1,4 +1,5 @@
 import React from 'react';
+import InputLabel from './InputLabel';
 
 interface TextInputProps {
   value: string;
@@ -12,7 +13,7 @@ interface TextInputProps {
 const TextInput = ({
   id,
   value,
-  label,
+  label = '',
   fullWidth = false,
   maxLength,
   onChange,
@@ -25,17 +26,12 @@ const TextInput = ({
   };
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="text-neutral-700 block text-sm uppercase font-medium"
-      >
-        {label}
-      </label>
+      <InputLabel htmlFor={id} label={label} />
       <input
         id={id}
         value={value}
         type="text"
-        className={`border border-neutral-300 outline-none text-neutral-700 p-2 focus:border-indigo-700 ${
+        className={`outline-none  p-2 border text-neutral-700 border-neutral-300 focus:border-indigo-600 hover:border-indigo-900 ${
           fullWidth && 'w-full'
         }`}
         onChange={onChangeHandler}

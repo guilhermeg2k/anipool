@@ -2,8 +2,10 @@ import { NextPage } from 'next';
 import { useState } from 'react';
 import Box from '../../../components/Box';
 import Page from '../../../components/Page';
+import SelectInput from '../../../components/SelectInput';
 import SmallLogo from '../../../components/SmallLogo';
-import TextInput from '../../../components/TextInput';
+
+const people = ['ANIME', 'CHARACTER', 'MANGA'];
 
 const CreatePool: NextPage = () => {
   const [poolTitle, setPoolTitle] = useState('');
@@ -13,14 +15,14 @@ const CreatePool: NextPage = () => {
       <div className="mx-auto max-w-3xl">
         <SmallLogo />
         <Box>
-          <TextInput
-            id="pool-title"
-            value={poolTitle}
-            label="Pool Title"
-            fullWidth
-            onChange={(value: string) => setPoolTitle(value)}
-            maxLength={10}
-          />
+          <div className="m-2">
+            <SelectInput
+              value={poolTitle}
+              label="Pool Title"
+              onChange={(value: string | number) => setPoolTitle(value)}
+              options={people}
+            />
+          </div>
         </Box>
       </div>
     </Page>
