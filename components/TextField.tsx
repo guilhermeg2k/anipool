@@ -31,7 +31,7 @@ const TextField = ({
         id={id}
         value={value}
         type="text"
-        className={`outline-none  p-2 border text-neutral-600 border-neutral-300 focus:border-indigo-600 hover:border-indigo-900 ${
+        className={`outline-none focus:ring-0 p-2 border text-neutral-600 border-neutral-300 focus:border-indigo-600 hover:border-indigo-900 ${
           fullWidth && 'w-full'
         }`}
         onChange={onChangeHandler}

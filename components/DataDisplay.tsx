@@ -1,12 +1,10 @@
-import { useMemo } from 'react';
-
 interface DataDisplayProps {
   children: React.ReactNode;
 }
 
 const DataDisplay = ({ children }: DataDisplayProps) => {
   return (
-    <div className={`p-2 border text-neutral-600 border-neutral-300`}>
+    <div className={`border border-neutral-300 p-2 text-neutral-600`}>
       {children}
     </div>
   );
