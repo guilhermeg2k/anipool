@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
-import Box from '../../../components/Box';
-import DatePicker from '../../../components/DateTimePicker';
-import Page from '../../../components/Page';
-import SmallLogo from '../../../components/SmallLogo';
+import Box from '@components/core/Box';
+import DatePicker from '@components/core/DateTimePicker';
+import Page from '@components/core/Page';
+import SmallLogo from '@components/core/SmallLogo';
 
 const people = [
   { label: 'ANIME', value: 'ANIME' },
