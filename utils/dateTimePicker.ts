@@ -38,3 +38,41 @@ export const getMonthWeeks = (
 
   return weeks;
 };
+
+export function getWeekDaysName() {
+  const dateOnMonday = new Date(Date.UTC(2022, 0, 3));
+  const currentDate = dateOnMonday;
+  var weekDays = [];
+  for (let i = 0; i < 7; i++) {
+    weekDays.push(currentDate.toLocaleDateString('en', { weekday: 'narrow' }));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return weekDays;
+}
+
+export function getMonthNames() {
+  const dateOnJanuary = new Date(Date.UTC(2022, 0, 2));
+  const currentDate = dateOnJanuary;
+  const months = [];
+  for (let i = 0; i < 12; i++) {
+    const month = {
+      number: i + 1,
+      name: currentDate.toLocaleDateString('en', { month: 'short' }),
+    };
+    months.push(month);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+  }
+  return months;
+}
+
+export function getYears() {
+  const dateOn1970 = new Date(Date.UTC(1900, 0, 2));
+  const currentDate = dateOn1970;
+  const years = [];
+  for (let i = 0; i < 200; i++) {
+    const year = currentDate.toLocaleDateString('en', { year: 'numeric' });
+    years.push(parseInt(year));
+    currentDate.setFullYear(currentDate.getFullYear() + 1);
+  }
+  return years;
+}

@@ -1,16 +1,16 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import Button from '../components/Button';
-import Logo from '../components/Logo';
-import Page from '../components/Page';
+import Button from '@components/core/Button';
+import Logo from '@components/core/Logo';
+import Page from '@components/core/Page';
 
 const Home: NextPage = () => {
   return (
     <Page bgImage="/images/bg-home.jpg">
-      <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center">
-        <div className="flex flex-col gap-y-4 items-center lg:items-start w-full lg:w-auto">
+      <div className="flex h-full w-full flex-col items-center justify-center lg:flex-row">
+        <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">
           <Logo />
-          <span className="text-white text-xl lg:text-2xl max-w-md">
+          <span className="max-w-md text-xl text-white lg:text-2xl">
             Create anime quiz pools integrated with anilist.co
           </span>
           <Button
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
             Login with anilist
           </Button>
         </div>
-        <div className="hidden lg:block self-end w-[550px]">
+        <div className="hidden w-[550px] self-end lg:block">
           <Image
             src="/images/killuarender.png"
             alt="Killua"
