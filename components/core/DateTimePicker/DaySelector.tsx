@@ -1,28 +1,37 @@
+import { DatePickerView } from './DateTimePicker';
 import {
   getMonthDays,
   getMonthWeeks,
   getWeekDaysName,
 } from './dateTimePickerUtils';
 
-interface DaysSelectionProps {
+interface DaySelectorProps {
   date: Date;
-  onDateChange: (date: Date) => void;
-  onMonthYearButtonClick: () => void;
+  onChangeDate: (date: Date) => void;
+  onChangeView: (view: DatePickerView) => void;
 }
 
-const DaysSelection = ({
+const DaySelector = ({
   date,
-  onDateChange,
-  onMonthYearButtonClick,
-}: DaysSelectionProps) => {
+  onChangeDate,
+  onChangeView,
+}: DaySelectorProps) => {
   const monthDays = getMonthDays(date);
   const monthWeeks = getMonthWeeks(monthDays);
   const weekDaysNames = getWeekDaysName();
 
+  const onMonthYearButtonClickHandler = () => {
+    onChangeView(DatePickerView.MONTH_SELECTOR);
+  };
+
+  const onDateChangeHandler = (date: Date) => {
+    onChangeDate(date);
+  };
+
   const monthYearButton = (
     <button
       className="flex items-center gap-1 self-end rounded-sm px-2 py-1 text-neutral-800 hover:bg-neutral-100"
-      onClick={onMonthYearButtonClick}
+      onClick={onMonthYearButtonClickHandler}
     >
       <span>
         {date.toLocaleString('default', { month: 'short' }).toUpperCase()}
@@ -44,12 +53,12 @@ const DaysSelection = ({
     const weekDays = week.map((day, dayIndex) => {
       if (day) {
         const isCurrentDay = day.toDateString() === date.toDateString();
-        const activeClass = isCurrentDay && 'bg-neutral-200';
+        const activeClass = isCurrentDay ? 'bg-neutral-200' : '';
         return (
           <button
             key={day?.toLocaleDateString()}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-full  text-neutral-600  hover:bg-neutral-100 ${activeClass}`}
-            onClick={() => onDateChange(day)}
+            onClick={() => onDateChangeHandler(day)}
           >
             {day?.getDate()}
           </button>
@@ -76,4 +85,4 @@ const DaysSelection = ({
   );
 };
 
-export default DaysSelection;
+export default DaySelector;
