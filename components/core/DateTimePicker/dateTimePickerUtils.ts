@@ -42,7 +42,7 @@ export const getMonthWeeks = (
 export function getWeekDaysName() {
   const dateOnMonday = new Date(Date.UTC(2022, 0, 3));
   const currentDate = dateOnMonday;
-  var weekDays = [];
+  const weekDays = [];
   for (let i = 0; i < 7; i++) {
     weekDays.push(currentDate.toLocaleDateString('en', { weekday: 'narrow' }));
     currentDate.setDate(currentDate.getDate() + 1);
@@ -57,7 +57,7 @@ export function getMonthNames() {
   for (let i = 0; i < 12; i++) {
     const month = {
       number: i + 1,
-      name: currentDate.toLocaleDateString('en', { month: 'short' }),
+      name: currentDate.toLocaleDateString('default', { month: 'short' }),
     };
     months.push(month);
     currentDate.setMonth(currentDate.getMonth() + 1);
@@ -70,7 +70,7 @@ export function getYears() {
   const currentDate = dateOn1970;
   const years = [];
   for (let i = 0; i < 200; i++) {
-    const year = currentDate.toLocaleDateString('en', { year: 'numeric' });
+    const year = currentDate.toLocaleDateString('default', { year: 'numeric' });
     years.push(parseInt(year));
     currentDate.setFullYear(currentDate.getFullYear() + 1);
   }

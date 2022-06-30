@@ -6,8 +6,9 @@ import {
   getMonthWeeks,
   getWeekDaysName,
   getYears,
-} from '@utils/dateTimePicker';
+} from './dateTimePickerUtils';
 import { Fragment, useRef, useState } from 'react';
+import DaysSelection from './DaysSelection';
 
 interface MonthYearSelectorProps {
   onYearChange: (year: number) => void;
@@ -15,7 +16,7 @@ interface MonthYearSelectorProps {
   onClose: () => void;
 }
 
-export const MonthYearSelector = ({
+const MonthYearSelector = ({
   onYearChange,
   onMonthChange,
   onClose,
@@ -69,12 +70,14 @@ export const MonthYearSelector = ({
   );
 };
 
+enum Selector {
+  CALENDAR,
+  MONTH_YEAR_SELECTOR,
+}
+
 const DatePicker = () => {
   const [date, setDate] = useState(new Date());
-  const monthDays = getMonthDays(date);
-  const monthWeeks = getMonthWeeks(monthDays);
-  const weekDays = getWeekDaysName();
-  const [currentScreen, setCurrentScreen] = useState('calendar');
+  const [currentSelector, setCurrentSelector] = useState(Selector.CALENDAR);
 
   const onDateChangeHandler = (date: Date) => {
     setDate(date);
@@ -93,11 +96,11 @@ const DatePicker = () => {
   };
 
   const onMonthYearSelectionCloseHandler = () => {
-    setCurrentScreen('calendar');
+    setCurrentSelector(Selector.CALENDAR);
   };
 
   const onMonthYearButtonClickHandler = () => {
-    setCurrentScreen('32131');
+    setCurrentSelector(Selector.MONTH_YEAR_SELECTOR);
   };
 
   const datePickerButton = (
@@ -106,6 +109,7 @@ const DatePicker = () => {
         value={date.toDateString()}
         type="text"
         className="w-full cursor-pointer border border-neutral-300 text-neutral-600 hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
+        readOnly
       />
       <div className="relative right-[45px] top-1/2 w-0 rounded-full duration-100 ease-in hover:bg-neutral-100 active:bg-neutral-200">
         <CalendarIcon className="m-2 h-6 text-neutral-600 " />
@@ -113,61 +117,34 @@ const DatePicker = () => {
     </div>
   );
 
-  const monthYearButton = (
-    <button
-      className="flex items-center gap-1 self-end rounded-sm px-2 py-1 text-neutral-800 hover:bg-neutral-100"
-      onClick={onMonthYearButtonClickHandler}
-    >
-      <span>
-        {date.toLocaleString('default', { month: 'short' }).toUpperCase()}
-      </span>
-      <span>{date.toLocaleString('default', { year: 'numeric' })}</span>
-    </button>
-  );
-
-  const calendarHeader = (
-    <div className="flex">
-      {weekDays.map((weekDay) => (
-        <span
-          key={weekDay}
-          className="flex h-[35px] w-[35px] items-center justify-center rounded-full text-neutral-800"
-        >
-          {weekDay}
-        </span>
-      ))}
-    </div>
-  );
-
-  const calendarWeeks = monthWeeks.map((week) => {
-    return (
-      <div className="flex last:self-start" key={`week-${week[6]?.getDate()}`}>
-        {week.map((day, index) => {
-          if (day) {
-            const isCurrentDay = day.toDateString() === date.toDateString();
-            const activeClass = isCurrentDay && 'bg-neutral-200';
-            return (
-              <button
-                key={day ? day?.getDate() : index}
-                className={`flex h-[35px] w-[35px] items-center justify-center rounded-full  text-neutral-600  hover:bg-neutral-100 ${activeClass}`}
-                onClick={() => onDateChangeHandler(day)}
-              >
-                {day?.getDate()}
-              </button>
-            );
-          }
-          return <div key={index} className="h-[35px] w-[35px]" />;
-        })}
-      </div>
-    );
-  });
-
-  const calendar = (
-    <div>
-      {monthYearButton}
-      {calendarHeader}
-      {calendarWeeks}
-    </div>
-  );
+  const renderBody = () => {
+    switch (currentSelector) {
+      case Selector.CALENDAR:
+        return (
+          <DaysSelection
+            date={date}
+            onDateChange={onDateChangeHandler}
+            onMonthYearButtonClick={onMonthYearButtonClickHandler}
+          />
+        );
+      case Selector.MONTH_YEAR_SELECTOR:
+        return (
+          <MonthYearSelector
+            onMonthChange={onMonthChangeHandler}
+            onYearChange={onYearChangeHandler}
+            onClose={onMonthYearSelectionCloseHandler}
+          />
+        );
+      default:
+        return (
+          <DaysSelection
+            date={date}
+            onDateChange={onDateChangeHandler}
+            onMonthYearButtonClick={onMonthYearButtonClickHandler}
+          />
+        );
+    }
+  };
 
   return (
     <Popover>
@@ -184,19 +161,7 @@ const DatePicker = () => {
         <Popover.Panel>
           <div className="text-neutral-60 absolute max-h-[320px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
             <div className="flex flex-col justify-center p-2">
-              <div>
-                {currentScreen === 'calendar' ? (
-                  calendar
-                ) : (
-                  <MonthYearSelector
-                    onMonthChange={onMonthChangeHandler}
-                    onYearChange={onYearChangeHandler}
-                    onClose={onMonthYearSelectionCloseHandler}
-                  />
-                )}
-              </div>
-              {/* <div>{monthYearButton}</div>
-              <div className="text-sm">{calendar}</div> */}
+              {renderBody()}
             </div>
           </div>
         </Popover.Panel>
