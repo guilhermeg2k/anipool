@@ -18,13 +18,13 @@ const DaySelector = ({
 }: DaySelectorProps) => {
   const monthDays = getMonthDays(date);
   const monthWeeks = getMonthWeeks(monthDays);
-  const weekDaysNames = getWeekDaysName();
+  const weekDayNames = getWeekDaysName();
 
   const onMonthYearButtonClickHandler = () => {
     onChangeView(DatePickerView.MONTH_SELECTOR);
   };
 
-  const onDateChangeHandler = (date: Date) => {
+  const onChangeDateHandler = (date: Date) => {
     onChangeDate(date);
   };
 
@@ -40,7 +40,7 @@ const DaySelector = ({
     </button>
   );
 
-  const weekDaysHeader = weekDaysNames.map((weekDay, index) => (
+  const weekDaysHeader = weekDayNames.map((weekDay, index) => (
     <span
       key={index}
       className="flex h-[35px] w-[35px] items-center justify-center rounded-full text-neutral-800"
@@ -58,7 +58,7 @@ const DaySelector = ({
           <button
             key={day?.toLocaleDateString()}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-full  text-neutral-600  hover:bg-neutral-100 ${activeClass}`}
-            onClick={() => onDateChangeHandler(day)}
+            onClick={() => onChangeDateHandler(day)}
           >
             {day?.getDate()}
           </button>

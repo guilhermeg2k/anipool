@@ -50,13 +50,13 @@ export function getWeekDaysName() {
   return weekDays;
 }
 
-export function getMonthNames() {
+export function getMonths() {
   const dateOnJanuary = new Date(Date.UTC(2022, 0, 2));
   const currentDate = dateOnJanuary;
   const months = [];
   for (let i = 0; i < 12; i++) {
     const month = {
-      number: i + 1,
+      number: i,
       name: currentDate.toLocaleDateString('default', { month: 'short' }),
     };
     months.push(month);

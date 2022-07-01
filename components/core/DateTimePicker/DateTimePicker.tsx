@@ -1,7 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
 import { CalendarIcon } from '@heroicons/react/outline';
-import { Fragment, useEffect, useState } from 'react';
-import { getMonthNames, getYears } from './dateTimePickerUtils';
+import { Fragment, useState } from 'react';
 import DaySelector from './DaySelector';
 import MonthSelector from './MonthSelector';
 import YearSelector from './YearSelector';
@@ -22,7 +21,7 @@ interface DateTimePickerProps {
 
 const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
   const [view, setView] = useState(DEFAULT_VIEW);
-
+  const [open, setOpen] = useState(false);
   const onChangeDateHandler = (date: Date) => {
     onChange(date);
   };
@@ -81,6 +80,20 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
     }
   };
 
+  const renderPopoverPanelBody = (open: boolean, close: Function) => {
+    if (open) {
+      return (
+        <div className="text-neutral-60 absolute max-h-[320px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
+          <div className="flex flex-col justify-center p-2">
+            {renderPickerBody(close)}
+          </div>
+        </div>
+      );
+    }
+    setView(DEFAULT_VIEW);
+    return <></>;
+  };
+
   return (
     <Popover>
       <Popover.Button className="w-full">{input}</Popover.Button>
@@ -94,13 +107,7 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Popover.Panel>
-          {({ close }) => (
-            <div className="text-neutral-60 absolute max-h-[320px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
-              <div className="flex flex-col justify-center p-2">
-                {renderPickerBody(close)}
-              </div>
-            </div>
-          )}
+          {({ open, close }) => renderPopoverPanelBody(open, close)}
         </Popover.Panel>
       </Transition>
     </Popover>

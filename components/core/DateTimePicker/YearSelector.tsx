@@ -13,6 +13,7 @@ const YearSelector = ({
   onChangeView,
 }: YearSelectorProps) => {
   const yearsList = getYears();
+  const lastYearListElement = yearsList[yearsList.length - 1];
 
   const onClickYearHandler = (year: number) => {
     const newDate = new Date(date);
@@ -22,13 +23,18 @@ const YearSelector = ({
   };
 
   const years = yearsList.map((year) => {
-    const focus = year === 2022;
+    const isCurrentYear = year === date.getFullYear();
+    const activeClass = isCurrentYear ? 'bg-neutral-200' : '';
+    const isToFocus =
+      year >= lastYearListElement - 9
+        ? isCurrentYear
+        : year === date.getFullYear() + 9;
     return (
       <button
         key={year}
-        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full  text-neutral-600 hover:bg-neutral-100`}
+        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full  text-neutral-600 hover:bg-neutral-100 ${activeClass}`}
         onClick={() => onClickYearHandler(year)}
-        autoFocus={focus}
+        autoFocus={isToFocus}
       >
         {year}
       </button>
