@@ -3,12 +3,14 @@ import { CalendarIcon } from '@heroicons/react/outline';
 import { Fragment, useState } from 'react';
 import DaySelector from './DaySelector';
 import MonthSelector from './MonthSelector';
+import TimeSelector from './TimeSelector';
 import YearSelector from './YearSelector';
 
 export enum DatePickerView {
   DAY_SELECTOR,
   MONTH_SELECTOR,
   YEAR_SELECTOR,
+  TIME_SELECTOR,
   CLOSE,
 }
 
@@ -44,7 +46,7 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
     </div>
   );
 
-  const renderPickerBody = (onClose: Function) => {
+  const renderPickerView = (onClose: Function) => {
     switch (view) {
       case DatePickerView.DAY_SELECTOR:
         return (
@@ -70,7 +72,8 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
             onChangeView={onChangeViewHandler}
           />
         );
-
+      case DatePickerView.TIME_SELECTOR:
+        return <TimeSelector />;
       case DatePickerView.CLOSE:
         onClose();
         setView(DEFAULT_VIEW);
@@ -80,12 +83,12 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
     }
   };
 
-  const renderPopoverPanelBody = (open: boolean, close: Function) => {
+  const renderPopoverPanelBody = (open: boolean, onClose: Function) => {
     if (open) {
       return (
-        <div className="text-neutral-60 absolute max-h-[320px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
+        <div className="text-neutral-60 absolute max-h-[340px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
           <div className="flex flex-col justify-center p-2">
-            {renderPickerBody(close)}
+            {renderPickerView(onClose)}
           </div>
         </div>
       );

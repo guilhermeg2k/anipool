@@ -30,13 +30,19 @@ const DaySelector = ({
 
   const monthYearButton = (
     <button
-      className="flex items-center gap-1 self-end rounded-sm px-2 py-1 text-neutral-800 hover:bg-neutral-100"
+      className="flex items-center gap-1 rounded-sm px-2 font-bold text-neutral-800 hover:bg-neutral-100"
       onClick={onMonthYearButtonClickHandler}
     >
       <span>
         {date.toLocaleString('default', { month: 'short' }).toUpperCase()}
       </span>
       <span>{date.toLocaleString('default', { year: 'numeric' })}</span>
+    </button>
+  );
+
+  const timeButton = (
+    <button className="flex rounded-sm px-2 text-sm hover:bg-neutral-100">
+      20:22:60
     </button>
   );
 
@@ -78,7 +84,10 @@ const DaySelector = ({
 
   return (
     <div>
-      <div>{monthYearButton}</div>
+      <div className="flex flex-col">
+        {monthYearButton}
+        {timeButton}
+      </div>
       <div className="flex">{weekDaysHeader}</div>
       <div>{weeks}</div>
     </div>

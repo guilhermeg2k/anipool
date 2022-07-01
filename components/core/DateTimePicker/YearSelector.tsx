@@ -19,7 +19,7 @@ const YearSelector = ({
     const newDate = new Date(date);
     newDate.setFullYear(year);
     onChangeDate(newDate);
-    onChangeView(DatePickerView.CLOSE);
+    onChangeView(DatePickerView.DAY_SELECTOR);
   };
 
   const years = yearsList.map((year) => {
