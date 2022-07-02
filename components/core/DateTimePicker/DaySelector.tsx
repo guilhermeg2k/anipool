@@ -29,8 +29,10 @@ const DaySelector = ({
     onChangeView(DatePickerView.TIME_SELECTOR);
   };
 
-  const onChangeDateHandler = (date: Date) => {
-    onChangeDate(date);
+  const onChangeDateHandler = (day: number) => {
+    const newDate = new Date(date);
+    newDate.setDate(day);
+    onChangeDate(newDate);
   };
 
   const monthYearButton = (
@@ -72,7 +74,7 @@ const DaySelector = ({
           <button
             key={day?.toLocaleDateString()}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-full  text-neutral-600  hover:bg-neutral-100 ${activeClass}`}
-            onClick={() => onChangeDateHandler(day)}
+            onClick={() => onChangeDateHandler(day.getDate())}
           >
             {day?.getDate()}
           </button>
