@@ -27,7 +27,7 @@ const MonthSelector = ({
     return (
       <button
         key={month.name}
-        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full  text-neutral-600 hover:bg-neutral-100 ${activeClass}`}
+        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full   hover:bg-neutral-100 ${activeClass}`}
         onClick={() => onClickMonthHandler(month.number)}
       >
         {month.name}

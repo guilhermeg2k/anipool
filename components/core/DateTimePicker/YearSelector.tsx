@@ -32,7 +32,7 @@ const YearSelector = ({
     return (
       <button
         key={year}
-        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full  text-neutral-600 hover:bg-neutral-100 ${activeClass}`}
+        className={`flex h-[45px] w-[45px] items-center justify-center rounded-full   hover:bg-neutral-100 ${activeClass}`}
         onClick={() => onClickYearHandler(year)}
         autoFocus={isToFocus}
       >

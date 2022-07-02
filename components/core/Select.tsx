@@ -38,7 +38,7 @@ const Select = ({
         <Listbox.Option
           key={index}
           value={option.value}
-          className="cursor-pointer p-2 text-neutral-600 last:rounded-b 
+          className="cursor-pointer p-2  last:rounded-b 
                     hover:bg-indigo-500 hover:text-white"
         >
           {option.label}
@@ -51,7 +51,7 @@ const Select = ({
     <Listbox value={value} onChange={onChange}>
       <Listbox.Button
         className={`group rounded-sm border border-neutral-300 p-2 text-left 
-                  text-neutral-600 hover:border-indigo-900 
+                   hover:border-indigo-900 
                   focus:border-indigo-600 ${size}`}
       >
         {selectButton}

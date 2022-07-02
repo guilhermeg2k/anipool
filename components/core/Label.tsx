@@ -5,10 +5,7 @@ interface LabelProps {
 
 const Label = ({ label, htmlFor }: LabelProps) => {
   return (
-    <label
-      htmlFor={htmlFor}
-      className="text-neutral-600 block text-sm uppercase font-medium"
-    >
+    <label htmlFor={htmlFor} className="block text-sm font-medium uppercase ">
       {label}
     </label>
   );

@@ -1,0 +1,51 @@
+import { Menu, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Fragment } from 'react';
+
+const UserCard = () => {
+  return (
+    <div className="flex w-[240px] items-center justify-between self-end rounded-sm bg-white p-3">
+      <div className="flex gap-2">
+        <Image
+          className="rounded-sm"
+          src="https://s4.anilist.co/file/anilistcdn/user/avatar/large/b982680-ufSby6V7RirG.jpg"
+          alt="Profile picture"
+          layout="fixed"
+          width={50}
+          height={50}
+        />
+        <div className="flex flex-col justify-center font-roboto font-medium leading-4">
+          <span className="">Logged as</span>
+          <span className="font-semibold text-neutral-800">guilhermeg2k</span>
+        </div>
+      </div>
+      <Menu>
+        <Menu.Button>
+          <ChevronDownIcon className="h-5 w-5 hover:text-indigo-800" />
+        </Menu.Button>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute z-50 mt-[120px] ml-[120px] w-[140px] origin-top-right rounded-sm bg-white p-4 text-sm uppercase shadow-md">
+            <Menu.Item as="div">
+              <Link href="/about">About</Link>
+            </Menu.Item>
+            <Menu.Item as="div">
+              <Link href="/signout">Sign out</Link>
+            </Menu.Item>
+          </Menu.Items>
+        </Transition>
+      </Menu>
+    </div>
+  );
+};
+
+export default UserCard;

@@ -56,20 +56,20 @@ const TimeSelector = ({
     <div className="flex w-full justify-between gap-1">
       <input
         value={renderHour()}
-        className="w-[100px] border border-neutral-300 p-2 text-neutral-600 outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
+        className="w-[100px] border border-neutral-300 p-2  outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
         type="number"
         placeholder="Hour"
         onChange={onChangeHourHandler}
       />
       <input
         value={renderMinutes()}
-        className="w-[100px] border border-neutral-300 p-2 text-neutral-600 outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
+        className="w-[100px] border border-neutral-300 p-2  outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
         type="number"
         placeholder="Minutes"
         onChange={onChangeMinuteHandler}
       />
       <button onClick={onConfirmClickHandler}>
-        <CheckIcon className="m-2 h-6 text-neutral-600 hover:text-indigo-800 " />
+        <CheckIcon className="m-2 h-6  hover:text-indigo-800 " />
       </button>
     </div>
   );

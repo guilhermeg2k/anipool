@@ -2,6 +2,7 @@ import Box from '@components/core/Box';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import Page from '@components/core/Page';
 import SmallLogo from '@components/core/SmallLogo';
+import UserCard from '@components/core/UserCard';
 import { NextPage } from 'next';
 import { useState } from 'react';
 
@@ -18,8 +19,9 @@ const CreatePool: NextPage = () => {
 
   return (
     <Page bgImage="/images/bg-create-pool.jpg">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto flex max-w-3xl flex-col">
         <SmallLogo />
+        <UserCard />
         <Box>
           <DateTimePicker value={date} onChange={setDate} />
         </Box>

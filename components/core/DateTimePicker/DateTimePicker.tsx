@@ -47,11 +47,11 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
       <input
         value={renderValue()}
         type="text"
-        className="w-full cursor-pointer border border-neutral-300 text-neutral-600 hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
+        className="w-full cursor-pointer border border-neutral-300  hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
         readOnly
       />
       <div className="relative right-[45px] top-1/2 w-0 rounded-full duration-100 ease-in hover:bg-neutral-100 active:bg-neutral-200">
-        <CalendarIcon className="m-2 h-6 text-neutral-600 " />
+        <CalendarIcon className="m-2 h-6  " />
       </div>
     </div>
   );

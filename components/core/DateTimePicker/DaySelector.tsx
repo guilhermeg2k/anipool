@@ -73,7 +73,7 @@ const DaySelector = ({
         return (
           <button
             key={day?.toLocaleDateString()}
-            className={`flex h-[35px] w-[35px] items-center justify-center rounded-full  text-neutral-600  hover:bg-neutral-100 ${activeClass}`}
+            className={`flex h-[35px] w-[35px] items-center justify-center rounded-full    hover:bg-neutral-100 ${activeClass}`}
             onClick={() => onChangeDateHandler(day.getDate())}
           >
             {day?.getDate()}

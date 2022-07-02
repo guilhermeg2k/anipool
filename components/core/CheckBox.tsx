@@ -16,11 +16,11 @@ const CheckBox = ({ id, value, children, onChange }: CheckBoxProps) => {
         type="checkbox"
         checked={value}
         id={id}
-        className="w-5 h-5 rounded-sm border border-neutral-300 focus:border-indigo-600 
-                  hover:border-indigo-900 text-indigo-900 focus:ring-indigo-300"
+        className="h-5 w-5 rounded-sm border border-neutral-300 text-indigo-900 
+                  hover:border-indigo-900 focus:border-indigo-600 focus:ring-indigo-300"
         onChange={onChangeHandler}
       />
-      <label className="text-neutral-600 font-medium" htmlFor={id}>
+      <label className="font-medium " htmlFor={id}>
         {children}
       </label>
     </div>
