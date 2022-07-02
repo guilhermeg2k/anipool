@@ -5,7 +5,8 @@ interface TextFieldProps {
   value: string;
   id: string;
   label?: string;
-  fullWidth?: boolean;
+  placeHolder: string;
+  className?: string;
   maxLength?: number;
   onChange: (value: string) => void;
 }
@@ -14,7 +15,8 @@ const TextField = ({
   id,
   value,
   label = '',
-  fullWidth = false,
+  placeHolder = '',
+  className,
   maxLength,
   onChange,
 }: TextFieldProps) => {
@@ -25,15 +27,14 @@ const TextField = ({
     }
   };
   return (
-    <div>
-      <Label htmlFor={id} label={label} />
+    <div className={`${className}`}>
+      {label && <Label htmlFor={id}> {label} </Label>}
       <input
         id={id}
         value={value}
         type="text"
-        className={`border border-neutral-300 p-2  outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0 ${
-          fullWidth && 'w-full'
-        }`}
+        placeholder={placeHolder}
+        className={`w-full border border-neutral-300  p-2 outline-none hover:border-indigo-900 focus:border-indigo-600 focus:ring-0`}
         onChange={onChangeHandler}
       />
     </div>

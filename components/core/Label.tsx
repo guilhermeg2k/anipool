@@ -1,12 +1,15 @@
 interface LabelProps {
-  label: string;
+  children: React.ReactNode;
   htmlFor?: string;
 }
 
-const Label = ({ label, htmlFor }: LabelProps) => {
+const Label = ({ children, htmlFor }: LabelProps) => {
   return (
-    <label htmlFor={htmlFor} className="block text-sm font-medium uppercase ">
-      {label}
+    <label
+      htmlFor={htmlFor}
+      className="block py-1 text-sm font-medium uppercase"
+    >
+      {children}
     </label>
   );
 };

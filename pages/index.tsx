@@ -14,8 +14,8 @@ const Home: NextPage = () => {
             Create anime quiz pools integrated with anilist.co
           </span>
           <Button
+            size="large"
             className="bg-indigo-900 hover:bg-indigo-800 active:bg-indigo-900"
-            fullscreen
           >
             Login with anilist
           </Button>
