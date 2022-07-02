@@ -11,6 +11,7 @@ module.exports = {
       current: 'currentColor',
       black: colors.black,
       white: colors.white,
+      red: colors.red,
       neutral: colors.neutral,
       green: colors.green,
       indigo: colors.indigo,
@@ -55,5 +56,5 @@ module.exports = {
       roboto: ['Roboto', 'sans'],
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require('@tailwindcss/forms')],
 };

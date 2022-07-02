@@ -1,11 +1,6 @@
-import Box from '@components/core/Box';
-import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
-import SmallLogo from '@components/core/SmallLogo';
-import TextField from '@components/core/TextField';
-import UserCard from '@components/core/UserCard';
-import PoolCreateForm from '@components/pool/create/PoolCreateForm';
+import PoolCreateForm from '@components/pool/create/CreatePoolForm';
 import { NextPage } from 'next';
 import { useState } from 'react';
 

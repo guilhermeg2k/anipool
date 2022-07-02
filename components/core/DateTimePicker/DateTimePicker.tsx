@@ -19,12 +19,16 @@ const DEFAULT_VIEW = DatePickerView.DAY_SELECTOR;
 
 interface DateTimePickerProps {
   value: Date;
+  className?: string;
   onChange: (date: Date) => void;
 }
 
-const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
+const DateTimePicker = ({
+  value,
+  className = '',
+  onChange,
+}: DateTimePickerProps) => {
   const [view, setView] = useState(DEFAULT_VIEW);
-  const [open, setOpen] = useState(false);
 
   const renderValue = () => {
     if (value) {
@@ -43,7 +47,7 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
   };
 
   const input = (
-    <div className="flex">
+    <div className={`flex ${className}`}>
       <input
         value={renderValue()}
         type="text"
@@ -114,7 +118,7 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
   };
 
   return (
-    <Popover>
+    <Popover className="w-full sm:w-auto">
       <Popover.Button className="w-full">{input}</Popover.Button>
       <Transition
         as={Fragment}

@@ -3,8 +3,10 @@ import UserCard from './UserCard';
 
 const PageHeader = () => {
   return (
-    <div className="flex items-center justify-between">
-      <SmallLogo />
+    <div className="flex flex-col items-center sm:flex-row sm:justify-between">
+      <div className="mb-6 sm:mb-0">
+        <SmallLogo />
+      </div>
       <UserCard />
     </div>
   );

@@ -16,7 +16,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="text-base font-normal text-neutral-700">
+        <body className="text-sm font-normal text-neutral-700 md:text-base">
           <Main />
           <NextScript />
         </body>

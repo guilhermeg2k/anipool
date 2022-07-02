@@ -57,7 +57,7 @@ const UserCard = () => {
   );
 
   return (
-    <div className="flex w-[225px] items-center justify-between self-end rounded-sm bg-white p-3">
+    <div className="flex w-full items-center justify-between self-end rounded-sm bg-white p-3 sm:w-[225px]">
       {userInfos}
       {menu}
     </div>
