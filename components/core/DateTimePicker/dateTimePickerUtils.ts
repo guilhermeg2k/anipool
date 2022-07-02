@@ -39,7 +39,7 @@ export const getMonthWeeks = (
   return weeks;
 };
 
-export function getWeekDaysName() {
+export const getWeekDaysName = () => {
   const dateOnMonday = new Date(Date.UTC(2022, 0, 3));
   const currentDate = dateOnMonday;
   const weekDays = [];
@@ -48,9 +48,9 @@ export function getWeekDaysName() {
     currentDate.setDate(currentDate.getDate() + 1);
   }
   return weekDays;
-}
+};
 
-export function getMonths() {
+export const getMonths = () => {
   const dateOnJanuary = new Date(Date.UTC(2022, 0, 2));
   const currentDate = dateOnJanuary;
   const months = [];
@@ -63,9 +63,9 @@ export function getMonths() {
     currentDate.setMonth(currentDate.getMonth() + 1);
   }
   return months;
-}
+};
 
-export function getYears() {
+export const getYears = () => {
   const dateOn1970 = new Date(Date.UTC(1900, 0, 2));
   const currentDate = dateOn1970;
   const years = [];
@@ -75,4 +75,14 @@ export function getYears() {
     currentDate.setFullYear(currentDate.getFullYear() + 1);
   }
   return years;
-}
+};
+
+export const getFormattedTime = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  if (minutes < 10) {
+    const formattedMinutes = `0${minutes}`;
+    return `${hours}:${formattedMinutes}`;
+  }
+  return `${hours}:${minutes}`;
+};

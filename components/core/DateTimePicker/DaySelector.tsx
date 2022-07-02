@@ -1,5 +1,6 @@
 import { DatePickerView } from './DateTimePicker';
 import {
+  getFormattedTime,
   getMonthDays,
   getMonthWeeks,
   getWeekDaysName,
@@ -24,6 +25,10 @@ const DaySelector = ({
     onChangeView(DatePickerView.MONTH_SELECTOR);
   };
 
+  const onTimeButtonClickHandler = () => {
+    onChangeView(DatePickerView.TIME_SELECTOR);
+  };
+
   const onChangeDateHandler = (date: Date) => {
     onChangeDate(date);
   };
@@ -41,8 +46,11 @@ const DaySelector = ({
   );
 
   const timeButton = (
-    <button className="flex rounded-sm px-2 text-sm hover:bg-neutral-100">
-      20:22:60
+    <button
+      className="flex rounded-sm px-2 text-sm hover:bg-neutral-100"
+      onClick={onTimeButtonClickHandler}
+    >
+      {getFormattedTime(date)}
     </button>
   );
 

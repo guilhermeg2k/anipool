@@ -1,6 +1,7 @@
 import { Popover, Transition } from '@headlessui/react';
 import { CalendarIcon } from '@heroicons/react/outline';
 import { Fragment, useState } from 'react';
+import { getFormattedTime } from './dateTimePickerUtils';
 import DaySelector from './DaySelector';
 import MonthSelector from './MonthSelector';
 import TimeSelector from './TimeSelector';
@@ -24,6 +25,15 @@ interface DateTimePickerProps {
 const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
   const [view, setView] = useState(DEFAULT_VIEW);
   const [open, setOpen] = useState(false);
+
+  const renderValue = () => {
+    if (value) {
+      const date = value.toDateString();
+      const time = getFormattedTime(value);
+      return `${date} ${time}`;
+    }
+  };
+
   const onChangeDateHandler = (date: Date) => {
     onChange(date);
   };
@@ -35,7 +45,7 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
   const input = (
     <div className="flex">
       <input
-        value={value && value.toDateString()}
+        value={renderValue()}
         type="text"
         className="w-full cursor-pointer border border-neutral-300 text-neutral-600 hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
         readOnly
@@ -73,7 +83,13 @@ const DateTimePicker = ({ value, onChange }: DateTimePickerProps) => {
           />
         );
       case DatePickerView.TIME_SELECTOR:
-        return <TimeSelector />;
+        return (
+          <TimeSelector
+            date={value}
+            onChangeDate={onChangeDateHandler}
+            onChangeView={onChangeViewHandler}
+          />
+        );
       case DatePickerView.CLOSE:
         onClose();
         setView(DEFAULT_VIEW);
