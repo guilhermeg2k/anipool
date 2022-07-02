@@ -30,8 +30,10 @@ const UserCard = () => {
   );
 
   const menuItems = MENU_OPTIONS.map((option) => (
-    <Menu.Item as="div" key={option.label}>
-      <Link href={option.path}>{option.label}</Link>
+    <Menu.Item as={Link} key={option.label} href={option.path}>
+      <span className="cursor-pointer rounded-sm p-2 hover:bg-indigo-500 hover:text-white">
+        {option.label}
+      </span>
     </Menu.Item>
   ));
 
@@ -49,7 +51,7 @@ const UserCard = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-50 mt-[120px] ml-[120px] w-[140px] origin-top-right rounded-sm bg-white p-4 text-sm uppercase shadow-md">
+        <Menu.Items className="absolute z-50 mt-[120px] ml-[120px] flex w-[140px] origin-top-right flex-col rounded-sm bg-white text-sm uppercase shadow-md">
           {menuItems}
         </Menu.Items>
       </Transition>

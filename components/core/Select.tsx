@@ -52,7 +52,7 @@ const Select = ({
     >
       <Listbox.Button
         className={`group w-full rounded-sm border border-neutral-300 p-2 
-                   text-left 
+                  text-center outline-none
                   hover:border-indigo-900 focus:border-indigo-600`}
       >
         {selectButton}

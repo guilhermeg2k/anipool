@@ -5,7 +5,7 @@ interface TextFieldProps {
   value: string;
   id: string;
   label?: string;
-  placeHolder: string;
+  placeHolder?: string;
   className?: string;
   maxLength?: number;
   onChange: (value: string) => void;
