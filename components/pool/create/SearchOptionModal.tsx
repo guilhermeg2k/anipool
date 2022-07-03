@@ -50,7 +50,7 @@ const SearchOptionModal = ({
               <span className="text-xs">TV - 22 EPISODES</span>
             </div>
             <div>
-              <Button className="bg-green-500 hover:bg-green-400 active:bg-green-500">
+              <Button color="green">
                 <span className="px-9">ADD</span>
               </Button>
             </div>

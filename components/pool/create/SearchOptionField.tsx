@@ -42,12 +42,7 @@ const SearchOptionFormGroup = ({ onSearch }: SearchOptionFormGroupProps) => {
           className="w-full"
           onChange={onChangeTextHandler}
         />
-        <Button
-          className="bg-indigo-900 hover:bg-indigo-800 active:bg-indigo-900"
-          onClick={onSearch}
-        >
-          Search
-        </Button>
+        <Button onClick={onSearch}>Search</Button>
       </div>
     </div>
   );

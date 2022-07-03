@@ -74,7 +74,8 @@ const CreatePoolForm = () => {
       <FormGroup label="Options">
         <DataDisplay className="flex w-full flex-col">
           <Button
-            className="self-end bg-green-500 hover:bg-green-400 active:bg-green-500"
+            className="self-end"
+            color="green"
             onClick={onOpenSearchModalHandler}
           >
             <span className="px-9">ADD</span>
@@ -107,7 +108,8 @@ const CreatePoolForm = () => {
         <Button
           disabled={!shouldCreateButtonBeEnabled}
           size="large"
-          className="w-full bg-green-500 hover:bg-green-400 active:bg-green-500 sm:w-auto"
+          color="green"
+          className="w-full sm:w-auto"
         >
           Create pool
         </Button>
