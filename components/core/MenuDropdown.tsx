@@ -3,12 +3,17 @@ import { Fragment } from 'react';
 
 interface MenuDropdownProps {
   items: Array<React.ReactNode>;
+  className?: string;
   children: React.ReactNode;
 }
 
-const MenuDropdown = ({ items, children }: MenuDropdownProps) => {
+const MenuDropdown = ({
+  items,
+  className = '',
+  children,
+}: MenuDropdownProps) => {
   return (
-    <Menu>
+    <Menu as="div" className={`${className} relative inline-block text-left`}>
       <Menu.Button>{children}</Menu.Button>
       <Transition
         as={Fragment}
@@ -19,7 +24,7 @@ const MenuDropdown = ({ items, children }: MenuDropdownProps) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-50 mt-[120px] ml-[120px] flex w-[140px] origin-top-right flex-col rounded-sm bg-white text-sm uppercase shadow-md">
+        <Menu.Items className="absolute right-0 z-50 flex w-[140px] origin-top-left flex-col rounded-sm bg-white text-sm uppercase shadow-md">
           {items}
         </Menu.Items>
       </Transition>

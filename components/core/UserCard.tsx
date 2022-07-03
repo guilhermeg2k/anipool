@@ -40,8 +40,10 @@ const UserCard = () => {
   return (
     <div className="flex w-full items-center justify-between self-end rounded-sm bg-white p-3 sm:w-[225px]">
       {userInfos}
-      <MenuDropdown items={menuItems}>
-        <ChevronDownIcon className="h-5 w-5 hover:text-indigo-800" />
+      <MenuDropdown items={menuItems} className="h-[20px]">
+        <div>
+          <ChevronDownIcon className="h-5 w-5 hover:text-indigo-700" />
+        </div>
       </MenuDropdown>
     </div>
   );
