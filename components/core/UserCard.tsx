@@ -1,12 +1,12 @@
-import { Menu, Transition } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment } from 'react';
+import MenuDropdown from './MenuDropdown';
 
-const MENU_OPTIONS = [
-  { label: 'About', path: '/about' },
-  { label: 'Sign out', path: 'signout' },
+const MENU_LINKS = [
+  { id: 1, label: 'About', path: '/about' },
+  { id: 2, label: 'Sign out', path: 'signout' },
 ];
 
 const UserCard = () => {
@@ -29,39 +29,20 @@ const UserCard = () => {
     </div>
   );
 
-  const menuItems = MENU_OPTIONS.map((option) => (
-    <Menu.Item as={Link} key={option.label} href={option.path}>
+  const menuItems = MENU_LINKS.map((link) => (
+    <Menu.Item as={Link} key={link.id} href={link.path}>
       <span className="cursor-pointer rounded-sm p-2 hover:bg-indigo-500 hover:text-white">
-        {option.label}
+        {link.label}
       </span>
     </Menu.Item>
   ));
 
-  const menu = (
-    <Menu>
-      <Menu.Button>
-        <ChevronDownIcon className="h-5 w-5 hover:text-indigo-800" />
-      </Menu.Button>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute z-50 mt-[120px] ml-[120px] flex w-[140px] origin-top-right flex-col rounded-sm bg-white text-sm uppercase shadow-md">
-          {menuItems}
-        </Menu.Items>
-      </Transition>
-    </Menu>
-  );
-
   return (
     <div className="flex w-full items-center justify-between self-end rounded-sm bg-white p-3 sm:w-[225px]">
       {userInfos}
-      {menu}
+      <MenuDropdown items={menuItems}>
+        <ChevronDownIcon className="h-5 w-5 hover:text-indigo-800" />
+      </MenuDropdown>
     </div>
   );
 };
