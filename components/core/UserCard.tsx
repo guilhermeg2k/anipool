@@ -20,8 +20,8 @@ const UserCard = () => {
         width={44}
         height={44}
       />
-      <div className="flex flex-col justify-center font-roboto">
-        <span className="text-sm text-neutral-800">Logged as</span>
+      <div className="font-robot flex flex-col justify-center ">
+        <span className="text-sm leading-none text-neutral-800">Logged as</span>
         <span className="text-base font-semibold text-indigo-900">
           guilhermeg2k
         </span>

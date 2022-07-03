@@ -18,7 +18,7 @@ const CreatePoolForm = () => {
   const [optionsList, setOptionsList] = useState(new Array<PoolOption>());
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(true);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const onChangeTitleHandler = (title: string) => {
     setTitle(title);

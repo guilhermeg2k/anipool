@@ -9,7 +9,7 @@ interface ButtonProps {
 
 const Button = ({
   children,
-  className,
+  className = '',
   size = 'normal',
   color = 'indigo',
   disabled = false,
@@ -25,6 +25,8 @@ const Button = ({
         return 'bg-indigo-900 hover:bg-indigo-800 active:bg-indigo-900';
       case 'green':
         return 'bg-green-500 hover:bg-green-400 active:bg-green-500';
+      case 'white':
+        return 'bg-white hover:bg-neutral-100 active:bg-neutral-200 text-neutral-800';
       default:
         return '';
     }
@@ -37,9 +39,9 @@ const Button = ({
       case 'normal':
         return 'py-2 px-4';
       case 'large':
-        return ' py-4 px-8';
+        return 'py-4 px-8';
       default:
-        return 'py-2 px-4';
+        return '';
     }
   };
 
@@ -49,7 +51,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {children}
+      <div className="flex items-center justify-center gap-1">{children}</div>
     </button>
   );
 };
