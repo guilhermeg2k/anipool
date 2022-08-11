@@ -57,11 +57,13 @@ const CreatePoolForm = () => {
 
   return (
     <Box>
-      <SearchOptionModal
-        open={isSearchModalOpen}
-        onAddOption={onAddOptionHandler}
-        onClose={onCloseSearchModalHandler}
-      />
+      {isSearchModalOpen && (
+        <SearchOptionModal
+          open={isSearchModalOpen}
+          onAdd={onAddOptionHandler}
+          onClose={onCloseSearchModalHandler}
+        />
+      )}
 
       <TextField
         value={title}

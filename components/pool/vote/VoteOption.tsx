@@ -44,7 +44,7 @@ const VoteOption = ({
   return (
     <button className="w-full pr-4 md:w-auto md:pr-0" onClick={onClick}>
       <DataDisplay
-        className={`flex ${activeClass} md-auto gap-2 p-2 hover:border-indigo-500 md:h-[320px] md:w-[200px] md:flex-col md:p-5`}
+        className={`flex ${activeClass} gap-2 p-2 hover:border-indigo-500 md:h-[320px] md:w-[200px] md:flex-col md:p-5`}
       >
         <div className="w-[50px] md:w-auto">
           <Image

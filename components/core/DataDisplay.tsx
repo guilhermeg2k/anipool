@@ -1,6 +1,8 @@
+import React, { ReactNode } from 'react';
+
 interface DataDisplayProps {
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode | Array<ReactNode>;
 }
 
 const DataDisplay = ({ children, className = '' }: DataDisplayProps) => {

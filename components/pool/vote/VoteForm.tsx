@@ -4,6 +4,7 @@ import Title from '@components/core/Title';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
 import VoteOption from './VoteOption';
+
 const VoteForm = ({}) => {
   const [selectedId, setSelectedId] = useState(1);
   const options = [
@@ -70,7 +71,7 @@ const VoteForm = ({}) => {
 
   return (
     <Box className="flex flex-col gap-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-between md:flex-row">
         <Title>What anime should i start watching next week?</Title>
         <div>
           <Button color="white">
