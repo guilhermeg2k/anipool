@@ -2,7 +2,7 @@ import { JWT_SECRET } from '@backend/constants';
 import { OAuthProvider } from '@backend/enums';
 import { User } from '@backend/types';
 import { SignJWT } from 'jose';
-import anilistService from './anilistService';
+import anilistService from '@services/anilistService';
 import userService from './userService';
 
 const generateUserJWTToken = (user: User) => {

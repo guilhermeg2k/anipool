@@ -5,55 +5,50 @@ import DataDisplay from '@components/core/DataDisplay';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import FormGroup from '@components/core/FormGroup';
 import TextField from '@components/core/TextField';
+import { TrashIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
-import PoolFormOption from './PoolFormOption';
 import SearchOptionModal from './SearchOptionModal';
 import { PoolOption } from './types';
 
 const DATE_TIME_NOW = new Date();
 
+interface PoolFormOptionProps {
+  id: string;
+  type: string;
+  text: string;
+}
+
+const PoolFormOption = ({ id, type, text }: PoolFormOptionProps) => {
+  return (
+    <FormGroup id={id} className="flex flex-col sm:flex-row" label="#1 Option">
+      <DataDisplay className="flex w-full items-center justify-center sm:w-[180px]">
+        {type}
+      </DataDisplay>
+      <DataDisplay className="flex w-full items-center justify-between uppercase">
+        <span>{text}</span>
+        <button>
+          <TrashIcon className="h-5 w-5 text-red-600" />
+        </button>
+      </DataDisplay>
+    </FormGroup>
+  );
+};
+
 const CreatePoolForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(DATE_TIME_NOW);
-  const [optionsList, setOptionsList] = useState(new Array<PoolOption>());
+  const [options, setOptions] = useState(new Array<PoolOption>());
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-
-  const onChangeTitleHandler = (title: string) => {
-    setTitle(title);
-  };
-
-  const onChangeEndDateHandler = (date: Date) => {
-    setEndDate(date);
-  };
-
-  const onChangeShouldEnableMultipleSelectionHandler = (
-    shouldEnable: boolean
-  ) => {
-    setShouldEnableMultipleSelection(shouldEnable);
-  };
-
-  const onOpenSearchModalHandler = () => {
-    setIsSearchModalOpen(true);
-  };
-
-  const onCloseSearchModalHandler = () => {
-    setIsSearchModalOpen(false);
-  };
+  const shouldCreateButtonBeEnabled =
+    title && endDate !== DATE_TIME_NOW && options.length > 1;
 
   const onAddOptionHandler = (option: PoolOption) => {
-    const newOptions = [...optionsList];
+    const newOptions = [...options];
     newOptions.push(option);
-    setOptionsList(newOptions);
+    setOptions(newOptions);
   };
-
-  const options = optionsList.map(({ id, type, text }) => (
-    <PoolFormOption key={id} id={id.toString()} type={type} text={text} />
-  ));
-
-  const shouldCreateButtonBeEnabled =
-    title && endDate !== DATE_TIME_NOW && optionsList.length > 1;
 
   return (
     <Box>
@@ -61,7 +56,7 @@ const CreatePoolForm = () => {
         <SearchOptionModal
           open={isSearchModalOpen}
           onAdd={onAddOptionHandler}
-          onClose={onCloseSearchModalHandler}
+          onClose={() => setIsSearchModalOpen(false)}
         />
       )}
 
@@ -71,19 +66,26 @@ const CreatePoolForm = () => {
         label="Pool title"
         placeHolder="What anime should i watch next?"
         className="w-full"
-        onChange={onChangeTitleHandler}
+        onChange={(title) => setTitle(title)}
       />
       <FormGroup label="Options">
         <DataDisplay className="flex w-full flex-col">
           <Button
             className="self-end"
             color="green"
-            onClick={onOpenSearchModalHandler}
+            onClick={() => setIsSearchModalOpen(true)}
           >
             <span className="px-9">ADD</span>
           </Button>
           {options.length > 0 ? (
-            options
+            options.map(({ id, type, text }) => (
+              <PoolFormOption
+                key={id}
+                id={id.toString()}
+                type={type}
+                text={text}
+              />
+            ))
           ) : (
             <span className="self-center text-sm uppercase">
               Add options to visualize here
@@ -99,11 +101,13 @@ const CreatePoolForm = () => {
         <DateTimePicker
           value={endDate}
           className="w-full sm:w-auto"
-          onChange={onChangeEndDateHandler}
+          onChange={(date) => setEndDate(date)}
         />
         <CheckBox
           value={shouldEnableMultipleSelection}
-          onChange={onChangeShouldEnableMultipleSelectionHandler}
+          onChange={(shouldEnable) =>
+            setShouldEnableMultipleSelection(shouldEnable)
+          }
         >
           Enable multiple selection
         </CheckBox>

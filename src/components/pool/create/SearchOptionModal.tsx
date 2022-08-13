@@ -1,9 +1,17 @@
 import Button from '@components/core/Button';
 import DataDisplay from '@components/core/DataDisplay';
 import Modal from '@components/core/Modal';
+import Select from '@components/core/Select';
+import TextField from '@components/core/TextField';
+import { toastError } from '@libs/toastify';
 import Image from 'next/image';
-import SearchOptionField from './SearchOptionField';
-import { PoolOption } from './types';
+import { useState } from 'react';
+
+const POOL_OPTION_TYPES = [
+  { id: 1, label: MediaTypes.Anime, value: MediaTypes.Anime },
+  { id: 2, label: MediaTypes.Manga, value: MediaTypes.Manga },
+  { id: 3, label: MediaTypes.Character, value: MediaTypes.Character },
+];
 
 interface SearchOptionModalProps {
   open: boolean;
@@ -16,6 +24,16 @@ const SearchOptionModal = ({
   onClose,
   onAdd,
 }: SearchOptionModalProps) => {
+  const [type, setType] = useState(POOL_OPTION_TYPES[0].value);
+  const [text, setText] = useState('');
+
+  const searchOptions = () => {
+    try {
+    } catch (error) {
+      toastError('Failed to search options');
+    }
+  };
+
   return (
     <Modal
       title="Add new option"
@@ -24,7 +42,24 @@ const SearchOptionModal = ({
       onClose={onClose}
     >
       <div className="flex flex-col gap-2 pt-2">
-        <SearchOptionField />
+        <div className="flex w-full flex-col gap-2 sm:flex-row">
+          <Select
+            className="w-full sm:w-[220px]"
+            options={POOL_OPTION_TYPES}
+            value={type}
+            onChange={(type) => setType(type)}
+          />
+          <div className="flex w-full gap-2">
+            <TextField
+              id="search-option-text"
+              placeHolder="Hunter x Hunter"
+              value={text}
+              className="w-full"
+              onChange={(text) => setText(text)}
+            />
+            <Button onClick={() => searchOptions()}>Search</Button>
+          </div>
+        </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <DataDisplay className="w-full">
             <ul>
