@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import axiosClient from '@libs/axios';
 import userService from '@services/userService';
 import SpinnerGon from '@components/core/SpinnerGon';
+import { toastError } from '@libs/toastify';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -30,11 +31,17 @@ const Auth: NextPage = () => {
   const router = useRouter();
 
   const authenticateUser = async (accessToken: string) => {
-    const userToken = await authService.signWithAnilistAccessToken(accessToken);
-    Cookies.set('userToken', userToken);
-    const user = await userService.getCurrentUser();
-    setUser(user);
-    router.replace('/pool/create');
+    try {
+      const userToken = await authService.signWithAnilistAccessToken(
+        accessToken
+      );
+      Cookies.set('userToken', userToken);
+      const user = await userService.getCurrentUser();
+      setUser(user);
+      router.replace('/pool/create');
+    } catch (error) {
+      toastError('Failed to authenticate user');
+    }
   };
 
   useEffect(() => {
