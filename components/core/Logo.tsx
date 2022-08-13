@@ -1,5 +1,20 @@
-const Logo = () => {
-  return <h1 className="text-white font-lg font-cursive text-7xl lg:text-8xl uppercase">Anipool</h1>;
+import { twMerge } from 'tailwind-merge';
+
+interface LogoProps {
+  className?: string;
+}
+
+const Logo: React.FC<LogoProps> = ({ className = '' }) => {
+  return (
+    <h1
+      className={twMerge(
+        `text-white text-lg font-cursive uppercase`,
+        className
+      )}
+    >
+      Anipool
+    </h1>
+  );
 };
 
 export default Logo;

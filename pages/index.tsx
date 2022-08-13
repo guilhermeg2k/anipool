@@ -9,11 +9,21 @@ const Home: NextPage = () => {
     <Page bgImage="/images/bg-home.jpg">
       <div className="flex h-full w-full flex-col items-center justify-center lg:flex-row">
         <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">
-          <Logo />
+          <Logo className="text-7xl lg:text-8xl" />
           <span className="max-w-md text-xl text-white lg:text-2xl">
             Create anime quiz pools integrated with anilist.co
           </span>
-          <Button size="large">Login with anilist</Button>
+          <Button
+            size="large"
+            onClick={() =>
+              window.open(
+                'https://anilist.co/api/v2/oauth/authorize?client_id=8466&response_type=token',
+                '_self'
+              )
+            }
+          >
+            Login with anilist
+          </Button>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
           <Image
