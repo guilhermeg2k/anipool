@@ -26,7 +26,6 @@ const getByOauthProviderAndOauthId = async (
       ':oauthProvider': oauthProvider,
       ':oauthId': oauthId,
     },
-    ProjectionExpression: 'oauthProvider, oauthId, nickname, avatarUrl',
     TableName: USERS_TABLE_NAME,
   };
 

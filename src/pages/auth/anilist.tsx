@@ -1,10 +1,13 @@
 import Page from '@components/core/Page';
+import useUserStore from '@store/userStore';
 import authService from '@services/authService';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import axiosClient from '@libs/axios';
+import userService from '@services/userService';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -22,12 +25,19 @@ const getAccessTokenFromUrl = (url: string) => {
 };
 
 const Auth: NextPage = () => {
+  const { setUser } = useUserStore();
   const router = useRouter();
+
+  const loadUser = async () => {
+    axiosClient.get('hi');
+  };
 
   const authenticateUser = async (accessToken: string) => {
     const userToken = await authService.signWithAnilistAccessToken(accessToken);
     Cookies.set('userToken', userToken);
-    router.push('/pool/create');
+    const user = await userService.getCurrentUser();
+    setUser(user);
+    router.replace('/pool/create');
   };
 
   useEffect(() => {

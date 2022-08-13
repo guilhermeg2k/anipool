@@ -1,5 +1,6 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
+import useUserStore from '@store/userStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import MenuDropdown from './MenuDropdown';
@@ -10,11 +11,13 @@ const MENU_LINKS = [
 ];
 
 const UserCard = () => {
+  const { user } = useUserStore();
+
   const userInfos = (
     <div className="flex gap-2">
       <Image
         className="rounded-sm"
-        src="https://s4.anilist.co/file/anilistcdn/user/avatar/large/b982680-ufSby6V7RirG.jpg"
+        src={user.avatarUrl}
         alt="Profile picture"
         layout="fixed"
         width={44}
@@ -23,7 +26,7 @@ const UserCard = () => {
       <div className="font-robot flex flex-col justify-center ">
         <span className="text-sm leading-none text-neutral-800">Logged as</span>
         <span className="text-base font-semibold text-indigo-900">
-          guilhermeg2k
+          {user.nickname}
         </span>
       </div>
     </div>

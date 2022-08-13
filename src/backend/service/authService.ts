@@ -1,20 +1,16 @@
+import { JWT_SECRET } from '@backend/constants';
 import { OAuthProvider } from '@backend/enums';
-import jwt from 'jsonwebtoken';
-import userRepository from '@backend/repository/userRepository';
+import { User } from '@backend/types';
+import { SignJWT } from 'jose';
 import anilistService from './anilistService';
 import userService from './userService';
-import { User } from '@backend/types';
-
-const JWT_SECRET = process.env.JWT_SECRET ?? 'DEFAULT_SECRET';
 
 const generateUserJWTToken = (user: User) => {
-  const jwtToken = jwt.sign(
-    {
-      id: user.id,
-    },
-    JWT_SECRET
-  );
-  return jwtToken;
+  const iat = Math.floor(Date.now() / 1000);
+  return new SignJWT({ id: user.id })
+    .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+    .setIssuedAt(iat)
+    .sign(new TextEncoder().encode(JWT_SECRET));
 };
 
 const signInByAnilistAccessToken = async (accessToken: string) => {
@@ -26,12 +22,12 @@ const signInByAnilistAccessToken = async (accessToken: string) => {
   );
 
   if (user) {
-    const jwtToken = generateUserJWTToken(user);
+    const jwtToken = await generateUserJWTToken(user);
     return jwtToken;
   }
 
   const createdUser = await userService.createByAnilistUser(anilistUser);
-  const jwtToken = generateUserJWTToken(createdUser);
+  const jwtToken = await generateUserJWTToken(createdUser);
   return jwtToken;
 };
 

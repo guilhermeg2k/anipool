@@ -1,4 +1,4 @@
-import axiosClient from 'libs/axios';
+import axiosClient from '@libs/axios';
 
 const signWithAnilistAccessToken = async (accessToken: string) => {
   const response = await axiosClient.post('/auth/sign-in', {
