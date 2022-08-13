@@ -28,10 +28,6 @@ const Auth: NextPage = () => {
   const { setUser } = useUserStore();
   const router = useRouter();
 
-  const loadUser = async () => {
-    axiosClient.get('hi');
-  };
-
   const authenticateUser = async (accessToken: string) => {
     const userToken = await authService.signWithAnilistAccessToken(accessToken);
     Cookies.set('userToken', userToken);
