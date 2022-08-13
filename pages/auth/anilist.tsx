@@ -1,7 +1,10 @@
 import Page from '@components/core/Page';
+import authService from '@services/authService';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -20,8 +23,19 @@ const getAccessTokenFromUrl = (url: string) => {
 
 const Auth: NextPage = () => {
   const router = useRouter();
-  const accessToken = getAccessTokenFromUrl(router.asPath);
-  console.log(accessToken);
+
+  const authenticateUser = async (accessToken: string) => {
+    const userToken = await authService.signWithAnilistAccessToken(accessToken);
+    Cookies.set('userToken', userToken);
+    router.push('/pool/create');
+  };
+
+  useEffect(() => {
+    const accessToken = getAccessTokenFromUrl(router.asPath);
+    if (accessToken) {
+      authenticateUser(accessToken);
+    }
+  }, []);
 
   return (
     <Page
