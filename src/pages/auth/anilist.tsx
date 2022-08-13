@@ -10,6 +10,7 @@ import axiosClient from '@libs/axios';
 import userService from '@services/userService';
 import SpinnerGon from '@components/core/SpinnerGon';
 import { toastError } from '@libs/toastify';
+import LoadingPage from '@components/core/LoadingPage';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -38,7 +39,7 @@ const Auth: NextPage = () => {
       Cookies.set('userToken', userToken);
       const user = await userService.getCurrentUser();
       setUser(user);
-      router.replace('/pool/create');
+      router.push('/pool/create');
     } catch (error) {
       toastError('Failed to authenticate user');
     }
@@ -51,15 +52,7 @@ const Auth: NextPage = () => {
     }
   }, []);
 
-  return (
-    <Page
-      bgImage="/images/bg-home.jpg"
-      className="flex flex-col items-center justify-center text-white gap-4"
-    >
-      <SpinnerGon />
-      <span className="text-sm font-semibold">Authenticating</span>
-    </Page>
-  );
+  return <LoadingPage text="Authenticating" />;
 };
 
 export default Auth;

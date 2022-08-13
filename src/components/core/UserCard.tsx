@@ -7,30 +7,11 @@ import MenuDropdown from './MenuDropdown';
 
 const MENU_LINKS = [
   { id: 1, label: 'About', path: '/about' },
-  { id: 2, label: 'Sign out', path: 'signout' },
+  { id: 2, label: 'Sign out', path: '/auth/sign-out' },
 ];
 
 const UserCard = () => {
   const { avatarUrl, nickname } = useUserStore();
-
-  const userInfos = (
-    <div className="flex gap-2">
-      <Image
-        className="rounded-sm"
-        src={avatarUrl}
-        alt="Profile picture"
-        layout="fixed"
-        width={44}
-        height={44}
-      />
-      <div className="font-robot flex flex-col justify-center ">
-        <span className="text-sm leading-none text-neutral-800">Logged as</span>
-        <span className="text-base font-semibold text-indigo-900">
-          {nickname}
-        </span>
-      </div>
-    </div>
-  );
 
   const menuItems = MENU_LINKS.map((link) => (
     <Menu.Item as={Link} key={link.id} href={link.path}>
@@ -42,7 +23,25 @@ const UserCard = () => {
 
   return (
     <div className="flex w-full items-center justify-between self-end rounded-sm bg-white p-3 sm:w-[225px]">
-      {userInfos}
+      <div className="flex gap-2">
+        <Image
+          className="rounded-sm"
+          src={avatarUrl}
+          alt="Profile picture"
+          layout="fixed"
+          width={44}
+          height={44}
+        />
+        <div className="font-robot flex flex-col justify-center ">
+          <span className="text-sm leading-none text-neutral-800">
+            Logged as
+          </span>
+          <span className="text-base font-semibold text-indigo-900">
+            {nickname}
+          </span>
+        </div>
+      </div>
+
       <MenuDropdown items={menuItems} className="h-[20px]">
         <div>
           <ChevronDownIcon className="h-5 w-5 hover:text-indigo-700" />

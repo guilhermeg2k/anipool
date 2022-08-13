@@ -1,3 +1,4 @@
+import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import SpinnerGon from '@components/core/SpinnerGon';
 import { toastError } from '@libs/toastify';
@@ -30,17 +31,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      {isLoading ? (
-        <Page
-          bgImage="/images/bg-home.jpg"
-          className="flex flex-col items-center justify-center text-white gap-4"
-        >
-          <SpinnerGon />
-          <span className="text-sm font-semibold">Loading</span>
-        </Page>
-      ) : (
-        <Component {...pageProps} />
-      )}
+      {isLoading ? <LoadingPage /> : <Component {...pageProps} />}
       <ToastContainer />
     </>
   );
