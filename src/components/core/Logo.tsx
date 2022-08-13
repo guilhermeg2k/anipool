@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
 interface LogoProps {
@@ -6,13 +7,8 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className = '' }) => {
   return (
-    <h1
-      className={twMerge(
-        `text-white text-lg font-cursive uppercase`,
-        className
-      )}
-    >
-      Anipool
+    <h1 className={twMerge(`text-white text-lg uppercase`, className)}>
+      <span>anipool</span>
     </h1>
   );
 };

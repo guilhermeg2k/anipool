@@ -1,16 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
 import userService from '@backend/service/userService';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const getCurrentUser = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { id } = req.cookies;
     if (id) {
       const user = await userService.get(id);
-      res.status(200).send(user);
+      return res.status(200).send(user);
     }
+    return res.status(401).send('');
   } catch (error) {
-    res.status(500).send('');
+    console.log(error);
+    return res.status(500).send('');
   }
 };
 

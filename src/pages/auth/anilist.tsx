@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axiosClient from '@libs/axios';
 import userService from '@services/userService';
+import SpinnerGon from '@components/core/SpinnerGon';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -45,19 +46,10 @@ const Auth: NextPage = () => {
 
   return (
     <Page
-      bgImage="/images/bg-vote-pool.jpg"
+      bgImage="/images/bg-home.jpg"
       className="flex flex-col items-center justify-center text-white gap-4"
     >
-      <div className="w-[50px]">
-        <Image
-          src="/images/gon-head.png"
-          alt="gon head spinning"
-          layout="responsive"
-          width={643}
-          height={630}
-          className="animate-spin"
-        />
-      </div>
+      <SpinnerGon />
       <span className="text-sm font-semibold">Authenticating</span>
     </Page>
   );

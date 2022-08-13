@@ -6,8 +6,7 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   const { oathProvider, accessToken } = req.body;
 
   if (!oathProvider || !accessToken) {
-    res.status(400).send('');
-    return;
+    return res.status(400).send('');
   }
 
   try {
@@ -16,18 +15,16 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
         const jwtToken = await authService.signInByAnilistAccessToken(
           accessToken
         );
-        res.status(200).send({
+        return res.status(200).send({
           jwtToken,
         });
-        return;
 
       default:
-        res.status(400).send('');
-        return;
+        return res.status(400).send('');
     }
   } catch (error) {
-    res.status(401).send('');
     console.log(error);
+    return res.status(401).send('');
   }
 };
 
