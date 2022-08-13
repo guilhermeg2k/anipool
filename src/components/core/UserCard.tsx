@@ -11,13 +11,13 @@ const MENU_LINKS = [
 ];
 
 const UserCard = () => {
-  const { user } = useUserStore();
+  const { avatarUrl, nickname } = useUserStore();
 
   const userInfos = (
     <div className="flex gap-2">
       <Image
         className="rounded-sm"
-        src={user.avatarUrl}
+        src={avatarUrl}
         alt="Profile picture"
         layout="fixed"
         width={44}
@@ -26,7 +26,7 @@ const UserCard = () => {
       <div className="font-robot flex flex-col justify-center ">
         <span className="text-sm leading-none text-neutral-800">Logged as</span>
         <span className="text-base font-semibold text-indigo-900">
-          {user.nickname}
+          {nickname}
         </span>
       </div>
     </div>

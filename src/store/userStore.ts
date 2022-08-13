@@ -1,23 +1,20 @@
 import { User } from '@backend/types';
 import create from 'zustand';
 
-interface UserState {
-  user: User;
+type UserState = User & {
   setUser: (user: User) => void;
-}
+};
 
 const useUserStore = create<UserState>((set) => ({
-  user: <User>{
-    id: '',
-    oauthProvider: '',
-    oauthId: '',
-    nickname: '',
-    avatarUrl: '',
-  },
+  id: '',
+  nickname: '',
+  avatarUrl: '',
+  oauthId: '',
+  oauthProvider: '',
 
   setUser: (user: User) =>
     set(() => ({
-      user,
+      ...user,
     })),
 }));
 
