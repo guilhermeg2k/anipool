@@ -1,11 +1,17 @@
+import AutoAnimate from '@components/core/AutoAnimate';
 import Button from '@components/core/Button';
 import DataDisplay from '@components/core/DataDisplay';
 import Modal from '@components/core/Modal';
 import Select from '@components/core/Select';
+import Spinner from '@components/core/Spinner';
+import SpinnerGon from '@components/core/SpinnerGon';
 import TextField from '@components/core/TextField';
 import { toastError } from '@libs/toastify';
+import anilistService from '@services/anilistService';
 import Image from 'next/image';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { MediaTypes } from 'src/enums';
 
 const POOL_OPTION_TYPES = [
   { id: 1, label: MediaTypes.Anime, value: MediaTypes.Anime },
@@ -24,13 +30,23 @@ const SearchOptionModal = ({
   onClose,
   onAdd,
 }: SearchOptionModalProps) => {
+  const [searchText, setSearchText] = useState('');
   const [type, setType] = useState(POOL_OPTION_TYPES[0].value);
-  const [text, setText] = useState('');
+  const [options, setOptions] = useState(Array<Anilist.Media>());
+  const [isLoadingOptions, setIsLoadingOptions] = useState(false);
 
-  const searchOptions = () => {
+  const searchOptions = async () => {
     try {
+      setIsLoadingOptions(true);
+      const options = await anilistService.listMediaBySearchAndType(
+        searchText,
+        type
+      );
+      setOptions(options);
     } catch (error) {
       toastError('Failed to search options');
+    } finally {
+      setIsLoadingOptions(false);
     }
   };
 
@@ -53,20 +69,26 @@ const SearchOptionModal = ({
             <TextField
               id="search-option-text"
               placeHolder="Hunter x Hunter"
-              value={text}
+              value={searchText}
               className="w-full"
-              onChange={(text) => setText(text)}
+              onChange={(text) => setSearchText(text)}
             />
             <Button onClick={() => searchOptions()}>Search</Button>
           </div>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <DataDisplay className="w-full">
-            <ul>
-              <li>SHINGEKI NO KYOJIN</li>
-              <li>SHINGEKI NO KYOJIN</li>
-              <li>SHINGEKI NO KYOJIN</li>
-            </ul>
+            <AutoAnimate as="ul" className="h-full">
+              {isLoadingOptions ? (
+                <div className="flex flex-col w-full h-full items-center justify-center">
+                  <Spinner className="text-indigo-900" />
+                </div>
+              ) : (
+                options.map((option) => (
+                  <li key={option.id}>{option.title.english}</li>
+                ))
+              )}
+            </AutoAnimate>
           </DataDisplay>
           <DataDisplay className="flex w-full flex-col items-center gap-2 py-3 sm:w-[400px]">
             <h1 className="font-medium text-neutral-800">SHINGEKI NO KYOJIN</h1>

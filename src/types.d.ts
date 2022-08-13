@@ -8,18 +8,25 @@ declare module Anilist {
     };
   }
 
+  interface Media {
+    id: number;
+    title: {
+      romaji: string;
+      english: string;
+      native: string;
+    };
+    coverImage: {
+      extraLarge: string;
+    };
+    episodes?: number;
+    status: string;
+    format: string;
+  }
   interface Page {
     pageInfo: PageInfo;
-    media: Array<AnilistAnime>;
+    media: Array<Media>;
   }
 }
-
-enum MediaTypes {
-  Anime = 'ANIME',
-  Manga = 'MANGA',
-  Character = 'CHARACTER',
-}
-
 interface User {
   id?: string;
   oauthProvider: string;

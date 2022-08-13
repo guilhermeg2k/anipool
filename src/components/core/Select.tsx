@@ -68,7 +68,7 @@ const Select = ({
         leaveTo="transform opacity-0 scale-95"
       >
         <Listbox.Options
-          className={`absolute min-w-[125px] rounded-b bg-white shadow-md`}
+          className={`absolute min-w-[125px] rounded-b bg-white shadow-md z-20`}
         >
           {selectItems}
         </Listbox.Options>

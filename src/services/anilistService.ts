@@ -1,5 +1,6 @@
-import { gql } from 'graphql-request';
 import graphqlClient from '@libs/graphql';
+import { gql } from 'graphql-request';
+import { MediaTypes } from 'src/enums';
 
 const getUserByAccessToken = async (accessToken: string) => {
   const query = gql`
@@ -28,11 +29,18 @@ const getUserByAccessToken = async (accessToken: string) => {
 
 const listMediaBySearchAndType = async (
   searchText: string,
-  type: MediaTypes
+  type: MediaTypes,
+  page = 1,
+  pageSize = 10
 ) => {
   const query = gql`
-    {
-      Page(page: 1, perPage: 10) {
+    query getMedias(
+      $searchText: String!
+      $type: MediaType!
+      $page: Int!
+      $pageSize: Int!
+    ) {
+      Page(page: $page, perPage: $pageSize) {
         pageInfo {
           total
           currentPage
@@ -57,12 +65,15 @@ const listMediaBySearchAndType = async (
     }
   `;
 
-  const queryResult = await graphqlClient.request(query, { searchText, type });
-  if (queryResult.Page && queryResult.Page.media) {
-    const queryPage = queryResult.Page as Anilist.Page;
-    return queryPage.media;
-  }
-  return null;
+  const queryResult = await graphqlClient.request(query, {
+    searchText,
+    type,
+    page,
+    pageSize,
+  });
+
+  const queryPage = queryResult.Page as Anilist.Page;
+  return queryPage.media;
 };
 
 const anilistService = {
