@@ -72,13 +72,49 @@ const listMediaBySearchAndType = async (
     pageSize,
   });
 
-  const queryPage = queryResult.Page as Anilist.Page;
-  return queryPage.media;
+  return queryResult.Page.media as Array<Anilist.Media>;
+};
+
+const listCharacterBySearch = async (
+  searchText: string,
+  page = 1,
+  pageSize = 10
+) => {
+  const query = gql`
+    query getMedias($searchText: String!, $page: Int!, $pageSize: Int!) {
+      Page(page: $page, perPage: $pageSize) {
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
+        }
+        characters(search: $searchText) {
+          id
+          name {
+            full
+            native
+            alternative
+          }
+        }
+      }
+    }
+  `;
+
+  const queryResult = await graphqlClient.request(query, {
+    searchText,
+    page,
+    pageSize,
+  });
+
+  return queryResult.Page.characters as Array<Anilist.Character>;
 };
 
 const anilistService = {
   getUserByAccessToken,
   listMediaBySearchAndType,
+  listCharacterBySearch,
 };
 
 export default anilistService;

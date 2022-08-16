@@ -22,9 +22,13 @@ declare module Anilist {
     status: string;
     format: string;
   }
-  interface Page {
-    pageInfo: PageInfo;
-    media: Array<Media>;
+
+  interface Character {
+    id: number;
+    name: {
+      full: string;
+      native: string;
+    };
   }
 }
 interface User {
