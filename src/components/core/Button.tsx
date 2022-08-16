@@ -1,20 +1,19 @@
-interface ButtonProps {
-  children: React.ReactNode;
+import { ButtonHTMLAttributes, ReactNode } from 'react';
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
   size?: string;
-  className?: string;
   color?: string;
-  disabled?: boolean;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const Button = ({
-  children,
+const Button: React.FC<ButtonProps> = ({
   className = '',
   size = 'normal',
   color = 'indigo',
-  disabled = false,
-  onClick,
-}: ButtonProps) => {
+  disabled,
+  children,
+  ...rest
+}) => {
   const buildColorClasses = () => {
     if (disabled) {
       return 'bg-neutral-300 text-neutral-400';
@@ -48,8 +47,8 @@ const Button = ({
   return (
     <button
       className={`${className} ${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] font-roboto font-bold uppercase text-white duration-200 ease-in-out`}
-      onClick={onClick}
       disabled={disabled}
+      {...rest}
     >
       <div className="flex items-center justify-center gap-1">{children}</div>
     </button>
