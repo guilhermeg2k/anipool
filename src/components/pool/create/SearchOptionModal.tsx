@@ -5,7 +5,7 @@ import Modal from '@components/core/Modal';
 import Select from '@components/core/Select';
 import Spinner from '@components/core/Spinner';
 import TextField from '@components/core/TextField';
-import { toastError } from '@libs/toastify';
+import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -21,7 +21,12 @@ const isMedia = (obj: any): obj is Anilist.Media => Boolean(obj && obj.title);
 const isCharacter = (obj: any): obj is Anilist.Character =>
   Boolean(obj && obj.name);
 
-const MediaCard: React.FC<{ media: Anilist.Media }> = ({ media }) => (
+interface MediaCardProps {
+  media: Anilist.Media;
+  onAdd: (media: Anilist.Media) => void;
+}
+
+const MediaCard: React.FC<MediaCardProps> = ({ media, onAdd }) => (
   <>
     <h1 className="font-medium text-neutral-800 text-center">
       {media.title.romaji}
@@ -44,23 +49,26 @@ const MediaCard: React.FC<{ media: Anilist.Media }> = ({ media }) => (
       </span>
     </div>
     <div>
-      <Button color="green">
+      <Button color="green" onClick={() => onAdd(media)}>
         <span className="px-9">ADD</span>
       </Button>
     </div>
   </>
 );
 
-const CharacterCard: React.FC<{ character: Anilist.Character }> = ({
-  character: media,
-}) => (
+interface CharacterCardProps {
+  character: Anilist.Character;
+  onAdd: (character: Anilist.Character) => void;
+}
+
+const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
   <>
     <h1 className="font-medium text-neutral-800 text-center">
-      {media.name.full}
+      {character.name.full}
     </h1>
     <div className="h-[155px] w-[112px]">
       <Image
-        src={media.image.large}
+        src={character.image.large}
         alt="Selected option cover"
         width="112px"
         height="155px"
@@ -68,11 +76,11 @@ const CharacterCard: React.FC<{ character: Anilist.Character }> = ({
       />
     </div>
     <div className="flex flex-col items-center text-neutral-600">
-      <span className="text-sm text-center">{media.name.full}</span>
-      <span className="text-sm text-center">{media.name.native}</span>
+      <span className="text-sm text-center">{character.name.full}</span>
+      <span className="text-sm text-center">{character.name.native}</span>
     </div>
     <div>
-      <Button color="green">
+      <Button color="green" onClick={() => onAdd(character)}>
         <span className="px-9">ADD</span>
       </Button>
     </div>
@@ -82,7 +90,7 @@ const CharacterCard: React.FC<{ character: Anilist.Character }> = ({
 interface SearchOptionModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (option: PoolOption) => void;
+  onAdd: (poolOption: PoolOption) => void;
 }
 
 const SearchOptionModal = ({
@@ -122,15 +130,31 @@ const SearchOptionModal = ({
     }
   };
 
+  const addMediaHandler = (media: Anilist.Media) => {
+    onAdd({ anilistId: media.id, type: media.type, text: media.title.english });
+    toastSuccess(`${media.title.english} added`);
+  };
+
+  const addCharacterHandler = (character: Anilist.Character) => {
+    onAdd({
+      anilistId: character.id,
+      type: MediaTypes.Character,
+      text: character.name.full,
+    });
+    toastSuccess(`${character.name.full} added`);
+  };
+
   const renderSelectedOption = (
     selectedOption: Anilist.Media | Anilist.Character | null
   ) => {
     if (isMedia(selectedOption)) {
-      return <MediaCard media={selectedOption} />;
+      return <MediaCard media={selectedOption} onAdd={addMediaHandler} />;
     }
 
     if (isCharacter(selectedOption)) {
-      return <CharacterCard character={selectedOption} />;
+      return (
+        <CharacterCard character={selectedOption} onAdd={addCharacterHandler} />
+      );
     }
 
     return (
@@ -141,15 +165,9 @@ const SearchOptionModal = ({
   };
 
   const renderOption = (option: Anilist.Media | Anilist.Character) => {
-    if (isMedia(option)) {
-      return <li>{option.title.english}</li>;
-    }
+    if (isMedia(option)) return option.title.english;
 
-    if (option.name) {
-      return <li>{option.name.full}</li>;
-    }
-
-    return <li></li>;
+    if (isCharacter(option)) return option.name.full;
   };
 
   return (

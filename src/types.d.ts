@@ -10,6 +10,7 @@ declare module Anilist {
 
   interface Media {
     id: number;
+    type: string;
     title: {
       romaji: string;
       english: string;
@@ -44,7 +45,7 @@ interface User {
 }
 
 interface PoolOption {
-  id: number;
+  anilistId: number;
   type: string;
   text: string;
 }

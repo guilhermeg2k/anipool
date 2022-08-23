@@ -50,6 +50,7 @@ const listMediaBySearchAndType = async (
         }
         media(search: $searchText, type: $type) {
           id
+          type
           title {
             romaji
             english

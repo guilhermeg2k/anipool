@@ -1,3 +1,4 @@
+import AutoAnimate from '@components/core/AutoAnimate';
 import Box from '@components/core/Box';
 import Button from '@components/core/Button';
 import CheckBox from '@components/core/CheckBox';
@@ -8,7 +9,6 @@ import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
 import SearchOptionModal from './SearchOptionModal';
-import { PoolOption } from './types';
 
 const DATE_TIME_NOW = new Date();
 
@@ -16,17 +16,22 @@ interface PoolFormOptionProps {
   id: string;
   type: string;
   text: string;
+  onRemove: () => void;
 }
 
-const PoolFormOption = ({ id, type, text }: PoolFormOptionProps) => {
+const PoolFormOption = ({ id, type, text, onRemove }: PoolFormOptionProps) => {
   return (
-    <FormGroup id={id} className="flex flex-col sm:flex-row" label="#1 Option">
+    <FormGroup
+      id={id}
+      className="flex flex-col sm:flex-row"
+      label={`#${id} Option`}
+    >
       <DataDisplay className="flex w-full items-center justify-center sm:w-[180px]">
         {type}
       </DataDisplay>
       <DataDisplay className="flex w-full items-center justify-between uppercase">
         <span>{text}</span>
-        <button>
+        <button onClick={onRemove}>
           <TrashIcon className="h-5 w-5 text-red-600" />
         </button>
       </DataDisplay>
@@ -45,8 +50,14 @@ const CreatePoolForm = () => {
     title && endDate !== DATE_TIME_NOW && options.length > 1;
 
   const onAddOptionHandler = (option: PoolOption) => {
-    const newOptions = [...options];
-    newOptions.push(option);
+    const newOptions = [...options, option];
+    setOptions(newOptions);
+  };
+
+  const onRemoveOptionHandler = (optionToRemove: PoolOption) => {
+    const newOptions = options.filter(
+      (option) => option.anilistId !== optionToRemove.anilistId
+    );
     setOptions(newOptions);
   };
 
@@ -77,20 +88,28 @@ const CreatePoolForm = () => {
           >
             <span className="px-9">ADD</span>
           </Button>
-          {options.length > 0 ? (
-            options.map(({ id, type, text }) => (
-              <PoolFormOption
-                key={id}
-                id={id.toString()}
-                type={type}
-                text={text}
-              />
-            ))
-          ) : (
-            <span className="self-center text-sm uppercase">
-              Add options to visualize here
-            </span>
-          )}
+          <AutoAnimate
+            as="ul"
+            className={`flex w-full flex-col ${
+              options.length > 0 && 'overflow-y-scroll max-h-[400px] pr-1'
+            }`}
+          >
+            {options.length > 0 ? (
+              options.map((option, index) => (
+                <PoolFormOption
+                  key={option.anilistId}
+                  id={(index + 1).toString()}
+                  type={option.type}
+                  text={option.text}
+                  onRemove={() => onRemoveOptionHandler(option)}
+                />
+              ))
+            ) : (
+              <li className="self-center text-sm uppercase">
+                Add options to visualize here
+              </li>
+            )}
+          </AutoAnimate>
         </DataDisplay>
       </FormGroup>
       <FormGroup
