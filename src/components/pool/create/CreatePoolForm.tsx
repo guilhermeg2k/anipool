@@ -61,6 +61,8 @@ const CreatePoolForm = () => {
     setOptions(newOptions);
   };
 
+  const onSubmitHandler = () => {};
+
   return (
     <Box>
       {isSearchModalOpen && (
@@ -81,16 +83,9 @@ const CreatePoolForm = () => {
       />
       <FormGroup label="Options">
         <DataDisplay className="flex w-full flex-col">
-          <Button
-            className="self-end"
-            color="green"
-            onClick={() => setIsSearchModalOpen(true)}
-          >
-            <span className="px-9">ADD</span>
-          </Button>
           <AutoAnimate
             as="ul"
-            className={`flex w-full flex-col ${
+            className={`flex w-full flex-col mb-2 ${
               options.length > 0 && 'overflow-y-scroll max-h-[400px] pr-1'
             }`}
           >
@@ -110,6 +105,13 @@ const CreatePoolForm = () => {
               </li>
             )}
           </AutoAnimate>
+          <Button
+            className="self-end w-full"
+            color="green"
+            onClick={() => setIsSearchModalOpen(true)}
+          >
+            ADD OPTIONS
+          </Button>
         </DataDisplay>
       </FormGroup>
       <FormGroup
@@ -135,6 +137,7 @@ const CreatePoolForm = () => {
           size="large"
           color="green"
           className="w-full sm:w-auto"
+          onClick={onSubmitHandler}
         >
           Create pool
         </Button>

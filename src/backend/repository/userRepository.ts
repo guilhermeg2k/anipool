@@ -1,6 +1,4 @@
 import dynamoDb from '@backend/database';
-import { DynamoDB } from 'aws-sdk';
-import { User } from '@backend/types';
 import { v4 as uuidv4 } from 'uuid';
 
 const USERS_TABLE_NAME = 'users';

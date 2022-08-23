@@ -1,6 +1,5 @@
 import { OAuthProvider } from '@backend/enums';
 import userRepository from '@backend/repository/userRepository';
-import { AnilistUser, User } from '@backend/types';
 
 const get = async (id: string) => {
   const user = await userRepository.get(id);
@@ -18,7 +17,7 @@ const getByOAuthProviderAndOauthId = async (
   return user;
 };
 
-const createByAnilistUser = async (anilistUser: AnilistUser) => {
+const createByAnilistUser = async (anilistUser: Anilist.User) => {
   const user = <User>{
     oauthProvider: OAuthProvider.Anilist,
     oauthId: anilistUser.id.toString(),
