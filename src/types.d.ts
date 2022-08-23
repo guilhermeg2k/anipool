@@ -29,6 +29,10 @@ declare module Anilist {
       full: string;
       native: string;
     };
+    image: {
+      large: string;
+      medium: string;
+    };
   }
 }
 interface User {

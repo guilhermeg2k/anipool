@@ -97,6 +97,10 @@ const listCharacterBySearch = async (
             native
             alternative
           }
+          image {
+            large
+            medium
+          }
         }
       }
     }

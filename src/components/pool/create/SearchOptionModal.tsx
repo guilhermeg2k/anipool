@@ -17,6 +17,68 @@ const POOL_OPTION_TYPES = [
   { id: 3, label: MediaTypes.Character, value: MediaTypes.Character },
 ];
 
+const isMedia = (obj: any): obj is Anilist.Media => Boolean(obj && obj.title);
+const isCharacter = (obj: any): obj is Anilist.Character =>
+  Boolean(obj && obj.name);
+
+const MediaCard: React.FC<{ media: Anilist.Media }> = ({ media }) => (
+  <>
+    <h1 className="font-medium text-neutral-800 text-center">
+      {media.title.romaji}
+    </h1>
+    <div className="h-[155px] w-[112px]">
+      <Image
+        src={media.coverImage.extraLarge}
+        alt="Selected option cover"
+        width="112px"
+        height="155px"
+        layout="responsive"
+      />
+    </div>
+    <div className="flex flex-col items-center text-neutral-600">
+      <span className="text-sm text-center">{media.title.english}</span>
+      <span className="text-sm text-center">{media.title.native}</span>
+      <span className="text-xs">
+        {media.format}
+        {media.episodes ? ` - ${media.episodes} EPISODES` : ``}
+      </span>
+    </div>
+    <div>
+      <Button color="green">
+        <span className="px-9">ADD</span>
+      </Button>
+    </div>
+  </>
+);
+
+const CharacterCard: React.FC<{ character: Anilist.Character }> = ({
+  character: media,
+}) => (
+  <>
+    <h1 className="font-medium text-neutral-800 text-center">
+      {media.name.full}
+    </h1>
+    <div className="h-[155px] w-[112px]">
+      <Image
+        src={media.image.large}
+        alt="Selected option cover"
+        width="112px"
+        height="155px"
+        layout="responsive"
+      />
+    </div>
+    <div className="flex flex-col items-center text-neutral-600">
+      <span className="text-sm text-center">{media.name.full}</span>
+      <span className="text-sm text-center">{media.name.native}</span>
+    </div>
+    <div>
+      <Button color="green">
+        <span className="px-9">ADD</span>
+      </Button>
+    </div>
+  </>
+);
+
 interface SearchOptionModalProps {
   open: boolean;
   onClose: () => void;
@@ -30,15 +92,24 @@ const SearchOptionModal = ({
 }: SearchOptionModalProps) => {
   const [searchText, setSearchText] = useState('');
   const [type, setType] = useState(POOL_OPTION_TYPES[0].value);
-  const [options, setOptions] = useState(Array<Anilist.Media>());
-  const [selectedOption, setSelectedOption] = useState<Anilist.Media | null>(
-    null
+  const [options, setOptions] = useState(
+    Array<Anilist.Media | Anilist.Character>()
   );
+  const [selectedOption, setSelectedOption] = useState<
+    Anilist.Media | Anilist.Character | null
+  >(null);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
 
   const searchOptions = async (searchText: string, type: MediaTypes) => {
     try {
       setIsLoadingOptions(true);
+
+      if (type === MediaTypes.Character) {
+        const options = await anilistService.listCharacterBySearch(searchText);
+        setOptions(options);
+        return;
+      }
+
       const options = await anilistService.listMediaBySearchAndType(
         searchText,
         type
@@ -49,6 +120,36 @@ const SearchOptionModal = ({
     } finally {
       setIsLoadingOptions(false);
     }
+  };
+
+  const renderSelectedOption = (
+    selectedOption: Anilist.Media | Anilist.Character | null
+  ) => {
+    if (isMedia(selectedOption)) {
+      return <MediaCard media={selectedOption} />;
+    }
+
+    if (isCharacter(selectedOption)) {
+      return <CharacterCard character={selectedOption} />;
+    }
+
+    return (
+      <span className="text-xs uppercase font-semibold">
+        Select a option to display
+      </span>
+    );
+  };
+
+  const renderOption = (option: Anilist.Media | Anilist.Character) => {
+    if (isMedia(option)) {
+      return <li>{option.title.english}</li>;
+    }
+
+    if (option.name) {
+      return <li>{option.name.full}</li>;
+    }
+
+    return <li></li>;
   };
 
   return (
@@ -101,7 +202,7 @@ const SearchOptionModal = ({
                     className="cursor-pointer"
                     onClick={() => setSelectedOption(option)}
                   >
-                    {option.title.english}
+                    {renderOption(option)}
                   </li>
                 ))
               )}
@@ -109,45 +210,7 @@ const SearchOptionModal = ({
           </DataDisplay>
 
           <DataDisplay className="flex w-full flex-col items-center gap-2 py-3 sm:w-[400px] min-h-[250px]">
-            {selectedOption ? (
-              <>
-                <h1 className="font-medium text-neutral-800 text-center">
-                  {selectedOption.title.romaji}
-                </h1>
-                <div className="h-[155px] w-[112px]">
-                  <Image
-                    src={selectedOption.coverImage.extraLarge}
-                    alt="Selected option cover"
-                    width="112px"
-                    height="155px"
-                    layout="responsive"
-                  />
-                </div>
-                <div className="flex flex-col items-center text-neutral-600">
-                  <span className="text-sm text-center">
-                    {selectedOption.title.english}
-                  </span>
-                  <span className="text-sm text-center">
-                    {selectedOption.title.native}
-                  </span>
-                  <span className="text-xs">
-                    {selectedOption.format}
-                    {selectedOption.episodes
-                      ? ` - ${selectedOption.episodes} EPISODES`
-                      : ``}
-                  </span>
-                </div>
-                <div>
-                  <Button color="green">
-                    <span className="px-9">ADD</span>
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <span className="text-xs uppercase font-semibold">
-                Select a option to display
-              </span>
-            )}
+            {renderSelectedOption(selectedOption)}
           </DataDisplay>
         </div>
       </div>
