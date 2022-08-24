@@ -1,6 +1,6 @@
 import graphqlClient from '@libs/graphql';
 import { gql } from 'graphql-request';
-import { MediaTypes } from 'src/enums';
+import { OptionType } from 'src/enums';
 
 const getUserByAccessToken = async (accessToken: string) => {
   const query = gql`
@@ -52,9 +52,33 @@ const getMediaById = async (id: number) => {
   return queryResult.Media as Anilist.Media;
 };
 
+const getCharacterById = async (id: number) => {
+  const query = gql`
+    query getCharacters($id: Int!) {
+      Character(id: $id) {
+        id
+        name {
+          full
+          native
+        }
+        image {
+          large
+          medium
+        }
+      }
+    }
+  `;
+
+  const queryResult = await graphqlClient.request(query, {
+    id,
+  });
+
+  return queryResult.Character as Anilist.Character;
+};
+
 const listMediaBySearchAndType = async (
   searchText: string,
-  type: MediaTypes,
+  type: OptionType,
   page = 1,
   pageSize = 10
 ) => {
@@ -144,6 +168,7 @@ const listCharacterBySearch = async (
 const anilistService = {
   getUserByAccessToken,
   getMediaById,
+  getCharacterById,
   listMediaBySearchAndType,
   listCharacterBySearch,
 };

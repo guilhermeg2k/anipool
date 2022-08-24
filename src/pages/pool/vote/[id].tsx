@@ -8,6 +8,7 @@ import poolService from '@services/poolService';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { OptionType } from 'src/enums';
 
 type PoolOption = Anilist.Media & Anilist.Character;
 
@@ -25,11 +26,22 @@ const CreatePool: NextPage = () => {
       if (id) {
         const pool = await poolService.get(String(id));
         const options = Array<PoolOption>();
+
         for (const option of pool.options) {
-          const media = await anilistService.getMediaById(
-            parseInt(String(option.anilistId))
-          );
-          options.push(media as PoolOption);
+          if (option.type === OptionType.Character) {
+            const character = await anilistService.getCharacterById(
+              parseInt(String(option.anilistId))
+            );
+            options.push({
+              ...character,
+              type: OptionType.Character,
+            } as PoolOption);
+          } else {
+            const media = await anilistService.getMediaById(
+              parseInt(String(option.anilistId))
+            );
+            options.push(media as PoolOption);
+          }
         }
 
         setPool(pool);
@@ -55,7 +67,7 @@ const CreatePool: NextPage = () => {
     <Page bgImage="/images/bg-vote-pool.jpg">
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
-        <VoteForm pool={pool} options={options} />
+        <VoteForm pool={pool!} options={options} />
       </div>
     </Page>
   );

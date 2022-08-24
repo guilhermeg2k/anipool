@@ -9,12 +9,12 @@ import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import Image from 'next/image';
 import { useState } from 'react';
-import { MediaTypes } from 'src/enums';
+import { OptionType } from 'src/enums';
 
 const POOL_OPTION_TYPES = [
-  { id: 1, label: MediaTypes.Anime, value: MediaTypes.Anime },
-  { id: 2, label: MediaTypes.Manga, value: MediaTypes.Manga },
-  { id: 3, label: MediaTypes.Character, value: MediaTypes.Character },
+  { id: 1, label: OptionType.Anime, value: OptionType.Anime },
+  { id: 2, label: OptionType.Manga, value: OptionType.Manga },
+  { id: 3, label: OptionType.Character, value: OptionType.Character },
 ];
 
 const isMedia = (obj: any): obj is Anilist.Media => Boolean(obj && obj.title);
@@ -108,11 +108,11 @@ const SearchOptionModal = ({
   >(null);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
 
-  const searchOptions = async (searchText: string, type: MediaTypes) => {
+  const searchOptions = async (searchText: string, type: OptionType) => {
     try {
       setIsLoadingOptions(true);
 
-      if (type === MediaTypes.Character) {
+      if (type === OptionType.Character) {
         const options = await anilistService.listCharacterBySearch(searchText);
         setOptions(options);
         return;
@@ -138,7 +138,7 @@ const SearchOptionModal = ({
   const addCharacterHandler = (character: Anilist.Character) => {
     onAdd({
       anilistId: character.id,
-      type: MediaTypes.Character,
+      type: OptionType.Character,
       text: character.name.full,
     });
     toastSuccess(`${character.name.full} added`);

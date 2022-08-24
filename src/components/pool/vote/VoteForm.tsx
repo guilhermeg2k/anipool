@@ -8,7 +8,7 @@ import { useState } from 'react';
 import VoteOption from './VoteOption';
 
 interface VoteFormProps {
-  pool: Pool | undefined;
+  pool: Pool;
   options: Array<Anilist.Media & Anilist.Character>;
 }
 
@@ -18,7 +18,7 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
   const { id } = router.query;
 
   const onSelectedHandler = (selectedId: number) => {
-    if (pool?.multiOptions) {
+    if (pool.multiOptions) {
       const isAlreadyAdded = selectedIds.find((id) => id === selectedId);
       if (isAlreadyAdded) {
         setSelectedIds(selectedIds.filter((id) => id !== selectedId));
@@ -36,7 +36,11 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
       return (
         <VoteOption
           key={option.id}
-          coverUrl={option.coverImage.extraLarge}
+          coverUrl={
+            option.coverImage
+              ? option.coverImage.extraLarge
+              : option.image.large
+          }
           title={option.title}
           name={option.name}
           selected={isSelected}
@@ -54,7 +58,10 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
     <Box className="flex flex-col gap-5">
       <div className="flex flex-col items-center justify-between md:flex-row">
         <div>
-          <Title>{pool?.title}</Title>
+          <Title>{pool.title}</Title>
+          <h2 className="text-xs uppercase">
+            Ends in: {new Date(pool.endDate!).toLocaleString()}
+          </h2>
         </div>
         <div>
           <Button
