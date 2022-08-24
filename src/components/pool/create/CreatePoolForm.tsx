@@ -7,7 +7,7 @@ import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import FormGroup from '@components/core/FormGroup';
 import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/outline';
-import { toastError } from '@libs/toastify';
+import { toastPromise } from '@libs/toastify';
 import poolService from '@services/poolService';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -49,6 +49,7 @@ const CreatePoolForm = () => {
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isCreatingPool, setIsCreatingPool] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
     title && endDate !== DATE_TIME_NOW && options.length > 1;
@@ -67,16 +68,22 @@ const CreatePoolForm = () => {
 
   const onSubmitHandler = async () => {
     try {
+      setIsCreatingPool(true);
       const pool = {
         title,
         endDate: endDate.toISOString(),
         options,
         multiOptions: shouldEnableMultipleSelection,
       };
-      const poolId = await poolService.create(pool);
+
+      const poolId = await toastPromise(poolService.create(pool), {
+        pending: 'Creating pool',
+        success: 'Pool created',
+        error: 'Failed to create pool',
+      });
       router.push(`/pool/vote/${poolId}`);
-    } catch (error) {
-      toastError('Error to create pool');
+    } finally {
+      setIsCreatingPool(false);
     }
   };
 
@@ -150,7 +157,7 @@ const CreatePoolForm = () => {
           Enable multiple selection
         </CheckBox>
         <Button
-          disabled={!shouldCreateButtonBeEnabled}
+          disabled={!shouldCreateButtonBeEnabled || isCreatingPool}
           size="large"
           color="green"
           className="w-full sm:w-auto"

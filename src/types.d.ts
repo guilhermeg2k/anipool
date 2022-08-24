@@ -51,7 +51,7 @@ interface PoolOption {
 }
 
 interface Pool {
-  userId: string;
+  userId?: string;
   title: string;
   endDate: string;
   multiOptions: boolean;
