@@ -7,6 +7,9 @@ import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import FormGroup from '@components/core/FormGroup';
 import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/outline';
+import { toastError } from '@libs/toastify';
+import poolService from '@services/poolService';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import SearchOptionModal from './SearchOptionModal';
 
@@ -48,6 +51,7 @@ const CreatePoolForm = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const shouldCreateButtonBeEnabled =
     title && endDate !== DATE_TIME_NOW && options.length > 1;
+  const router = useRouter();
 
   const onAddOptionHandler = (option: PoolOption) => {
     const newOptions = [...options, option];
@@ -61,7 +65,20 @@ const CreatePoolForm = () => {
     setOptions(newOptions);
   };
 
-  const onSubmitHandler = () => {};
+  const onSubmitHandler = async () => {
+    try {
+      const pool = {
+        title,
+        endDate: endDate.toISOString(),
+        options,
+        multiOptions: shouldEnableMultipleSelection,
+      };
+      const poolId = await poolService.create(pool);
+      router.push(`/pool/results/${poolId}`);
+    } catch (error) {
+      toastError('Error to create pool');
+    }
+  };
 
   return (
     <Box>
@@ -95,7 +112,7 @@ const CreatePoolForm = () => {
                   key={option.anilistId}
                   id={(index + 1).toString()}
                   type={option.type}
-                  text={option.text}
+                  text={option.text!}
                   onRemove={() => onRemoveOptionHandler(option)}
                 />
               ))

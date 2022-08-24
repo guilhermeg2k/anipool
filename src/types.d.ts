@@ -47,5 +47,12 @@ interface User {
 interface PoolOption {
   anilistId: number;
   type: string;
-  text: string;
+  text?: string;
+}
+
+interface Pool {
+  title: string;
+  endDate: string;
+  multiOptions: boolean;
+  options: Array<PoolOption>;
 }

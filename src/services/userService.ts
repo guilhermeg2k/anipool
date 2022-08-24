@@ -1,4 +1,3 @@
-import { User } from '@backend/types';
 import axiosClient from '@libs/axios';
 
 const getCurrentUser = async () => {
