@@ -18,7 +18,17 @@ const create = async (
   await poolVotesRepository.create(parsedPoolVotes);
 };
 
+const getUserVotesOnPool = async (userId: string, poolId: string) => {
+  const userVotes = await poolVotesRepository.getVotesByUserIdAndPoolId(
+    userId,
+    poolId
+  );
+
+  return userVotes;
+};
+
 const poolVoteService = {
+  getUserVotesOnPool,
   create,
 };
 

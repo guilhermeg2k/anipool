@@ -1,4 +1,5 @@
 import poolVotesRepository from '@backend/repository/poolVoteRepository';
+import poolService from '@backend/service/poolService';
 import poolVoteService from '@backend/service/poolVoteService';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -6,11 +7,26 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { poolId } = req.query;
     const { poolVotes } = req.body;
-    const { id } = req.cookies;
+    const { id: userId } = req.cookies;
 
-    if (id && poolId && poolVotes) {
+    if (userId && poolId && poolVotes) {
+      const pool = await poolService.get(String(poolId));
+
+      if (!pool.multiOptions && poolVotes.length > 1) {
+        return res.status(400).send('');
+      }
+
+      const userVotes = await poolVoteService.getUserVotesOnPool(
+        userId,
+        String(poolId)
+      );
+
+      if (userVotes && userVotes.length > 0) {
+        return res.status(400).send('');
+      }
+
       await poolVoteService.create(
-        id,
+        userId,
         String(poolId),
         poolVotes as Array<PoolOption>
       );
