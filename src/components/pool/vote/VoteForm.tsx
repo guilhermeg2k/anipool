@@ -17,6 +17,7 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
   const [votes, setVotes] = useState<Array<PoolOption>>([]);
   const router = useRouter();
   const { id } = router.query;
+  const canVote = votes.length > 0;
 
   const onSelectedHandler = (
     selectedOption: Anilist.Media & Anilist.Character
@@ -64,8 +65,6 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
     navigator.clipboard.writeText(window.location.href);
     toastSuccess('Share link copied to clipboard');
   };
-
-  const canVote = votes.length > 0;
 
   return (
     <Box className="flex flex-col gap-5">

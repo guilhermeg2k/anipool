@@ -14,6 +14,13 @@ export const toastSuccess = (message: string) => {
   });
 };
 
+export const toastWarning = (message: string) => {
+  toast(message, {
+    type: 'warning',
+    autoClose: 2000,
+  });
+};
+
 export const toastPromise = (
   fn: Promise<unknown>,
   messages: {

@@ -76,7 +76,30 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+const getUserVotesOnPool = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  const { poolId } = req.query;
+  const { id: userId } = req.cookies;
+
+  try {
+    if (poolId && userId) {
+      const userPoolVotes = await poolVoteService.getUserVotesOnPool(
+        String(userId),
+        String(poolId)
+      );
+
+      return res.status(200).send(userPoolVotes);
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send('');
+  }
+};
+
 const poolVoteController = {
+  getUserVotesOnPool,
   create,
 };
 

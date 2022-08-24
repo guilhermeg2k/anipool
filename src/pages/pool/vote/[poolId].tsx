@@ -2,7 +2,7 @@ import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
 import VoteForm from '@components/pool/vote/VoteForm';
-import { toastError, toastSuccess } from '@libs/toastify';
+import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
 import { NextPage } from 'next';
@@ -12,20 +12,31 @@ import { OptionType } from 'src/enums';
 
 type VoteOptions = Anilist.Media & Anilist.Character;
 
-const CreatePool: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const Vote: NextPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
   const [pool, setPool] = useState<Pool>();
   const [options, setOptions] = useState<Array<VoteOptions>>([]);
-
   const router = useRouter();
+  const { poolId } = router.query;
+
+  const goToResults = () => router.push(`/pool/results/${poolId}`);
+
+  const hasUserAlreadyVoted = async () => {
+    if (poolId) {
+      const userVotes = await poolService.getUserVotesOnPool(String(poolId));
+      if (userVotes && userVotes.length > 0) {
+        return true;
+      }
+      return false;
+    }
+  };
 
   const loadOptions = async () => {
     try {
       setIsLoading(true);
-      const { id } = router.query;
-      if (id) {
-        const pool = await poolService.get(String(id));
+      if (poolId) {
+        const pool = await poolService.get(String(poolId));
         const options = Array<VoteOptions>();
 
         for (const option of pool.options) {
@@ -62,8 +73,8 @@ const CreatePool: NextPage = () => {
       setIsVoting(true);
       const { id } = router.query;
       await poolService.vote(String(id), poolVotes);
-      router.push(`/pool/results/${id}`);
       toastSuccess('Your vote was registered');
+      goToResults();
     } catch (error) {
       toastError('Error while registering your vote');
     } finally {
@@ -72,7 +83,15 @@ const CreatePool: NextPage = () => {
   };
 
   useEffect(() => {
-    loadOptions();
+    const fetchInitialData = async () => {
+      if (await hasUserAlreadyVoted()) {
+        toastWarning('You already has voted on this pool');
+        goToResults();
+      } else {
+        await loadOptions();
+      }
+    };
+    fetchInitialData();
   }, []);
 
   if (isLoading) {
@@ -93,4 +112,4 @@ const CreatePool: NextPage = () => {
   );
 };
 
-export default CreatePool;
+export default Vote;

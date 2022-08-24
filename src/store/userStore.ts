@@ -1,4 +1,3 @@
-import { User } from '@backend/types';
 import create from 'zustand';
 
 type UserState = User & {
