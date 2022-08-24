@@ -1,11 +1,4 @@
 import axiosClient from '@libs/axios';
-import anilistService from './anilistService';
-interface PoolVote {
-  title: string;
-  endDate: string;
-  multiOptions: boolean;
-  options: Array<Anilist.Media | Anilist.Character>;
-}
 
 const get = async (id: string) => {
   const response = await axiosClient.get<Pool>(`/pool/${id}`);
@@ -14,14 +7,21 @@ const get = async (id: string) => {
 };
 
 const create = async (pool: Pool) => {
-  const response = await axiosClient.post('/pool/create', pool);
-  const poolId = <string>response.data;
+  const response = await axiosClient.post<string>('/pool/create', pool);
+  const poolId = response.data;
   return poolId;
+};
+
+const vote = async (poolId: string, poolVotes: Array<PoolOption>) => {
+  await axiosClient.post(`/pool/vote/${poolId}`, {
+    poolVotes,
+  });
 };
 
 const poolService = {
   get,
   create,
+  vote,
 };
 
 export default poolService;

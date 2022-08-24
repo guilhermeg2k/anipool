@@ -51,9 +51,18 @@ interface PoolOption {
 }
 
 interface Pool {
+  id?: string;
   userId?: string;
   title: string;
   endDate: string;
   multiOptions: boolean;
   options: Array<PoolOption>;
+}
+
+interface PoolVote {
+  id?: string;
+  userId?: string;
+  poolId: string;
+  anilistId: number;
+  type: string;
 }

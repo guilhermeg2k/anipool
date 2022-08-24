@@ -8,31 +8,42 @@ import { useState } from 'react';
 import VoteOption from './VoteOption';
 
 interface VoteFormProps {
-  pool: Pool;
+  pool?: Pool;
   options: Array<Anilist.Media & Anilist.Character>;
+  onSubmit: (poolVotes: Array<PoolOption>) => void;
 }
 
-const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
-  const [selectedIds, setSelectedIds] = useState<Array<number>>([]);
+const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
+  const [votes, setVotes] = useState<Array<PoolOption>>([]);
   const router = useRouter();
   const { id } = router.query;
 
-  const onSelectedHandler = (selectedId: number) => {
-    if (pool.multiOptions) {
-      const isAlreadyAdded = selectedIds.find((id) => id === selectedId);
+  const onSelectedHandler = (
+    selectedOption: Anilist.Media & Anilist.Character
+  ) => {
+    if (pool?.multiOptions) {
+      const isAlreadyAdded = votes.find(
+        (vote) => vote.anilistId === selectedOption.id
+      );
       if (isAlreadyAdded) {
-        setSelectedIds(selectedIds.filter((id) => id !== selectedId));
+        setVotes(votes.filter((vote) => vote.anilistId !== selectedOption.id));
       } else {
-        setSelectedIds([...selectedIds, selectedId]);
+        setVotes([
+          ...votes,
+          { anilistId: selectedOption.id, type: selectedOption.type },
+        ]);
       }
     } else {
-      setSelectedIds([selectedId]);
+      setVotes([{ anilistId: selectedOption.id, type: selectedOption.type }]);
     }
   };
 
   const renderOptions = () =>
     options.map((option) => {
-      const isSelected = selectedIds.includes(option.id);
+      const isSelected = Boolean(
+        votes.find((vote) => vote.anilistId === option.id)
+      );
+
       return (
         <VoteOption
           key={option.id}
@@ -44,7 +55,7 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
           title={option.title}
           name={option.name}
           selected={isSelected}
-          onClick={() => onSelectedHandler(option.id)}
+          onClick={() => onSelectedHandler(option)}
         />
       );
     });
@@ -58,9 +69,9 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
     <Box className="flex flex-col gap-5">
       <div className="flex flex-col items-center justify-between md:flex-row">
         <div>
-          <Title>{pool.title}</Title>
+          <Title>{pool?.title}</Title>
           <h2 className="text-xs uppercase">
-            Ends in: {new Date(pool.endDate!).toLocaleString()}
+            Ends in: {new Date(pool?.endDate!).toLocaleString()}
           </h2>
         </div>
         <div>
@@ -81,7 +92,9 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options }) => {
         {renderOptions()}
       </div>
       <div className="self-end">
-        <Button color="green">vote</Button>
+        <Button color="green" onClick={() => onSubmit(votes)}>
+          vote
+        </Button>
       </div>
     </Box>
   );

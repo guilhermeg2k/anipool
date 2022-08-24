@@ -10,12 +10,12 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-type PoolOption = Anilist.Media & Anilist.Character;
+type VoteOptions = Anilist.Media & Anilist.Character;
 
 const CreatePool: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pool, setPool] = useState<Pool>();
-  const [options, setOptions] = useState(Array<PoolOption>);
+  const [options, setOptions] = useState<Array<VoteOptions>>([]);
 
   const router = useRouter();
 
@@ -25,22 +25,23 @@ const CreatePool: NextPage = () => {
       const { id } = router.query;
       if (id) {
         const pool = await poolService.get(String(id));
-        const options = Array<PoolOption>();
+        const options = Array<VoteOptions>();
 
         for (const option of pool.options) {
           if (option.type === OptionType.Character) {
             const character = await anilistService.getCharacterById(
               parseInt(String(option.anilistId))
             );
+
             options.push({
               ...character,
               type: OptionType.Character,
-            } as PoolOption);
+            } as VoteOptions);
           } else {
             const media = await anilistService.getMediaById(
               parseInt(String(option.anilistId))
             );
-            options.push(media as PoolOption);
+            options.push(media as VoteOptions);
           }
         }
 
@@ -55,6 +56,13 @@ const CreatePool: NextPage = () => {
     }
   };
 
+  const onSubmitHandler = async (poolVotes: Array<PoolOption>) => {
+    try {
+      const { id } = router.query;
+      await poolService.vote(String(id), poolVotes);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     loadOptions();
   }, []);
@@ -67,7 +75,7 @@ const CreatePool: NextPage = () => {
     <Page bgImage="/images/bg-vote-pool.jpg">
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
-        <VoteForm pool={pool!} options={options} />
+        <VoteForm pool={pool} options={options} onSubmit={onSubmitHandler} />
       </div>
     </Page>
   );
