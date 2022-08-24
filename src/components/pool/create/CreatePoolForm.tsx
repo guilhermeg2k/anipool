@@ -49,9 +49,9 @@ const CreatePoolForm = () => {
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const router = useRouter();
   const shouldCreateButtonBeEnabled =
     title && endDate !== DATE_TIME_NOW && options.length > 1;
-  const router = useRouter();
 
   const onAddOptionHandler = (option: PoolOption) => {
     const newOptions = [...options, option];

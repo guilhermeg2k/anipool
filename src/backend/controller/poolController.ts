@@ -20,8 +20,11 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
 const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, endDate, options, multiOptions } = req.body;
-    if (title && endDate && options && multiOptions != null) {
+    const { id } = req.cookies;
+
+    if (id && title && endDate && options && multiOptions != null) {
       const poolId = await poolService.createAndReturnId({
+        userId: id,
         title,
         endDate,
         options,
