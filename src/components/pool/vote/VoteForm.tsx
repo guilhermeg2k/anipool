@@ -65,13 +65,15 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
     toastSuccess('Share link copied to clipboard');
   };
 
+  const canVote = votes.length > 0;
+
   return (
     <Box className="flex flex-col gap-5">
       <div className="flex flex-col items-center justify-between md:flex-row">
         <div>
           <Title>{pool?.title}</Title>
-          <h2 className="text-xs uppercase">
-            Ends in: {new Date(pool?.endDate!).toLocaleString()}
+          <h2 className="text-xs">
+            Pool ends in: {new Date(pool?.endDate!).toLocaleString()}
           </h2>
         </div>
         <div>
@@ -92,7 +94,11 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
         {renderOptions()}
       </div>
       <div className="self-end">
-        <Button color="green" onClick={() => onSubmit(votes)}>
+        <Button
+          color="green"
+          disabled={!canVote}
+          onClick={() => onSubmit(votes)}
+        >
           vote
         </Button>
       </div>

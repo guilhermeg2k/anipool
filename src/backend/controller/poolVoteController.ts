@@ -27,7 +27,7 @@ const areVotesValid = async (poolId: any, userId: any, poolVotes: any) => {
 
   const pool = await poolService.get(String(poolId));
 
-  const areMultipleVotesValid = pool.multiOptions && poolVotes.length > 1;
+  const areMultipleVotesValid = pool.multiOptions || poolVotes.length <= 1;
   if (!areMultipleVotesValid) {
     return false;
   }
@@ -55,8 +55,8 @@ const areVotesValid = async (poolId: any, userId: any, poolVotes: any) => {
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { poolId } = req.query;
-    const { poolVotes } = req.body;
     const { id: userId } = req.cookies;
+    const { poolVotes } = req.body;
 
     const areUserVotesValid = await areVotesValid(poolId, userId, poolVotes);
     if (!areUserVotesValid) {

@@ -2,7 +2,7 @@ import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
 import VoteForm from '@components/pool/vote/VoteForm';
-import { toastError } from '@libs/toastify';
+import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
 import { NextPage } from 'next';
@@ -14,6 +14,7 @@ type VoteOptions = Anilist.Media & Anilist.Character;
 
 const CreatePool: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
   const [pool, setPool] = useState<Pool>();
   const [options, setOptions] = useState<Array<VoteOptions>>([]);
 
@@ -58,9 +59,16 @@ const CreatePool: NextPage = () => {
 
   const onSubmitHandler = async (poolVotes: Array<PoolOption>) => {
     try {
+      setIsVoting(true);
       const { id } = router.query;
       await poolService.vote(String(id), poolVotes);
-    } catch (error) {}
+      router.push(`/pool/results/${id}`);
+      toastSuccess('Your vote was registered');
+    } catch (error) {
+      toastError('Error while registering your vote');
+    } finally {
+      setIsVoting(false);
+    }
   };
 
   useEffect(() => {
@@ -69,6 +77,10 @@ const CreatePool: NextPage = () => {
 
   if (isLoading) {
     return <LoadingPage />;
+  }
+
+  if (isVoting) {
+    return <LoadingPage text="Voting..." />;
   }
 
   return (
