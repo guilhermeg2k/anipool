@@ -5,9 +5,14 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import ResultCard from '@components/pool/results/ResultCard';
 import { LinkIcon, PlusIcon } from '@heroicons/react/outline';
+import poolService from '@services/poolService';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const PoolResult: NextPage = () => {
+  const router = useRouter();
+
   const options = [
     {
       id: 1,
@@ -60,6 +65,16 @@ const PoolResult: NextPage = () => {
     options.forEach((option) => (totalVotes += option.votes));
     return totalVotes;
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { id } = router.query;
+      const pool = await poolService.get(String(id));
+
+      console.log(pool);
+    };
+    fetch();
+  }, []);
 
   return (
     <Page bgImage="/images/bg-pool-results.jpg">

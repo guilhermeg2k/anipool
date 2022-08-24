@@ -19,7 +19,19 @@ const createAndReturnId = async (pool: Pool) => {
   return id;
 };
 
+const get = async (id: string) => {
+  const { Item: user } = await dynamoDb
+    .get({
+      TableName: POOL_TABLE_NAME,
+      Key: { id },
+    })
+    .promise();
+
+  return user as Pool;
+};
+
 const poolRepository = {
+  get,
   createAndReturnId,
 };
 
