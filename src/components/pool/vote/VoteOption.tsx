@@ -9,8 +9,7 @@ interface VoteOptionProps {
     english: string;
   };
   name?: {
-    first: string;
-    last: string;
+    full: string;
     native: string;
   };
   selected?: boolean;
@@ -28,23 +27,27 @@ const VoteOption = ({
 
   const characterNames = (
     <>
-      <h2 className="font-semibold">{`${name?.first} ${name?.last}`}</h2>
+      <h2 className="font-semibold">{name?.full}</h2>
       <h3 className="text-xs">{name?.native}</h3>
     </>
   );
 
   const mediaTitles = (
     <>
-      <h2 className="font-semibold">{title?.romaji}</h2>
-      <h3 className="text-xs">{title?.english}</h3>
-      <h3 className="text-xs">{title?.native}</h3>
+      <h2 className="font-semibold truncate w-full">{title?.romaji}</h2>
+      <h3 className="text-xs truncate w-full">{title?.english}</h3>
+      <h3 className="text-xs truncate w-full">{title?.native}</h3>
     </>
   );
 
   return (
-    <button className="w-full pr-4 md:w-auto md:pr-0" onClick={onClick}>
+    <button
+      className="w-full pr-4 md:w-auto md:pr-0"
+      onClick={onClick}
+      title={name ? name.full : title?.romaji}
+    >
       <DataDisplay
-        className={`flex ${activeClass} gap-2 p-2 hover:border-indigo-500 md:h-[320px] md:w-[200px] md:flex-col md:p-5`}
+        className={`flex ${activeClass} gap-2 p-2 hover:border-indigo-500 md:h-[340px] md:w-[200px] md:flex-col md:p-5`}
       >
         <div className="w-[50px] md:w-auto">
           <Image

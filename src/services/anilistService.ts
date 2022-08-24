@@ -27,6 +27,31 @@ const getUserByAccessToken = async (accessToken: string) => {
   return Viewer as Anilist.User;
 };
 
+const getMediaById = async (id: number) => {
+  const query = gql`
+    query getMedias($id: Int!) {
+      Media(id: $id) {
+        id
+        type
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          extraLarge
+        }
+      }
+    }
+  `;
+
+  const queryResult = await graphqlClient.request(query, {
+    id,
+  });
+
+  return queryResult.Media as Anilist.Media;
+};
+
 const listMediaBySearchAndType = async (
   searchText: string,
   type: MediaTypes,
@@ -118,6 +143,7 @@ const listCharacterBySearch = async (
 
 const anilistService = {
   getUserByAccessToken,
+  getMediaById,
   listMediaBySearchAndType,
   listCharacterBySearch,
 };

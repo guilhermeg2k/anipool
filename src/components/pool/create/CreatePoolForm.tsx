@@ -74,7 +74,7 @@ const CreatePoolForm = () => {
         multiOptions: shouldEnableMultipleSelection,
       };
       const poolId = await poolService.create(pool);
-      router.push(`/pool/results/${poolId}`);
+      router.push(`/pool/vote/${poolId}`);
     } catch (error) {
       toastError('Error to create pool');
     }
