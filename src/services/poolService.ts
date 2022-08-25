@@ -1,7 +1,7 @@
 import axiosClient from '@libs/axios';
 
 const get = async (id: string) => {
-  const response = await axiosClient.get<Pool>(`/pool/${id}`);
+  const response = await axiosClient.get<Pool>(`/pool/get/${id}`);
   const pool = response.data;
   return pool;
 };
