@@ -2,6 +2,7 @@ import Button from '@components/core/Button';
 import Logo from '@components/core/Logo';
 import Page from '@components/core/Page';
 import useUserStore from '@store/userStore';
+import { openAnilistAuthUrl } from '@utils/utils';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -10,8 +11,6 @@ const Home: NextPage = () => {
   const { id } = useUserStore();
   const router = useRouter();
   const isLogged = Boolean(id);
-  const anilistClientId = process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID;
-  const anilistAuthURL = `https://anilist.co/api/v2/oauth/authorize?client_id=${anilistClientId}&response_type=token`;
 
   return (
     <Page bgImage="/images/bg-home.jpg">
@@ -30,10 +29,7 @@ const Home: NextPage = () => {
               Create Pool
             </Button>
           ) : (
-            <Button
-              size="large"
-              onClick={() => window.open(anilistAuthURL, '_self')}
-            >
+            <Button size="large" onClick={openAnilistAuthUrl}>
               Login with anilist
             </Button>
           )}

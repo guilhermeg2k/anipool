@@ -9,9 +9,10 @@ import { toastSuccess } from '@libs/toastify';
 import poolService from '@services/poolService';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const PoolResult: NextPage = () => {
+  const [pool, setPool] = useState<Pool>();
   const router = useRouter();
 
   const options = [
