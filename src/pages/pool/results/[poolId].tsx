@@ -5,6 +5,7 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import ResultCard from '@components/pool/results/ResultCard';
 import { LinkIcon, PlusIcon } from '@heroicons/react/outline';
+import { toastSuccess } from '@libs/toastify';
 import poolService from '@services/poolService';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -66,12 +67,17 @@ const PoolResult: NextPage = () => {
     return totalVotes;
   };
 
+  const onShareHandler = () => {
+    navigator.clipboard.writeText(
+      window.location.href.replace('results', 'vote')
+    );
+    toastSuccess('Share link copied to clipboard');
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      const { id } = router.query;
-      const pool = await poolService.get(String(id));
-
-      console.log(pool);
+      const { id: poolId } = router.query;
+      const pool = await poolService.get(String(poolId));
     };
     fetch();
   }, []);
@@ -87,7 +93,7 @@ const PoolResult: NextPage = () => {
               <h2 className="semi text-xs">Created by guilhermeg2k</h2>
             </div>
             <div>
-              <Button color="white">
+              <Button color="white" onClick={onShareHandler}>
                 <span>Share</span>
                 <LinkIcon className="w-5" />
               </Button>
