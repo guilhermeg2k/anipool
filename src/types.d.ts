@@ -50,6 +50,8 @@ interface PoolOption {
   text?: string;
 }
 
+type PoolOptionWithVotes = PoolOption & { votes: number };
+
 interface Pool {
   id?: string;
   userId?: string;

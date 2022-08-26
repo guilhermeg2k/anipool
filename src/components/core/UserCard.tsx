@@ -1,12 +1,11 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, LoginIcon } from '@heroicons/react/outline';
 import useUserStore from '@store/userStore';
 import { openAnilistAuthUrl } from '@utils/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from './Button';
 import MenuDropdown from './MenuDropdown';
-
 const MENU_LINKS = [
   { id: 1, label: 'About', path: '/about' },
   { id: 2, label: 'Sign out', path: '/auth/sign-out' },
@@ -54,8 +53,11 @@ const UserCard = () => {
           </MenuDropdown>
         </>
       ) : (
-        <div className="flex justify-center w-full">
-          <Button onClick={openAnilistAuthUrl}>Sign in</Button>
+        <div className="flex items-center w-full">
+          <Button onClick={openAnilistAuthUrl} color="white" className="w-full">
+            Sign in
+            <LoginIcon className="w-5 h-5" />
+          </Button>
         </div>
       )}
     </div>

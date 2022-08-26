@@ -1,44 +1,23 @@
 import DataDisplay from '@components/core/DataDisplay';
 import Image from 'next/image';
 
-interface ResultCardProps {
+interface MediaResultCardProps {
   coverUrl: string;
-  title?: {
+  title: {
     native: string;
     romaji: string;
     english: string;
   };
-  name?: {
-    first: string;
-    last: string;
-    native: string;
-  };
-  totalVotes: number;
   votes: number;
+  totalVotes: number;
 }
 
-const ResultCard = ({
+const MediaResultCard: React.FC<MediaResultCardProps> = ({
   title,
-  name,
   coverUrl,
   totalVotes,
   votes,
-}: ResultCardProps) => {
-  const characterNames = (
-    <>
-      <h2 className="font-semibold">{`${name?.first} ${name?.last}`}</h2>
-      <h3 className="text-xs">{name?.native}</h3>
-    </>
-  );
-
-  const mediaTitles = (
-    <div>
-      <h2 className="font-semibold">{title?.romaji}</h2>
-      <h3 className="text-xs">{title?.english}</h3>
-      <h3 className="text-xs">{title?.native}</h3>
-    </div>
-  );
-
+}) => {
   const votesPercentage = (100 * votes) / totalVotes;
 
   return (
@@ -56,15 +35,20 @@ const ResultCard = ({
         />
       </div>
       <div className="flex flex-grow flex-col items-start gap-1">
-        {name && characterNames}
-        {title && mediaTitles}
+        <h2 className="font-semibold text-sm truncate w-full">
+          {title.romaji}
+        </h2>
+        <h3 className="text-xs truncate w-full">{title.english}</h3>
+        <h3 className="text-xs truncate w-full">{title.native}</h3>
       </div>
       <div className="flex flex-col items-center self-center font-roboto">
-        <span className="font-semibold">{votes} votes</span>
+        <span className="font-semibold">
+          {votes === 1 ? `${votes} vote` : `${votes} votes`}
+        </span>
         <span className="text-sm">{votesPercentage.toFixed(0)}%</span>
       </div>
     </DataDisplay>
   );
 };
 
-export default ResultCard;
+export default MediaResultCard;

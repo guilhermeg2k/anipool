@@ -27,8 +27,8 @@ const VoteOption = ({
 
   const characterNames = (
     <>
-      <h2 className="font-semibold">{name?.full}</h2>
-      <h3 className="text-xs">{name?.native}</h3>
+      <h2 className="font-semibold truncate w-ful">{name?.full}</h2>
+      <h3 className="text-xs truncate w-ful">{name?.native}</h3>
     </>
   );
 

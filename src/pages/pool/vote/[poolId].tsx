@@ -71,8 +71,7 @@ const Vote: NextPage = () => {
   const onSubmitHandler = async (poolVotes: Array<PoolOption>) => {
     try {
       setIsVoting(true);
-      const { id } = router.query;
-      await poolService.vote(String(id), poolVotes);
+      await poolService.vote(String(poolId), poolVotes);
       toastSuccess('Your vote was registered');
       goToResults();
     } catch (error) {
