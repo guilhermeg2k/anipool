@@ -18,7 +18,7 @@ const MediaResultCard: React.FC<MediaResultCardProps> = ({
   totalVotes,
   votes,
 }) => {
-  const votesPercentage = (100 * votes) / totalVotes;
+  const votesPercentage = (100 * votes) / totalVotes || 0;
 
   return (
     <DataDisplay
