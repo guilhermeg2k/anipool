@@ -5,7 +5,7 @@ interface LoadingPageProps {
   text?: string;
 }
 
-const LoadingPage: React.FC<LoadingPageProps> = ({ text = 'Loading' }) => {
+const LoadingPage: React.FC<LoadingPageProps> = ({ text = 'Loading...' }) => {
   return (
     <Page
       bgImage="/images/bg-home.jpg"

@@ -52,7 +52,7 @@ const Auth: NextPage = () => {
     }
   }, []);
 
-  return <LoadingPage text="Authenticating" />;
+  return <LoadingPage text="Authenticating..." />;
 };
 
 export default Auth;
