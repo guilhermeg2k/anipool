@@ -1,4 +1,4 @@
-import poolVoteController from '@backend/controller/poolVoteController';
+import poolController from '@backend/controller/poolController';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -9,7 +9,7 @@ export default async function handler(
 
   switch (method) {
     case 'GET':
-      await poolVoteController.getPoolResults(req, res);
+      await poolController.getResult(req, res);
       break;
     default:
       res.status(405).end();

@@ -17,6 +17,21 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { poolId } = req.query;
+
+    if (poolId) {
+      const poolResults = await poolService.getResult(String(poolId));
+      return res.status(200).send(poolResults);
+    }
+
+    return res.status(400).send('');
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send('');
+  }
+};
 const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, endDate, options, multiOptions } = req.body;
@@ -42,6 +57,7 @@ const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const poolController = {
   get,
+  getResult,
   createPool,
 };
 

@@ -1,30 +1,8 @@
 import poolVotesRepository from '@backend/repository/poolVoteRepository';
 
-const getPoolResults = async (poolId: string) => {
+const getPoolVotes = async (poolId: string) => {
   const poolVotes = await poolVotesRepository.getByPoolId(poolId);
-  const poolOptionWithVotes = Array<PoolOptionWithVotes>(0);
-
-  if (poolVotes) {
-    for (const poolVote of poolVotes!) {
-      const currentOptionIndex = poolOptionWithVotes.findIndex(
-        (option) =>
-          option.anilistId === poolVote.anilistId &&
-          option.type === poolVote.type
-      );
-
-      if (currentOptionIndex !== -1) {
-        poolOptionWithVotes[currentOptionIndex].votes = +1;
-      } else {
-        poolOptionWithVotes.push({
-          anilistId: poolVote.anilistId,
-          type: poolVote.type,
-          votes: 1,
-        });
-      }
-    }
-  }
-
-  return poolOptionWithVotes;
+  return poolVotes;
 };
 
 const getUserVotesOnPool = async (userId: string, poolId: string) => {
@@ -55,7 +33,7 @@ const create = async (
 };
 
 const poolVoteService = {
-  getPoolResults,
+  getPoolResults: getPoolVotes,
   getUserVotesOnPool,
   create,
 };
