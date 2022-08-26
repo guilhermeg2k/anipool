@@ -23,7 +23,7 @@ const isAuthRoute = (req: NextRequest) => {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/pool/results')) {
+  if (req.nextUrl.pathname.startsWith('/api/pool/result')) {
     return false;
   }
 

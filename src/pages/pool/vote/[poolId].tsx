@@ -20,7 +20,7 @@ const Vote: NextPage = () => {
   const router = useRouter();
   const { poolId } = router.query;
 
-  const goToResults = () => router.push(`/pool/results/${poolId}`);
+  const goToResults = () => router.push(`/pool/result/${poolId}`);
 
   const hasUserAlreadyVoted = async () => {
     if (poolId) {

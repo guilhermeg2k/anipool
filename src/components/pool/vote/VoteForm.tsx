@@ -16,7 +16,7 @@ interface VoteFormProps {
 const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
   const [votes, setVotes] = useState<Array<PoolOption>>([]);
   const router = useRouter();
-  const { id } = router.query;
+  const { poolId } = router.query;
   const canVote = votes.length > 0;
 
   const onSelectedHandler = (
@@ -78,7 +78,7 @@ const VoteForm: React.FC<VoteFormProps> = ({ pool, options, onSubmit }) => {
         <div>
           <Button
             color="white"
-            onClick={() => router.push(`/pool/results/${id}`)}
+            onClick={() => router.push(`/pool/result/${poolId}`)}
           >
             <span>Results</span>
             <ChartBarIcon className="w-5" />

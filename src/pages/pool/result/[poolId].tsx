@@ -34,6 +34,7 @@ const PoolResult: NextPage = () => {
   const [mediasResult, setMediasResult] = useState(Array<MediaResult>());
   const router = useRouter();
 
+  const { poolId } = router.query;
   const results = [...charactersResult, ...mediasResult].sort(
     (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
   );
@@ -41,7 +42,6 @@ const PoolResult: NextPage = () => {
   const loadPoolAndResult = async () => {
     setIsLoadingPoolAndResult(true);
     try {
-      const { poolId } = router.query;
       if (poolId) {
         const poolPromise = poolService.get(String(poolId));
         const poolResultsPromise = poolService.getResult(String(poolId));
@@ -55,7 +55,6 @@ const PoolResult: NextPage = () => {
         setPoolOptionsResult(poolOptionsResult);
       }
     } catch (error) {
-      console.log(error);
       toastError('Failed to load pool and results');
     } finally {
       setIsLoadingPoolAndResult(false);
@@ -73,7 +72,7 @@ const PoolResult: NextPage = () => {
 
       for (const characterOption of characterOptionsResult) {
         const character = await anilistService.getCharacterById(
-          parseInt(String(characterOption.anilistId))
+          characterOption.anilistId
         );
 
         charactersResult.push({
@@ -102,7 +101,7 @@ const PoolResult: NextPage = () => {
 
       for (const mediaOption of mediaOptionsResult) {
         const character = await anilistService.getMediaById(
-          parseInt(String(mediaOption.anilistId))
+          mediaOption.anilistId
         );
 
         mediasResult.push({
@@ -174,7 +173,7 @@ const PoolResult: NextPage = () => {
                 <span>Share</span>
                 <LinkIcon className="w-5" />
               </Button>
-              <Button color="white">
+              <Button color="white" onClick={() => router.push('/pool/create')}>
                 <span>Create New</span>
                 <PlusIcon className="w-5" />
               </Button>
@@ -182,23 +181,22 @@ const PoolResult: NextPage = () => {
           </div>
           <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
             {results.map((result) => {
-              console.log(result.type, 'type');
               if (result.type === OptionType.Character) {
                 const characterResult = result as CharacterResult;
                 return (
                   <CharacterResultCard
+                    key={characterResult.id}
                     coverUrl={characterResult.image.large}
                     name={characterResult.name}
                     totalVotes={totalVotes}
                     votes={characterResult.votes}
-                    key={characterResult.id}
                   />
                 );
               } else {
                 const mediaResult = result as MediaResult;
-                console.log(mediaResult, 'mr');
                 return (
                   <MediaResultCard
+                    key={mediaResult.id}
                     coverUrl={mediaResult.coverImage.extraLarge}
                     title={mediaResult.title}
                     totalVotes={totalVotes}
