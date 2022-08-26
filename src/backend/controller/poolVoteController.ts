@@ -103,10 +103,10 @@ const getPoolResults = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     if (poolId) {
-      const poolOptionsWithVotes = await poolVoteService.getPoolResults(
+      const poolOptionsResult = await poolVoteService.getPoolResults(
         String(poolId)
       );
-      return res.status(200).send(poolOptionsWithVotes);
+      return res.status(200).send(poolOptionsResult);
     }
   } catch (error) {
     console.log(error);

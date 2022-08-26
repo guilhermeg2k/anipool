@@ -15,125 +15,116 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-const getCharacterWithVotes = async (
-  characterId: number,
-  poolOptionsWithVotes: Array<PoolOptionWithVotes>
-) => {
-  const character = await anilistService.getCharacterById(
-    parseInt(String(characterId))
-  );
-
-  const characterPoolOptionWithVotes = poolOptionsWithVotes.find(
-    (option) =>
-      option.anilistId === character.id && option.type === OptionType.Character
-  );
-
-  const characterWithVotes = {
-    ...character,
-    ...characterPoolOptionWithVotes!,
-    votes: characterPoolOptionWithVotes
-      ? characterPoolOptionWithVotes!.votes
-      : 0,
-  };
-
-  console.log(characterWithVotes, 'characterWithVotes');
-  return characterWithVotes;
-};
-
-const getMediaWithVotes = async (
-  mediaId: number,
-  poolOptionsWithVotes: Array<PoolOptionWithVotes>
-) => {
-  const media = await anilistService.getMediaById(parseInt(String(mediaId)));
-
-  const mediaPoolOptionWithVotes = poolOptionsWithVotes.find(
-    (option) =>
-      option.anilistId === media.id &&
-      (option.type === OptionType.Anime || option.type === OptionType.Manga)
-  );
-
-  console.log(mediaPoolOptionWithVotes, 'mediaPoolOptionWithVotes');
-
-  const mediaWithVotes = {
-    ...media,
-    ...mediaPoolOptionWithVotes!,
-    votes: mediaPoolOptionWithVotes ? mediaPoolOptionWithVotes!.votes : 0,
-  };
-
-  return mediaWithVotes;
-};
+type CharacterResult = Anilist.Character & PoolOptionResult;
+type MediaResult = Anilist.Media & PoolOptionResult;
 
 const PoolResult: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPoolAndResult, setIsLoadingPoolAndResult] = useState(false);
+  const [isLoadingCharactersResult, setIsLoadingCharacterResult] =
+    useState(false);
+  const [isLoadingMediaResult, setIsLoadingMediaResult] = useState(false);
+  const [totalVotes, setTotalVotes] = useState(0);
   const [pool, setPool] = useState<Pool>();
-  const [mediaResults, setMediaResults] = useState(
-    Array<Anilist.Media & PoolOptionWithVotes>
+  const [poolOptionsResult, setPoolOptionsResult] = useState(
+    Array<PoolOptionResult>()
   );
-  const [characterResults, setCharacterResults] = useState(
-    Array<Anilist.Character & PoolOptionWithVotes>
+  const [charactersResult, setCharactersResult] = useState(
+    Array<CharacterResult>()
   );
-
+  const [mediasResult, setMediasResult] = useState(Array<MediaResult>());
   const router = useRouter();
 
-  const results = [...mediaResults, ...characterResults].sort(
-    (resultA, resultB) => (resultA.votes > resultB.votes ? 1 : -1)
+  const results = [...charactersResult, ...mediasResult].sort(
+    (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
   );
 
-  const loadPoolAndResults = async () => {
-    setIsLoading(true);
+  const loadPoolAndResult = async () => {
+    setIsLoadingPoolAndResult(true);
     try {
       const { poolId } = router.query;
       if (poolId) {
         const poolPromise = poolService.get(String(poolId));
-        const poolResultsPromise = poolService.getPoolResults(String(poolId));
+        const poolResultsPromise = poolService.getResult(String(poolId));
 
-        const mediaResults = Array<Anilist.Media & PoolOptionWithVotes>();
-        const characterResults = Array<
-          Anilist.Character & PoolOptionWithVotes
-        >();
-
-        const [pool, poolOptionsWithVotes] = await Promise.all([
+        const [pool, poolOptionsResult] = await Promise.all([
           poolPromise,
           poolResultsPromise,
         ]);
 
-        for (const option of pool.options) {
-          if (option.type === OptionType.Character) {
-            const characterWithVotes = await getCharacterWithVotes(
-              option.anilistId,
-              poolOptionsWithVotes
-            );
-
-            characterResults.push(characterWithVotes);
-          } else {
-            const mediaWithVotes = await getMediaWithVotes(
-              option.anilistId,
-              poolOptionsWithVotes
-            );
-            mediaResults.push(mediaWithVotes);
-          }
-        }
-
-        setMediaResults(mediaResults);
-        setCharacterResults(characterResults);
         setPool(pool);
+        setPoolOptionsResult(poolOptionsResult);
       }
     } catch (error) {
       console.log(error);
-      toastError('Filed to load pool results');
+      toastError('Failed to load pool and results');
     } finally {
-      setIsLoading(false);
+      setIsLoadingPoolAndResult(false);
+    }
+  };
+
+  const loadCharactersResult = async () => {
+    try {
+      setIsLoadingCharacterResult(true);
+      const characterOptionsResult = poolOptionsResult.filter(
+        (option) => option.type === OptionType.Character
+      );
+
+      const charactersResult = Array<CharacterResult>();
+
+      for (const characterOption of characterOptionsResult) {
+        const character = await anilistService.getCharacterById(
+          parseInt(String(characterOption.anilistId))
+        );
+
+        charactersResult.push({
+          ...character,
+          ...characterOption,
+        });
+      }
+
+      setCharactersResult(charactersResult);
+    } catch (error) {
+      toastError('Failed to load results for character options');
+    } finally {
+      setIsLoadingCharacterResult(false);
+    }
+  };
+
+  const loadMediasResult = async () => {
+    try {
+      setIsLoadingMediaResult(true);
+      const mediaOptionsResult = poolOptionsResult.filter(
+        (option) =>
+          option.type === OptionType.Manga || option.type === OptionType.Anime
+      );
+
+      const mediasResult = Array<MediaResult>();
+
+      for (const mediaOption of mediaOptionsResult) {
+        const character = await anilistService.getMediaById(
+          parseInt(String(mediaOption.anilistId))
+        );
+
+        mediasResult.push({
+          ...character,
+          ...mediaOption,
+        });
+      }
+
+      setMediasResult(mediasResult);
+    } catch (error) {
+      toastError('Failed to load results for media options');
+    } finally {
+      setIsLoadingMediaResult(false);
     }
   };
 
   const calculateTotalVotes = () => {
     let totalVotes = 0;
-    console.log(results);
     for (const result of results) {
       totalVotes += result.votes;
     }
-    console.log(totalVotes, 'tv');
-    return totalVotes;
+    setTotalVotes(totalVotes);
   };
 
   const onShareHandler = () => {
@@ -144,10 +135,25 @@ const PoolResult: NextPage = () => {
   };
 
   useEffect(() => {
-    loadPoolAndResults();
+    loadPoolAndResult();
   }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (poolOptionsResult.length > 0) {
+      loadCharactersResult();
+      loadMediasResult();
+    }
+  }, [poolOptionsResult]);
+
+  useEffect(() => {
+    calculateTotalVotes();
+  }, [charactersResult, mediasResult]);
+
+  if (
+    isLoadingPoolAndResult ||
+    isLoadingCharactersResult ||
+    isLoadingMediaResult
+  ) {
     return <LoadingPage text="Loading results..." />;
   }
 
@@ -178,26 +184,24 @@ const PoolResult: NextPage = () => {
             {results.map((result) => {
               console.log(result.type, 'type');
               if (result.type === OptionType.Character) {
-                const characterResult = result as Anilist.Character &
-                  PoolOptionWithVotes;
+                const characterResult = result as CharacterResult;
                 return (
                   <CharacterResultCard
                     coverUrl={characterResult.image.large}
                     name={characterResult.name}
-                    totalVotes={calculateTotalVotes()}
+                    totalVotes={totalVotes}
                     votes={characterResult.votes}
                     key={characterResult.id}
                   />
                 );
               } else {
-                const mediaResult = result as Anilist.Media &
-                  PoolOptionWithVotes;
+                const mediaResult = result as MediaResult;
                 console.log(mediaResult, 'mr');
                 return (
                   <MediaResultCard
                     coverUrl={mediaResult.coverImage.extraLarge}
                     title={mediaResult.title}
-                    totalVotes={calculateTotalVotes()}
+                    totalVotes={totalVotes}
                     votes={mediaResult.votes}
                   />
                 );

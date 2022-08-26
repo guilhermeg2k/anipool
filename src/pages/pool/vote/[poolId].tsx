@@ -24,7 +24,7 @@ const Vote: NextPage = () => {
 
   const hasUserAlreadyVoted = async () => {
     if (poolId) {
-      const userVotes = await poolService.getUserVotesOnPool(String(poolId));
+      const userVotes = await poolService.getUserVotes(String(poolId));
       if (userVotes && userVotes.length > 0) {
         return true;
       }

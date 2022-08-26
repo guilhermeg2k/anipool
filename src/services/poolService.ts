@@ -18,7 +18,7 @@ const vote = async (poolId: string, poolVotes: Array<PoolOption>) => {
   });
 };
 
-const getUserVotesOnPool = async (poolId: string) => {
+const getUserVotes = async (poolId: string) => {
   const response = await axiosClient.get<Array<PoolOption>>(
     `/pool/user/votes/${poolId}`
   );
@@ -26,18 +26,18 @@ const getUserVotesOnPool = async (poolId: string) => {
   return userVotes;
 };
 
-const getPoolResults = async (poolId: string) => {
-  const response = await axiosClient.get<Array<PoolOptionWithVotes>>(
-    `/pool/results/${poolId}`
+const getResult = async (poolId: string) => {
+  const response = await axiosClient.get<Array<PoolOptionResult>>(
+    `/pool/result/${poolId}`
   );
-  const poolResults = response.data;
-  return poolResults;
+  const poolResult = response.data;
+  return poolResult;
 };
 
 const poolService = {
   get,
-  getUserVotesOnPool,
-  getPoolResults,
+  getUserVotes,
+  getResult,
   create,
   vote,
 };

@@ -18,7 +18,7 @@ const getResult = async (id: string) => {
     return {
       ...option,
       votes: optionVotes ? optionVotes?.length : 0,
-    } as PoolOptionWithVotes;
+    } as PoolOptionResult;
   });
 
   return poolResults;

@@ -50,7 +50,7 @@ interface PoolOption {
   text?: string;
 }
 
-type PoolOptionWithVotes = PoolOption & { votes: number };
+type PoolOptionResult = PoolOption & { votes: number };
 
 interface Pool {
   id?: string;
