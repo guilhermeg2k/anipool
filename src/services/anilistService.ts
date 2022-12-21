@@ -27,53 +27,79 @@ const getUserByAccessToken = async (accessToken: string) => {
   return Viewer as Anilist.User;
 };
 
-const getMediaById = async (id: number) => {
+const getMediasByIds = async (ids: Array<number>) => {
+  console.log('🚀 ~ file: anilistService.ts:31 ~ getMediasByIds ~ ids', ids);
   const query = gql`
-    query getMedias($id: Int!) {
-      Media(id: $id) {
-        id
-        type
-        title {
-          romaji
-          english
-          native
+    query getMedias($ids: [Int]!, $size: Int!) {
+      Page(page: 1, perPage: $size) {
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
         }
-        coverImage {
-          extraLarge
+        media(id_in: $ids) {
+          id
+          type
+          title {
+            romaji
+            english
+            native
+          }
+          coverImage {
+            extraLarge
+          }
         }
       }
     }
   `;
-
+  const size = ids.length;
   const queryResult = await graphqlClient.request(query, {
-    id,
+    ids,
+    size,
   });
+  console.log(
+    '🚀 ~ file: anilistService.ts:61 ~ getMediasByIds ~ queryResult',
+    queryResult
+  );
 
-  return queryResult.Media as Anilist.Media;
+  return queryResult.Page.media as Array<Anilist.Media>;
 };
 
-const getCharacterById = async (id: number) => {
+const getCharactersByIds = async (ids: Array<number>) => {
   const query = gql`
-    query getCharacters($id: Int!) {
-      Character(id: $id) {
-        id
-        name {
-          full
-          native
+    query getCharacters($ids: [Int]!, $size: Int!) {
+      Page(page: 1, perPage: $size) {
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
         }
-        image {
-          large
-          medium
+        characters(id_in: $ids) {
+          id
+          name {
+            full
+            native
+          }
+          image {
+            large
+            medium
+          }
         }
       }
     }
   `;
+  const size = ids.length;
 
   const queryResult = await graphqlClient.request(query, {
-    id,
+    ids,
+    size,
   });
 
-  return queryResult.Character as Anilist.Character;
+  return queryResult.Page.characters as Array<Anilist.Character>;
 };
 
 const listMediaBySearchAndType = async (
@@ -167,8 +193,8 @@ const listCharacterBySearch = async (
 
 const anilistService = {
   getUserByAccessToken,
-  getMediaById,
-  getCharacterById,
+  getMediasByIds,
+  getCharactersByIds,
   listMediaBySearchAndType,
   listCharacterBySearch,
 };

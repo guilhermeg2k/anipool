@@ -15,32 +15,69 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-type CharacterResult = Anilist.Character & PoolOptionResult;
-type MediaResult = Anilist.Media & PoolOptionResult;
+type CharacterResult = Anilist.Character & PoolResult;
+type MediaResult = Anilist.Media & PoolResult;
 
 const PoolResult: NextPage = () => {
-  const [isLoadingPoolAndResult, setIsLoadingPoolAndResult] = useState(false);
-  const [isLoadingCharactersResult, setIsLoadingCharacterResult] =
-    useState(false);
-  const [isLoadingMediaResult, setIsLoadingMediaResult] = useState(false);
-  const [totalVotes, setTotalVotes] = useState(0);
+  const [isLoadingPoolAndResults, setIsLoadingPoolAndResults] = useState(false);
+  const [isLoadingCharacters, setIsLoadingCharacters] = useState(false);
+  const [isLoadingMedias, setIsLoadingMedias] = useState(false);
+
   const [pool, setPool] = useState<Pool>();
-  const [poolOptionsResult, setPoolOptionsResult] = useState(
-    Array<PoolOptionResult>()
-  );
-  const [charactersResult, setCharactersResult] = useState(
+  const [results, setResults] = useState(Array<PoolResult>());
+  const [charactersResults, setCharactersResults] = useState(
     Array<CharacterResult>()
   );
-  const [mediasResult, setMediasResult] = useState(Array<MediaResult>());
+  const [mediaResults, setMediaResults] = useState(Array<MediaResult>());
+
   const router = useRouter();
 
   const { poolId } = router.query;
-  const results = [...charactersResult, ...mediasResult].sort(
+
+  const resultsSorted = [...charactersResults, ...mediaResults].sort(
     (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
   );
 
+  const totalVotes = results.reduce(
+    (totalVotes, option) => totalVotes + option.votes,
+    0
+  );
+
+  const buildCharactersResults = (characters: Array<Anilist.Character>) => {
+    const charactersResults = characters.map((character) => {
+      const result = results.find(
+        ({ anilistId, type }) =>
+          anilistId === character.id && type === OptionType.Character
+      );
+
+      return {
+        ...character,
+        ...result,
+      } as CharacterResult;
+    });
+
+    return charactersResults;
+  };
+
+  const buildMediasResults = (medias: Array<Anilist.Media>) => {
+    const mediasWithVotes = medias.map((media) => {
+      const result = results.find(
+        ({ anilistId, type }) =>
+          anilistId === media.id &&
+          (type === OptionType.Manga || type === OptionType.Anime)
+      );
+
+      return {
+        ...media,
+        ...result,
+      } as MediaResult;
+    });
+
+    return mediasWithVotes;
+  };
+
   const loadPoolAndResult = async () => {
-    setIsLoadingPoolAndResult(true);
+    setIsLoadingPoolAndResults(true);
     try {
       if (poolId) {
         const poolPromise = poolService.get(String(poolId));
@@ -52,78 +89,55 @@ const PoolResult: NextPage = () => {
         ]);
 
         setPool(pool);
-        setPoolOptionsResult(poolOptionsResult);
+        setResults(poolOptionsResult);
       }
     } catch (error) {
       toastError('Failed to load pool and results');
     } finally {
-      setIsLoadingPoolAndResult(false);
+      setIsLoadingPoolAndResults(false);
     }
   };
 
-  const loadCharactersResult = async () => {
+  const loadCharactersResults = async () => {
     try {
-      setIsLoadingCharacterResult(true);
-      const characterOptionsResult = poolOptionsResult.filter(
-        (option) => option.type === OptionType.Character
+      setIsLoadingCharacters(true);
+      const characterOptionIds = results
+        .filter((option) => option.type === OptionType.Character)
+        .map((option) => option.anilistId);
+
+      const characters = await anilistService.getCharactersByIds(
+        characterOptionIds
       );
 
-      const charactersResult = Array<CharacterResult>();
+      const charactersWithVotes = buildCharactersResults(characters);
 
-      for (const characterOption of characterOptionsResult) {
-        const character = await anilistService.getCharacterById(
-          characterOption.anilistId
-        );
-
-        charactersResult.push({
-          ...character,
-          ...characterOption,
-        });
-      }
-
-      setCharactersResult(charactersResult);
+      setCharactersResults(charactersWithVotes);
     } catch (error) {
       toastError('Failed to load results for character options');
     } finally {
-      setIsLoadingCharacterResult(false);
+      setIsLoadingCharacters(false);
     }
   };
 
-  const loadMediasResult = async () => {
+  const loadMediaResults = async () => {
     try {
-      setIsLoadingMediaResult(true);
-      const mediaOptionsResult = poolOptionsResult.filter(
-        (option) =>
-          option.type === OptionType.Manga || option.type === OptionType.Anime
-      );
+      setIsLoadingMedias(true);
+      const mediasOptionIds = results
+        .filter(
+          (option) =>
+            option.type === OptionType.Manga || option.type === OptionType.Anime
+        )
+        .map((option) => option.anilistId);
 
-      const mediasResult = Array<MediaResult>();
+      const medias = await anilistService.getMediasByIds(mediasOptionIds);
+      const mediasWithVotes = buildMediasResults(medias);
 
-      for (const mediaOption of mediaOptionsResult) {
-        const character = await anilistService.getMediaById(
-          mediaOption.anilistId
-        );
-
-        mediasResult.push({
-          ...character,
-          ...mediaOption,
-        });
-      }
-
-      setMediasResult(mediasResult);
+      setMediaResults(mediasWithVotes);
     } catch (error) {
       toastError('Failed to load results for media options');
     } finally {
-      setIsLoadingMediaResult(false);
+      setIsLoadingMedias(false);
     }
-  };
-
-  const calculateTotalVotes = () => {
-    let totalVotes = 0;
-    for (const result of results) {
-      totalVotes += result.votes;
-    }
-    setTotalVotes(totalVotes);
   };
 
   const onShareHandler = () => {
@@ -133,26 +147,45 @@ const PoolResult: NextPage = () => {
     toastSuccess('Share link copied to clipboard');
   };
 
+  const renderResultsCards = () =>
+    resultsSorted.map((result) => {
+      if (result.type === OptionType.Character) {
+        const characterResult = result as CharacterResult;
+        return (
+          <CharacterResultCard
+            key={characterResult.id}
+            coverUrl={characterResult.image.large}
+            name={characterResult.name}
+            totalVotes={totalVotes}
+            votes={characterResult.votes}
+          />
+        );
+      }
+
+      const mediaResult = result as MediaResult;
+      return (
+        <MediaResultCard
+          key={mediaResult.id}
+          coverUrl={mediaResult.coverImage.extraLarge}
+          title={mediaResult.title}
+          totalVotes={totalVotes}
+          votes={mediaResult.votes}
+        />
+      );
+    });
+
   useEffect(() => {
     loadPoolAndResult();
   }, []);
 
   useEffect(() => {
-    if (poolOptionsResult.length > 0) {
-      loadCharactersResult();
-      loadMediasResult();
+    if (results.length > 0) {
+      loadCharactersResults();
+      loadMediaResults();
     }
-  }, [poolOptionsResult]);
+  }, [results]);
 
-  useEffect(() => {
-    calculateTotalVotes();
-  }, [charactersResult, mediasResult]);
-
-  if (
-    isLoadingPoolAndResult ||
-    isLoadingCharactersResult ||
-    isLoadingMediaResult
-  ) {
+  if (isLoadingPoolAndResults || isLoadingCharacters || isLoadingMedias) {
     return <LoadingPage text="Loading results..." />;
   }
 
@@ -180,31 +213,7 @@ const PoolResult: NextPage = () => {
             </div>
           </div>
           <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-            {results.map((result) => {
-              if (result.type === OptionType.Character) {
-                const characterResult = result as CharacterResult;
-                return (
-                  <CharacterResultCard
-                    key={characterResult.id}
-                    coverUrl={characterResult.image.large}
-                    name={characterResult.name}
-                    totalVotes={totalVotes}
-                    votes={characterResult.votes}
-                  />
-                );
-              } else {
-                const mediaResult = result as MediaResult;
-                return (
-                  <MediaResultCard
-                    key={mediaResult.id}
-                    coverUrl={mediaResult.coverImage.extraLarge}
-                    title={mediaResult.title}
-                    totalVotes={totalVotes}
-                    votes={mediaResult.votes}
-                  />
-                );
-              }
-            })}
+            {renderResultsCards()}
           </div>
         </Box>
       </div>

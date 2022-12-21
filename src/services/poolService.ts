@@ -27,7 +27,7 @@ const getUserVotes = async (poolId: string) => {
 };
 
 const getResult = async (poolId: string) => {
-  const response = await axiosClient.get<Array<PoolOptionResult>>(
+  const response = await axiosClient.get<Array<PoolResult>>(
     `/pool/result/${poolId}`
   );
   const poolResult = response.data;

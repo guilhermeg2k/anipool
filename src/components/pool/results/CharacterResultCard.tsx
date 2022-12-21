@@ -17,7 +17,7 @@ const CharacterResultCard = ({
   totalVotes,
   votes,
 }: CharacterResultCardProps) => {
-  const votesPercentage = (100 * votes) / totalVotes;
+  const votesPercentage = (100 * votes) / totalVotes || 0;
 
   return (
     <DataDisplay
