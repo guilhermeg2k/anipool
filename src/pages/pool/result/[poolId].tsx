@@ -19,9 +19,9 @@ type CharacterResult = Anilist.Character & PoolResult;
 type MediaResult = Anilist.Media & PoolResult;
 
 const PoolResult: NextPage = () => {
-  const [isLoadingPoolAndResults, setIsLoadingPoolAndResults] = useState(false);
-  const [isLoadingCharacters, setIsLoadingCharacters] = useState(false);
-  const [isLoadingMedias, setIsLoadingMedias] = useState(false);
+  const [isLoadingPoolAndResults, setIsLoadingPoolAndResults] = useState(true);
+  const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
+  const [isLoadingMedias, setIsLoadingMedias] = useState(true);
 
   const [pool, setPool] = useState<Pool>();
   const [results, setResults] = useState(Array<PoolResult>());

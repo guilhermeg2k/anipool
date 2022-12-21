@@ -11,7 +11,7 @@ interface CharacterProps {
   onClick: () => void;
 }
 
-const Character = ({
+const CharacterVoteOption = ({
   name,
   coverUrl,
   selected = false,
@@ -47,4 +47,4 @@ const Character = ({
   );
 };
 
-export default Character;
+export default CharacterVoteOption;

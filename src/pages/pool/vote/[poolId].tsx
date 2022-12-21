@@ -1,7 +1,12 @@
+import Box from '@components/core/Box';
+import Button from '@components/core/Button';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
-import VoteForm from '@components/pool/vote/VoteForm';
+import Title from '@components/core/Title';
+import CharacterVoteOption from '@components/pool/vote/CharacterVoteOption';
+import MediaVoteOption from '@components/pool/vote/MediaVoteOption';
+import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
@@ -10,65 +15,139 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-type VoteOptions = Anilist.Media & Anilist.Character;
+type CharacterOption = Anilist.Character & PoolOption;
+type MediaOption = Anilist.Media & PoolOption;
 
 const Vote: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+  const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
+  const [isLoadingMedias, setIsLoadingMedias] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
   const [pool, setPool] = useState<Pool>();
-  const [options, setOptions] = useState<Array<VoteOptions>>([]);
+  const [characters, setCharacters] = useState<Array<Anilist.Character>>([]);
+  const [medias, setMedias] = useState<Array<Anilist.Media>>([]);
+  const [votes, setVotes] = useState<Array<PoolOption>>([]);
   const router = useRouter();
   const { poolId } = router.query;
+  const options = pool?.options.map((option) => {
+    if (option.type === OptionType.Character) {
+      const character = characters.find(({ id }) => option.anilistId === id);
+      return {
+        ...character,
+        ...option,
+      };
+    }
+
+    const media = medias.find(({ id }) => option.anilistId === id);
+    return {
+      ...option,
+      ...media,
+    };
+  });
+  const canSubmit = votes.length > 0;
 
   const goToResults = () => router.push(`/pool/result/${poolId}`);
 
   const hasUserAlreadyVoted = async () => {
     if (poolId) {
       const userVotes = await poolService.getUserVotes(String(poolId));
-      if (userVotes && userVotes.length > 0) {
-        return true;
-      }
-      return false;
+      return userVotes && userVotes.length > 0;
     }
   };
 
-  const loadOptions = async () => {
+  const loadPoolIfUserDoesNotHasVoted = async () => {
+    if (await hasUserAlreadyVoted()) {
+      toastWarning('You already has voted on this pool');
+      goToResults();
+    } else {
+      await loadPool();
+    }
+  };
+
+  const loadPool = async () => {
     try {
-      setIsLoading(true);
+      setIsLoadingPool(true);
       if (poolId) {
         const pool = await poolService.get(String(poolId));
-        const options = Array<VoteOptions>();
-
-        for (const option of pool.options) {
-          if (option.type === OptionType.Character) {
-            const character = await anilistService.getCharacterById(
-              parseInt(String(option.anilistId))
-            );
-
-            options.push({
-              ...character,
-              type: OptionType.Character,
-            } as VoteOptions);
-          } else {
-            const media = await anilistService.getMediaById(
-              parseInt(String(option.anilistId))
-            );
-            options.push(media as VoteOptions);
-          }
-        }
-
         setPool(pool);
-        setOptions(options);
       }
     } catch (error) {
-      console.log(error);
-      toastError('Failed  to load options');
+      toastError('Failed  to load pool');
     } finally {
-      setIsLoading(false);
+      setIsLoadingPool(false);
     }
   };
 
-  const onSubmitHandler = async (poolVotes: Array<PoolOption>) => {
+  const loadMedias = async () => {
+    try {
+      setIsLoadingMedias(true);
+      const optionsThatAreMediaIds = pool?.options
+        .filter(
+          ({ type }) => type === OptionType.Manga || type === OptionType.Anime
+        )
+        .map(({ anilistId }) => anilistId);
+
+      if (optionsThatAreMediaIds) {
+        const medias = await anilistService.getMediasByIds(
+          optionsThatAreMediaIds
+        );
+        setMedias(medias);
+      }
+    } catch (error) {
+      toastError('Failed to load pool media options');
+    } finally {
+      setIsLoadingMedias(false);
+    }
+  };
+
+  const loadCharacters = async () => {
+    try {
+      setIsLoadingCharacters(true);
+      const optionsThatAreCharacters = pool?.options
+        .filter(({ type }) => type === OptionType.Character)
+        .map(({ anilistId }) => anilistId);
+
+      if (optionsThatAreCharacters) {
+        const characters = await anilistService.getCharactersByIds(
+          optionsThatAreCharacters
+        );
+        setCharacters(characters);
+      }
+    } catch (error) {
+      toastError('Failed to load pool character options');
+    } finally {
+      setIsLoadingCharacters(false);
+    }
+  };
+
+  const onSelectedHandler = (selectedOption: PoolOption) => {
+    if (pool!.multiOptions) {
+      const isAlreadyAdded = votes.find(
+        (vote) => vote.anilistId === selectedOption.anilistId
+      );
+      if (isAlreadyAdded) {
+        setVotes(
+          votes.filter((vote) => vote.anilistId !== selectedOption.anilistId)
+        );
+      } else {
+        setVotes([
+          ...votes,
+          { anilistId: selectedOption.anilistId, type: selectedOption.type },
+        ]);
+      }
+    } else {
+      setVotes([
+        { anilistId: selectedOption.anilistId, type: selectedOption.type },
+      ]);
+    }
+  };
+
+  const onShareHandler = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toastSuccess('Share link copied to clipboard');
+  };
+
+  const submitVotes = async (poolVotes: Array<PoolOption>) => {
     try {
       setIsVoting(true);
       await poolService.vote(String(poolId), poolVotes);
@@ -81,19 +160,68 @@ const Vote: NextPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      if (await hasUserAlreadyVoted()) {
-        toastWarning('You already has voted on this pool');
-        goToResults();
-      } else {
-        await loadOptions();
+  const buildCharacterVoteOption = (characterOption: CharacterOption) => {
+    const isSelected = Boolean(
+      votes.find(
+        (vote) =>
+          vote.anilistId === characterOption.id &&
+          vote.type === OptionType.Character
+      )
+    );
+
+    return (
+      <CharacterVoteOption
+        key={`character-${characterOption.id}`}
+        onClick={() => onSelectedHandler(characterOption)}
+        coverUrl={characterOption.image.large}
+        name={characterOption.name}
+        selected={isSelected}
+      />
+    );
+  };
+
+  const buildMediaVoteOption = (mediaOption: MediaOption) => {
+    const isSelected = Boolean(
+      votes.find(
+        (vote) =>
+          vote.anilistId === mediaOption.id &&
+          (vote.type === OptionType.Manga || vote.type === OptionType.Anime)
+      )
+    );
+
+    return (
+      <MediaVoteOption
+        key={`media-${mediaOption.id}`}
+        onClick={() => onSelectedHandler(mediaOption)}
+        coverUrl={mediaOption.coverImage.extraLarge}
+        title={mediaOption.title}
+        selected={isSelected}
+      />
+    );
+  };
+
+  const renderOptions = () =>
+    options?.map((option) => {
+      if (option.type === OptionType.Character) {
+        const characterOption = option as CharacterOption;
+        return buildCharacterVoteOption(characterOption);
       }
-    };
-    fetchInitialData();
+      const mediaOption = option as MediaOption;
+      return buildMediaVoteOption(mediaOption);
+    });
+
+  useEffect(() => {
+    loadPoolIfUserDoesNotHasVoted();
   }, []);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (pool) {
+      loadMedias();
+      loadCharacters();
+    }
+  }, [pool]);
+
+  if (isLoadingPool || isLoadingCharacters || isLoadingMedias) {
     return <LoadingPage />;
   }
 
@@ -105,7 +233,41 @@ const Vote: NextPage = () => {
     <Page bgImage="/images/bg-vote-pool.jpg">
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
-        <VoteForm pool={pool} options={options} onSubmit={onSubmitHandler} />
+        <Box className="flex flex-col gap-5">
+          <div className="flex flex-col items-center justify-between md:flex-row">
+            <div>
+              <Title>{pool?.title}</Title>
+              <h2 className="text-xs">
+                Pool ends in: {new Date(pool?.endDate!).toLocaleString()}
+              </h2>
+            </div>
+            <div>
+              <Button
+                color="white"
+                onClick={() => router.push(`/pool/result/${poolId}`)}
+              >
+                <span>Results</span>
+                <ChartBarIcon className="w-5" />
+              </Button>
+              <Button color="white" onClick={onShareHandler}>
+                <span>Share</span>
+                <LinkIcon className="w-5" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+            {renderOptions()}
+          </div>
+          <div className="self-end">
+            <Button
+              color="green"
+              disabled={!canSubmit}
+              onClick={() => submitVotes(votes)}
+            >
+              vote
+            </Button>
+          </div>
+        </Box>
       </div>
     </Page>
   );
