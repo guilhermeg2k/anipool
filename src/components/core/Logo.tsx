@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
 interface LogoProps {

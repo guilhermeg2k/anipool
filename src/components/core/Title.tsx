@@ -1,5 +1,3 @@
-import { FunctionComponent } from 'react';
-
 interface TitleProps {
   children: React.ReactNode;
 }
