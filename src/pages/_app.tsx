@@ -4,11 +4,12 @@ import userService from '@services/userService';
 import useUserStore from '@store/userStore';
 import { AUTH_CHANNEL } from '@utils/channelUtils';
 import type { AppProps } from 'next/app';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
+import { Analytics } from '@vercel/analytics/react';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { setUser } = useUserStore();
@@ -45,6 +46,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <>
       <Component {...pageProps} />
       <ToastContainer />
+      <Analytics />
     </>
   );
 };
