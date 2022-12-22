@@ -9,11 +9,10 @@ import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/outline';
 import { toastPromise } from '@libs/toastify';
 import poolService from '@services/poolService';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import SearchOptionModal from './SearchOptionModal';
-
-const DATE_TIME_NOW = new Date();
 
 interface PoolFormOptionProps {
   id: string;
@@ -44,7 +43,7 @@ const PoolFormOption = ({ id, type, text, onRemove }: PoolFormOptionProps) => {
 
 const CreatePoolForm = () => {
   const [title, setTitle] = useState('');
-  const [endDate, setEndDate] = useState(DATE_TIME_NOW);
+  const [endDate, setEndDate] = useState(new Date());
   const [options, setOptions] = useState(new Array<PoolOption>());
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
@@ -52,7 +51,7 @@ const CreatePoolForm = () => {
   const [isCreatingPool, setIsCreatingPool] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
-    title && endDate !== DATE_TIME_NOW && options.length > 1;
+    title && dayjs(endDate) > dayjs() && options.length > 1;
 
   const onAddOptionHandler = (option: PoolOption) => {
     const newOptions = [...options, option];
