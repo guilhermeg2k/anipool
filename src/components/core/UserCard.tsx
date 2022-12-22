@@ -1,5 +1,8 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon, LoginIcon } from '@heroicons/react/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline';
 import useUserStore from '@store/userStore';
 import { openAnilistAuthUrl } from '@utils/utils';
 import Image from 'next/image';
@@ -57,7 +60,7 @@ const UserCard = () => {
         <div className="flex items-center w-full">
           <Button onClick={openAnilistAuthUrl} color="white" className="w-full">
             Sign in
-            <LoginIcon className="w-5 h-5" />
+            <ArrowRightOnRectangleIcon className="w-5 h-5" />
           </Button>
         </div>
       )}

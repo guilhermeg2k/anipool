@@ -6,7 +6,7 @@ import DataDisplay from '@components/core/DataDisplay';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import FormGroup from '@components/core/FormGroup';
 import TextField from '@components/core/TextField';
-import { TrashIcon } from '@heroicons/react/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { toastPromise } from '@libs/toastify';
 import pollService from '@services/pollService';
 import dayjs from 'dayjs';

@@ -7,7 +7,7 @@ import SignInModal from '@components/core/SignInModal';
 import Title from '@components/core/Title';
 import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
-import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
+import { ChartBarIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';

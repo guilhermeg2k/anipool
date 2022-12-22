@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import CloseIcon from '@heroicons/react/outline/XCircleIcon';
+import CloseIcon from '@heroicons/react/24/outline/XCircleIcon';
 import { Fragment } from 'react';
 interface ModalProps {
   title?: string;

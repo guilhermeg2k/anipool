@@ -6,6 +6,14 @@ const get = async (id: string) => {
   return poll;
 };
 
+const listByUserId = async (userId: string) => {
+  const response = await axiosClient.get<Poll[]>(
+    `/poll/list-by-user-id/${userId}`
+  );
+  const poll = response.data;
+  return poll;
+};
+
 const create = async (poll: Poll) => {
   const response = await axiosClient.post<string>('/poll/create', poll);
   const pollId = response.data;
@@ -36,6 +44,7 @@ const getResult = async (pollId: string) => {
 
 const pollService = {
   get,
+  listByUserId,
   getUserVotes,
   getResult,
   create,

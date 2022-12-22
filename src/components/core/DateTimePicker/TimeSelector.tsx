@@ -1,4 +1,4 @@
-import CheckIcon from '@heroicons/react/outline/CheckIcon';
+import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
 import React from 'react';
 import { DatePickerView } from './DateTimePicker';
 interface TimeSelectorProps {

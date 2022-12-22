@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
-import { SelectorIcon } from '@heroicons/react/outline';
+import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 
 interface SelectOption {
@@ -28,7 +28,10 @@ const Select = ({
   const selectButton = (
     <div className="flex items-center justify-between">
       <span>{selectedOption ? selectedOption.label : label}</span>
-      <SelectorIcon className="h-5 w-5 text-neutral-500" aria-hidden="true" />
+      <ChevronUpDownIcon
+        className="h-5 w-5 text-neutral-500"
+        aria-hidden="true"
+      />
     </div>
   );
 
