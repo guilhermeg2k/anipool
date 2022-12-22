@@ -10,6 +10,7 @@ import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
+import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -216,6 +217,13 @@ const Vote: NextPage = () => {
 
   useEffect(() => {
     if (pool) {
+      const poolEndDate = dayjs(pool.endDate);
+
+      if (poolEndDate < dayjs()) {
+        goToResults();
+        return;
+      }
+
       loadMedias();
       loadCharacters();
     }
