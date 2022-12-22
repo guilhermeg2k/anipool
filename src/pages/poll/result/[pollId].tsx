@@ -22,29 +22,19 @@ type MediaResult = Anilist.Media & PollResult;
 
 const PollResult: NextPage = () => {
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
-  const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
-  const [isLoadingMedias, setIsLoadingMedias] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
-  const [charactersResults, setCharactersResults] = useState(
-    Array<CharacterResult>()
-  );
-  const [mediaResults, setMediaResults] = useState(Array<MediaResult>());
-
   const router = useRouter();
-
   const { pollId } = router.query;
-
-  const resultsSorted = [...charactersResults, ...mediaResults].sort(
-    (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
-  );
-
   const totalVotes = results.reduce(
     (totalVotes, option) => totalVotes + option.votes,
     0
   );
 
-  const buildCharactersResults = (characters: Array<Anilist.Character>) => {
+  const buildCharactersResults = (
+    characters: Array<Anilist.Character>,
+    results: Array<PollResult>
+  ) => {
     const charactersResults = characters.map((character) => {
       const result = results.find(
         ({ anilistId, type }) =>
@@ -60,7 +50,10 @@ const PollResult: NextPage = () => {
     return charactersResults;
   };
 
-  const buildMediasResults = (medias: Array<Anilist.Media>) => {
+  const buildMediasResults = (
+    medias: Array<Anilist.Media>,
+    results: Array<PollResult>
+  ) => {
     const mediasWithVotes = medias.map((media) => {
       const result = results.find(
         ({ anilistId, type }) =>
@@ -77,67 +70,59 @@ const PollResult: NextPage = () => {
     return mediasWithVotes;
   };
 
+  const loadCharactersResults = async (results: Array<PollResult>) => {
+    const characterOptionIds = results
+      .filter((option) => option.type === OptionType.Character)
+      .map((option) => option.anilistId);
+
+    const characters = await anilistService.getCharactersByIds(
+      characterOptionIds
+    );
+
+    const charactersResults = buildCharactersResults(characters, results);
+
+    return charactersResults;
+  };
+
+  const loadMediaResults = async (results: Array<PollResult>) => {
+    const mediasOptionIds = results
+      .filter(
+        (option) =>
+          option.type === OptionType.Manga || option.type === OptionType.Anime
+      )
+      .map((option) => option.anilistId);
+
+    const medias = await anilistService.getMediasByIds(mediasOptionIds);
+    const mediasWithVotes = buildMediasResults(medias, results);
+
+    return mediasWithVotes;
+  };
+
   const loadPollAndResult = async () => {
     setIsLoadingPollAndResults(true);
     try {
       if (pollId) {
-        const pollPromise = pollService.get(String(pollId));
-        const pollResultsPromise = pollService.getResult(String(pollId));
-
         const [poll, pollOptionsResult] = await Promise.all([
-          pollPromise,
-          pollResultsPromise,
+          pollService.get(String(pollId)),
+          pollService.getResult(String(pollId)),
         ]);
 
+        const [characterResults, mediaResults] = await Promise.all([
+          loadCharactersResults(pollOptionsResult),
+          loadMediaResults(pollOptionsResult),
+        ]);
+
+        const results = [...characterResults, ...mediaResults].sort(
+          (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
+        );
+
+        setResults(results);
         setPoll(poll);
-        setResults(pollOptionsResult);
       }
     } catch (error) {
       toastError('Failed to load poll and results');
     } finally {
       setIsLoadingPollAndResults(false);
-    }
-  };
-
-  const loadCharactersResults = async () => {
-    try {
-      setIsLoadingCharacters(true);
-      const characterOptionIds = results
-        .filter((option) => option.type === OptionType.Character)
-        .map((option) => option.anilistId);
-
-      const characters = await anilistService.getCharactersByIds(
-        characterOptionIds
-      );
-
-      const charactersWithVotes = buildCharactersResults(characters);
-
-      setCharactersResults(charactersWithVotes);
-    } catch (error) {
-      toastError('Failed to load results for character options');
-    } finally {
-      setIsLoadingCharacters(false);
-    }
-  };
-
-  const loadMediaResults = async () => {
-    try {
-      setIsLoadingMedias(true);
-      const mediasOptionIds = results
-        .filter(
-          (option) =>
-            option.type === OptionType.Manga || option.type === OptionType.Anime
-        )
-        .map((option) => option.anilistId);
-
-      const medias = await anilistService.getMediasByIds(mediasOptionIds);
-      const mediasWithVotes = buildMediasResults(medias);
-
-      setMediaResults(mediasWithVotes);
-    } catch (error) {
-      toastError('Failed to load results for media options');
-    } finally {
-      setIsLoadingMedias(false);
     }
   };
 
@@ -149,7 +134,7 @@ const PollResult: NextPage = () => {
   };
 
   const renderResultsCards = () =>
-    resultsSorted.map((result) => {
+    results.map((result) => {
       if (result.type === OptionType.Character) {
         const characterResult = result as CharacterResult;
         return (
@@ -179,14 +164,7 @@ const PollResult: NextPage = () => {
     loadPollAndResult();
   }, [pollId]);
 
-  useEffect(() => {
-    if (results.length > 0) {
-      loadCharactersResults();
-      loadMediaResults();
-    }
-  }, [results]);
-
-  if (isLoadingPollAndResults || isLoadingCharacters || isLoadingMedias) {
+  if (isLoadingPollAndResults) {
     return <LoadingPage text="Loading results..." />;
   }
 

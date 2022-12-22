@@ -24,31 +24,13 @@ type CharacterOption = Anilist.Character & PollOption;
 type MediaOption = Anilist.Media & PollOption;
 
 const Vote: NextPage = () => {
-  const [isLoadingpoll, setIsLoadingpoll] = useState(true);
-  const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
-  const [isLoadingMedias, setIsLoadingMedias] = useState(true);
+  const [isLoadingPoll, setIsLoadingPoll] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
-  const [poll, setpoll] = useState<PollWithCreator>();
-  const [characters, setCharacters] = useState<Array<Anilist.Character>>([]);
-  const [medias, setMedias] = useState<Array<Anilist.Media>>([]);
+  const [poll, setPoll] = useState<PollWithCreator>();
+  const [options, setOptions] = useState<Array<PollOption>>([]);
   const [votes, setVotes] = useState<Array<PollOption>>([]);
   const router = useRouter();
   const { pollId } = router.query;
-  const options = poll?.options.map((option) => {
-    if (option.type === OptionType.Character) {
-      const character = characters.find(({ id }) => option.anilistId === id);
-      return {
-        ...character,
-        ...option,
-      };
-    }
-
-    const media = medias.find(({ id }) => option.anilistId === id);
-    return {
-      ...option,
-      ...media,
-    };
-  });
   const { isLogged } = useUserStore();
   const isUserLogged = isLogged();
   const canSubmit = votes.length > 0 && isUserLogged;
@@ -62,68 +44,92 @@ const Vote: NextPage = () => {
     }
   };
 
-  const loadpollIfUserDoesNotHasVoted = async () => {
-    if (isUserLogged && (await hasUserAlreadyVoted())) {
-      toastWarning('You already has voted on this poll');
-      goToResults();
-    } else {
-      await loadpoll();
+  const buildOptions = (
+    options: PollOption[],
+    characterOptions: Anilist.Character[],
+    mediaOptions: Anilist.Media[]
+  ) =>
+    options.map((option) => {
+      if (option.type === OptionType.Character) {
+        const character = characterOptions.find(
+          ({ id }) => option.anilistId === id
+        );
+        return {
+          ...character,
+          ...option,
+        };
+      }
+
+      const media = mediaOptions.find(({ id }) => option.anilistId === id);
+      return {
+        ...option,
+        ...media,
+      };
+    });
+
+  const loadMediasFromOptions = async (options: Array<PollOption>) => {
+    const optionsThatAreMediaIds = options
+      .filter(
+        ({ type }) => type === OptionType.Manga || type === OptionType.Anime
+      )
+      .map(({ anilistId }) => anilistId);
+
+    if (optionsThatAreMediaIds.length > 0) {
+      const medias = await anilistService.getMediasByIds(
+        optionsThatAreMediaIds
+      );
+      return medias;
     }
+    return [];
   };
 
-  const loadpoll = async () => {
+  const loadCharactersFromOptions = async (options: Array<PollOption>) => {
+    const optionsThatAreCharacters = options
+      .filter(({ type }) => type === OptionType.Character)
+      .map(({ anilistId }) => anilistId);
+
+    if (optionsThatAreCharacters.length > 0) {
+      const characters = await anilistService.getCharactersByIds(
+        optionsThatAreCharacters
+      );
+      return characters;
+    }
+    return [];
+  };
+
+  const loadPoll = async () => {
     try {
-      setIsLoadingpoll(true);
+      setIsLoadingPoll(true);
       if (pollId) {
         const poll = await pollService.get(String(pollId));
-        setpoll(poll);
+
+        const [characterOptions, mediaOptions] = await Promise.all([
+          loadCharactersFromOptions(poll.options),
+          loadMediasFromOptions(poll.options),
+        ]);
+
+        const options = buildOptions(
+          poll.options,
+          characterOptions,
+          mediaOptions
+        );
+
+        setPoll(poll);
+        setOptions(options);
       }
     } catch (error) {
       toastError('Failed  to load poll');
     } finally {
-      setIsLoadingpoll(false);
+      setIsLoadingPoll(false);
     }
   };
 
-  const loadMedias = async () => {
-    try {
-      setIsLoadingMedias(true);
-      const optionsThatAreMediaIds = poll?.options
-        .filter(
-          ({ type }) => type === OptionType.Manga || type === OptionType.Anime
-        )
-        .map(({ anilistId }) => anilistId);
-
-      if (optionsThatAreMediaIds) {
-        const medias = await anilistService.getMediasByIds(
-          optionsThatAreMediaIds
-        );
-        setMedias(medias);
-      }
-    } catch (error) {
-      toastError('Failed to load poll media options');
-    } finally {
-      setIsLoadingMedias(false);
-    }
-  };
-
-  const loadCharacters = async () => {
-    try {
-      setIsLoadingCharacters(true);
-      const optionsThatAreCharacters = poll?.options
-        .filter(({ type }) => type === OptionType.Character)
-        .map(({ anilistId }) => anilistId);
-
-      if (optionsThatAreCharacters) {
-        const characters = await anilistService.getCharactersByIds(
-          optionsThatAreCharacters
-        );
-        setCharacters(characters);
-      }
-    } catch (error) {
-      toastError('Failed to load poll character options');
-    } finally {
-      setIsLoadingCharacters(false);
+  const loadPollIfUserDoesNotHasVoted = async () => {
+    if (isUserLogged && (await hasUserAlreadyVoted())) {
+      toastWarning('You already has voted on this poll');
+      goToResults();
+    } else {
+      await loadPoll();
     }
   };
 
@@ -167,7 +173,7 @@ const Vote: NextPage = () => {
     }
   };
 
-  const buildCharacterVoteOption = (characterOption: CharacterOption) => {
+  const renderCharacterVoteOption = (characterOption: CharacterOption) => {
     const isSelected = Boolean(
       votes.find(
         (vote) =>
@@ -187,7 +193,7 @@ const Vote: NextPage = () => {
     );
   };
 
-  const buildMediaVoteOption = (mediaOption: MediaOption) => {
+  const renderMediaVoteOption = (mediaOption: MediaOption) => {
     const isSelected = Boolean(
       votes.find(
         (vote) =>
@@ -211,31 +217,27 @@ const Vote: NextPage = () => {
     options?.map((option) => {
       if (option.type === OptionType.Character) {
         const characterOption = option as CharacterOption;
-        return buildCharacterVoteOption(characterOption);
+        return renderCharacterVoteOption(characterOption);
       }
       const mediaOption = option as MediaOption;
-      return buildMediaVoteOption(mediaOption);
+      return renderMediaVoteOption(mediaOption);
     });
 
   useEffect(() => {
-    loadpollIfUserDoesNotHasVoted();
+    loadPollIfUserDoesNotHasVoted();
   }, [pollId]);
 
   useEffect(() => {
     if (poll) {
       const pollEndDate = dayjs(poll.endDate);
-
       if (pollEndDate < dayjs()) {
         goToResults();
         return;
       }
-
-      loadMedias();
-      loadCharacters();
     }
   }, [poll]);
 
-  if (isLoadingpoll || isLoadingCharacters || isLoadingMedias) {
+  if (isLoadingPoll) {
     return <LoadingPage />;
   }
 
