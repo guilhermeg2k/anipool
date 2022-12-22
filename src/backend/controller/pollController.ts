@@ -1,4 +1,5 @@
-import poolService from '@backend/service/poolService';
+import pollService from '@backend/service/pollService';
+import { getTokenPayload } from '@utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -6,8 +7,8 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
     const { id } = req.query;
 
     if (id) {
-      const pool = await poolService.get(String(id));
-      return res.status(200).send(pool);
+      const poll = await pollService.get(String(id));
+      return res.status(200).send(poll);
     }
 
     return res.status(400).send('');
@@ -19,11 +20,11 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { poolId } = req.query;
+    const { pollId } = req.query;
 
-    if (poolId) {
-      const poolResults = await poolService.getResult(String(poolId));
-      return res.status(200).send(poolResults);
+    if (pollId) {
+      const pollResults = await pollService.getResult(String(pollId));
+      return res.status(200).send(pollResults);
     }
 
     return res.status(400).send('');
@@ -33,13 +34,14 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
+const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, endDate, options, multiOptions } = req.body;
-    const { id } = req.cookies;
+    const { userToken } = req.cookies;
+    const { id } = await getTokenPayload(String(userToken));
 
     if (id && title && endDate && options && multiOptions != null) {
-      const poolId = await poolService.createAndReturnId({
+      const pollId = await pollService.createAndReturnId({
         userId: id,
         title,
         endDate,
@@ -47,7 +49,7 @@ const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
         multiOptions,
       });
 
-      return res.status(200).send(poolId);
+      return res.status(200).send(pollId);
     }
     return res.status(400).send('');
   } catch (error) {
@@ -56,10 +58,10 @@ const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const poolController = {
+const pollController = {
   get,
   getResult,
-  createPool,
+  createPoll,
 };
 
-export default poolController;
+export default pollController;

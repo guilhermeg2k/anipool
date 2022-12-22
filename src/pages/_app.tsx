@@ -10,16 +10,17 @@ import '../styles/globals.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { setUser } = useUserStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadUser = async () => {
     try {
       setIsLoading(true);
       const user = await userService.getCurrentUser();
       setUser(user);
-      setIsLoading(false);
     } catch (error) {
       toastError('Failed to load user data');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -27,9 +28,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     loadUser();
   }, []);
 
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
   return (
     <>
-      {isLoading ? <LoadingPage /> : <Component {...pageProps} />}
+      <Component {...pageProps} />
       <ToastContainer />
     </>
   );

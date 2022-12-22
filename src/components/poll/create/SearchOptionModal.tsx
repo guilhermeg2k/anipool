@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { OptionType } from 'src/enums';
 
-const POOL_OPTION_TYPES = [
+const poll_OPTION_TYPES = [
   { id: 1, label: OptionType.Anime, value: OptionType.Anime },
   { id: 2, label: OptionType.Manga, value: OptionType.Manga },
   { id: 3, label: OptionType.Character, value: OptionType.Character },
@@ -90,7 +90,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
 interface SearchOptionModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (poolOption: PoolOption) => void;
+  onAdd: (pollOption: PollOption) => void;
 }
 
 const SearchOptionModal = ({
@@ -99,7 +99,7 @@ const SearchOptionModal = ({
   onAdd,
 }: SearchOptionModalProps) => {
   const [searchText, setSearchText] = useState('');
-  const [type, setType] = useState(POOL_OPTION_TYPES[0].value);
+  const [type, setType] = useState(poll_OPTION_TYPES[0].value);
   const [options, setOptions] = useState(
     Array<Anilist.Media | Anilist.Character>()
   );
@@ -181,7 +181,7 @@ const SearchOptionModal = ({
         <div className="flex w-full flex-col gap-2 sm:flex-row">
           <Select
             className="w-full sm:w-[220px]"
-            options={POOL_OPTION_TYPES}
+            options={poll_OPTION_TYPES}
             value={type}
             onChange={(type) => setType(type)}
           />

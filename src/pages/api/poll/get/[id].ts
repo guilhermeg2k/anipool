@@ -1,4 +1,4 @@
-import poolController from '@backend/controller/poolController';
+import pollController from '@backend/controller/pollController';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -9,7 +9,7 @@ export default async function handler(
 
   switch (method) {
     case 'GET':
-      await poolController.getResult(req, res);
+      await pollController.get(req, res);
       break;
     default:
       res.status(405).end();

@@ -8,20 +8,20 @@ import FormGroup from '@components/core/FormGroup';
 import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/outline';
 import { toastPromise } from '@libs/toastify';
-import poolService from '@services/poolService';
+import pollService from '@services/pollService';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import SearchOptionModal from './SearchOptionModal';
 
-interface PoolFormOptionProps {
+interface PollFormOptionProps {
   id: string;
   type: string;
   text: string;
   onRemove: () => void;
 }
 
-const PoolFormOption = ({ id, type, text, onRemove }: PoolFormOptionProps) => {
+const PollFormOption = ({ id, type, text, onRemove }: PollFormOptionProps) => {
   return (
     <FormGroup
       id={id}
@@ -41,24 +41,24 @@ const PoolFormOption = ({ id, type, text, onRemove }: PoolFormOptionProps) => {
   );
 };
 
-const CreatePoolForm = () => {
+const CreatePollForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(new Date());
-  const [options, setOptions] = useState(new Array<PoolOption>());
+  const [options, setOptions] = useState(new Array<PollOption>());
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [isCreatingPool, setIsCreatingPool] = useState(false);
+  const [isCreatingPoll, setIsCreatingPoll] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
     title && dayjs(endDate) > dayjs() && options.length > 1;
 
-  const onAddOptionHandler = (option: PoolOption) => {
+  const onAddOptionHandler = (option: PollOption) => {
     const newOptions = [...options, option];
     setOptions(newOptions);
   };
 
-  const onRemoveOptionHandler = (optionToRemove: PoolOption) => {
+  const onRemoveOptionHandler = (optionToRemove: PollOption) => {
     const newOptions = options.filter(
       (option) => option.anilistId !== optionToRemove.anilistId
     );
@@ -67,22 +67,22 @@ const CreatePoolForm = () => {
 
   const onSubmitHandler = async () => {
     try {
-      setIsCreatingPool(true);
-      const pool = {
+      setIsCreatingPoll(true);
+      const poll = {
         title,
         endDate: endDate.toISOString(),
         options,
         multiOptions: shouldEnableMultipleSelection,
       };
 
-      const poolId = await toastPromise(poolService.create(pool), {
-        pending: 'Creating pool',
-        success: 'Pool created',
-        error: 'Failed to create pool',
+      const pollId = await toastPromise(pollService.create(poll), {
+        pending: 'Creating poll',
+        success: 'Poll created',
+        error: 'Failed to create poll',
       });
-      router.push(`/pool/vote/${poolId}`);
+      router.push(`/poll/vote/${pollId}`);
     } finally {
-      setIsCreatingPool(false);
+      setIsCreatingPoll(false);
     }
   };
 
@@ -98,8 +98,8 @@ const CreatePoolForm = () => {
 
       <TextField
         value={title}
-        id="pool-title"
-        label="Pool title"
+        id="poll-title"
+        label="Poll title"
         placeHolder="What anime should i watch next?"
         className="w-full"
         onChange={(title) => setTitle(title)}
@@ -114,7 +114,7 @@ const CreatePoolForm = () => {
           >
             {options.length > 0 ? (
               options.map((option, index) => (
-                <PoolFormOption
+                <PollFormOption
                   key={option.anilistId}
                   id={(index + 1).toString()}
                   type={option.type}
@@ -156,17 +156,17 @@ const CreatePoolForm = () => {
           Enable multiple selection
         </CheckBox>
         <Button
-          disabled={!shouldCreateButtonBeEnabled || isCreatingPool}
+          disabled={!shouldCreateButtonBeEnabled || isCreatingPoll}
           size="large"
           color="green"
           className="w-full sm:w-auto"
           onClick={onSubmitHandler}
         >
-          Create pool
+          Create poll
         </Button>
       </FormGroup>
     </Box>
   );
 };
 
-export default CreatePoolForm;
+export default CreatePollForm;

@@ -1,5 +1,3 @@
-import { Children } from 'react';
-
 interface BoxProps {
   children: React.ReactNode;
   className?: string;

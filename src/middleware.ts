@@ -1,21 +1,12 @@
-import { JWT_SECRET } from '@backend/constants';
-import { jwtVerify } from 'jose';
+import { getTokenPayload } from '@utils/authUtils';
 import { NextRequest, NextResponse } from 'next/server';
 
-const getTokenPayload = async (
-  token: string,
-  secret: string
-): Promise<{ id: string }> => {
-  const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
-  return { id: payload.id as string };
-};
-
 const isAuthRoute = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/pool/result')) {
+  if (req.nextUrl.pathname.startsWith('/poll/result')) {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/pool/vote')) {
+  if (req.nextUrl.pathname.startsWith('/poll/vote')) {
     return false;
   }
 
@@ -23,11 +14,11 @@ const isAuthRoute = (req: NextRequest) => {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/pool/get')) {
+  if (req.nextUrl.pathname.startsWith('/api/poll/get')) {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/pool/result')) {
+  if (req.nextUrl.pathname.startsWith('/api/poll/result')) {
     return false;
   }
 
@@ -38,8 +29,7 @@ const authMiddleware = async (req: NextRequest, res: NextResponse) => {
   const userToken = req.cookies.get('userToken');
   if (userToken) {
     try {
-      const { id } = await getTokenPayload(userToken, JWT_SECRET);
-      res.cookies.set('id', id);
+      await getTokenPayload(userToken);
       return res;
     } catch (error) {
       return NextResponse.redirect(new URL('/401', req.url));
@@ -59,5 +49,5 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  matcher: ['/pool/:path*', '/api/:path*'],
+  matcher: ['/poll/:path*', '/api/:path*'],
 };

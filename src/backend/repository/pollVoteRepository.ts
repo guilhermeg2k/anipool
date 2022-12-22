@@ -1,18 +1,18 @@
 import dynamoDb from '@backend/database';
 import { v4 as uuidv4 } from 'uuid';
 
-const TABLE_NAME = 'pool_votes';
+const TABLE_NAME = 'poll_votes';
 
-const create = async (votes: Array<PoolVote>) => {
-  const poolVotes = Array<{
+const create = async (votes: Array<PollVote>) => {
+  const pollVotes = Array<{
     PutRequest: {
-      Item: PoolVote;
+      Item: PollVote;
     };
   }>();
 
   votes.forEach((vote) => {
     const id = uuidv4();
-    poolVotes.push({
+    pollVotes.push({
       PutRequest: {
         Item: {
           ...vote,
@@ -24,18 +24,18 @@ const create = async (votes: Array<PoolVote>) => {
 
   let params = {
     RequestItems: {
-      pool_votes: poolVotes,
+      poll_votes: pollVotes,
     },
   };
 
   await dynamoDb.batchWrite(params).promise();
 };
 
-const getByUserIdAndPoolId = async (userId: string, poolId: string) => {
+const getByUserIdAndPollId = async (userId: string, pollId: string) => {
   const params = {
-    FilterExpression: 'poolId = :poolId and userId = :userId',
+    FilterExpression: 'pollId = :pollId and userId = :userId',
     ExpressionAttributeValues: {
-      ':poolId': poolId,
+      ':pollId': pollId,
       ':userId': userId,
     },
     TableName: TABLE_NAME,
@@ -44,18 +44,18 @@ const getByUserIdAndPoolId = async (userId: string, poolId: string) => {
   const scanResult = await dynamoDb.scan(params).promise();
 
   if (scanResult.Items!.length > 0) {
-    const votes = scanResult.Items! as Array<PoolVote>;
+    const votes = scanResult.Items! as Array<PollVote>;
     return votes;
   }
 
   return null;
 };
 
-const getByPoolId = async (poolId: string) => {
+const getByPollId = async (pollId: string) => {
   const params = {
-    FilterExpression: 'poolId = :poolId',
+    FilterExpression: 'pollId = :pollId',
     ExpressionAttributeValues: {
-      ':poolId': poolId,
+      ':pollId': pollId,
     },
     TableName: TABLE_NAME,
   };
@@ -63,17 +63,17 @@ const getByPoolId = async (poolId: string) => {
   const scanResult = await dynamoDb.scan(params).promise();
 
   if (scanResult.Items!.length > 0) {
-    const votes = scanResult.Items! as Array<PoolVote>;
+    const votes = scanResult.Items! as Array<PollVote>;
     return votes;
   }
 
   return null;
 };
 
-const poolVotesRepository = {
-  getByPoolId,
-  getByUserIdAndPoolId,
+const pollVotesRepository = {
+  getByPollId,
+  getByUserIdAndPollId,
   create,
 };
 
-export default poolVotesRepository;
+export default pollVotesRepository;

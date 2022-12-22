@@ -1,16 +1,12 @@
-import Page from '@components/core/Page';
-import useUserStore from '@store/userStore';
+import LoadingPage from '@components/core/LoadingPage';
+import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
+import userService from '@services/userService';
+import useUserStore from '@store/userStore';
+import Cookies from 'js-cookie';
 import { NextPage } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Cookies from 'js-cookie';
-import axiosClient from '@libs/axios';
-import userService from '@services/userService';
-import SpinnerGon from '@components/core/SpinnerGon';
-import { toastError } from '@libs/toastify';
-import LoadingPage from '@components/core/LoadingPage';
 
 const getAccessTokenFromUrl = (url: string) => {
   /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
@@ -38,9 +34,8 @@ const Auth: NextPage = () => {
       );
       Cookies.set('userToken', userToken);
       const user = await userService.getCurrentUser();
-
       setUser(user);
-      router.push('/pool/create');
+      await router.push('/poll/create');
     } catch (error) {
       toastError('Failed to authenticate user');
     }

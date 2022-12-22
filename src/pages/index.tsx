@@ -22,15 +22,15 @@ const Home: NextPage = () => {
         <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">
           <Logo className="text-7xl lg:text-8xl" />
           <span className="max-w-md text-xl text-white lg:text-2xl">
-            Create anime quiz pools integrated with anilist.co
+            Create anime quizes and polls integrated with anilist.co
           </span>
           {isLogged ? (
             <Button
               className="min-w-[250px]"
               size="large"
-              onClick={() => router.push('/pool/create')}
+              onClick={() => router.push('/poll/create')}
             >
-              Create Pool
+              Create poll
             </Button>
           ) : (
             <Button size="large" onClick={openAnilistAuthUrl}>
