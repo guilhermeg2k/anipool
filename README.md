@@ -10,7 +10,7 @@ It was created using [NextJS](https://nextjs.org/) on both front and backend, [T
 
 ## Change Logs
 
-[Change logs](https://github.com/guilhermeg2k/anipool/blob/main/README.md)
+[Change logs](https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md)
 
 ## License
 
