@@ -6,7 +6,7 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import CharacterResultCard from '@components/pool/results/CharacterResultCard';
 import MediaResultCard from '@components/pool/results/MediaResultCard';
-import { LinkIcon, PlusIcon } from '@heroicons/react/outline';
+import { LinkIcon, PlusIcon, RefreshIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
@@ -178,7 +178,7 @@ const PoolResult: NextPage = () => {
 
   useEffect(() => {
     loadPoolAndResult();
-  }, []);
+  }, [poolId]);
 
   useEffect(() => {
     if (results.length > 0) {
@@ -220,6 +220,10 @@ const PoolResult: NextPage = () => {
               </h2>
             </div>
             <div className="self-center">
+              <Button color="white" onClick={() => loadPoolAndResult()}>
+                <span>Refresh</span>
+                <RefreshIcon className="w-5" />
+              </Button>
               <Button color="white" onClick={onShareHandler}>
                 <span>Share</span>
                 <LinkIcon className="w-5" />
