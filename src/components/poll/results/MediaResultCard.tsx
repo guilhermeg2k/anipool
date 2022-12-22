@@ -34,7 +34,7 @@ const MediaResultCard: React.FC<MediaResultCardProps> = ({
           height={255}
         />
       </div>
-      <div className="flex flex-grow flex-col items-start gap-1">
+      <div className="flex flex-grow flex-col items-start gap-1 overflow-hidden">
         <h2 className="font-semibold text-sm truncate w-full">
           {title.romaji}
         </h2>

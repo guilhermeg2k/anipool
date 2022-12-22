@@ -39,7 +39,7 @@ const MediaVoteOption = ({
             height={255}
           />
         </div>
-        <div className="flex flex-col items-start gap-1">
+        <div className="flex flex-col items-start gap-1 overflow-hidden">
           <h2 className="font-semibold truncate w-full">{title.romaji}</h2>
           <h3 className="text-xs truncate w-full">{title.english}</h3>
           <h3 className="text-xs truncate w-full">{title.native}</h3>

@@ -38,9 +38,9 @@ const CharacterVoteOption = ({
             height={255}
           />
         </div>
-        <div className="flex flex-col items-start gap-1">
-          <h2 className="font-semibold truncate w-ful">{name.full}</h2>
-          <h3 className="text-xs truncate w-ful">{name.native}</h3>
+        <div className="flex flex-col items-start gap-1 overflow-hidden">
+          <h2 className="font-semibold truncate w-full">{name.full}</h2>
+          <h3 className="text-xs truncate w-full">{name.native}</h3>
         </div>
       </DataDisplay>
     </button>

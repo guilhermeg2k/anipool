@@ -33,9 +33,9 @@ const CharacterResultCard = ({
           height={255}
         />
       </div>
-      <div className="flex flex-grow flex-col items-start gap-1">
-        <h2 className="font-semibold text-sm truncate">{`${name.full}`}</h2>
-        <h3 className="text-xs truncate">{name.native}</h3>
+      <div className="flex flex-grow flex-col items-start gap-1 overflow-hidden">
+        <h2 className="font-semibold text-sm truncate w-full">{`${name.full}`}</h2>
+        <h3 className="text-xs truncate w-full">{name.native}</h3>
       </div>
       <div className="flex flex-col items-center self-center font-roboto">
         <span className="font-semibold">
