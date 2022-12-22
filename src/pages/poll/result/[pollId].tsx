@@ -171,14 +171,14 @@ const PollResult: NextPage = () => {
   return (
     <Page bgImage="/images/bg-poll-results.jpg">
       <Head>
-        <title>Results: {poll?.title}</title>
+        <title>Results: {poll!.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6 ">
         <PageHeader />
         <Box className="flex flex-col gap-5 pb-7">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
-              <Title>{poll?.title}</Title>
+              <Title>{poll!.title}</Title>
               <h2 className="text-xs">
                 <div className="flex items-center  gap-1">
                   <span className="font-semibold">Author:</span>
