@@ -11,8 +11,9 @@ import Button from './Button';
 import MenuDropdown from './MenuDropdown';
 
 const MENU_LINKS = [
-  { id: 1, label: 'About', path: '/about' },
-  { id: 2, label: 'Sign out', path: '/auth/sign-out' },
+  { id: 1, label: 'My Polls', path: '/me/polls' },
+  { id: 2, label: 'About', path: '/about' },
+  { id: 3, label: 'Sign out', path: '/auth/sign-out' },
 ];
 
 const UserCard = () => {
