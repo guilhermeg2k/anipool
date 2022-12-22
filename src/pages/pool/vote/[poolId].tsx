@@ -12,6 +12,7 @@ import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -241,6 +242,9 @@ const Vote: NextPage = () => {
 
   return (
     <Page bgImage="/images/bg-vote-pool.jpg">
+      <Head>
+        <title>Pool: {pool?.title}</title>
+      </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
         <Box className="flex flex-col gap-5">

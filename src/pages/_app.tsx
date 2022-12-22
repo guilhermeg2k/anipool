@@ -1,6 +1,4 @@
 import LoadingPage from '@components/core/LoadingPage';
-import Page from '@components/core/Page';
-import SpinnerGon from '@components/core/SpinnerGon';
 import { toastError } from '@libs/toastify';
 import userService from '@services/userService';
 import useUserStore from '@store/userStore';
