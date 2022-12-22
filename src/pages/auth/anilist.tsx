@@ -36,7 +36,7 @@ const Auth: NextPage = () => {
       const user = await userService.getCurrentUser();
 
       setUser(user);
-      router.push('/poll/create');
+      await router.push('/poll/create');
     } catch (error) {
       toastError('Failed to authenticate user');
     }
