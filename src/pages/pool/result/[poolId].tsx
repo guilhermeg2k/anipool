@@ -11,6 +11,7 @@ import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
 import { NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
@@ -23,7 +24,7 @@ const PoolResult: NextPage = () => {
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
 
-  const [pool, setPool] = useState<Pool>();
+  const [pool, setPool] = useState<PoolWithCreator>();
   const [results, setResults] = useState(Array<PoolResult>());
   const [charactersResults, setCharactersResults] = useState(
     Array<CharacterResult>()
@@ -197,8 +198,21 @@ const PoolResult: NextPage = () => {
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <Title>{pool?.title}</Title>
-              <h2 className="semi text-xs">
-                Pool ends in: {new Date(pool?.endDate!).toLocaleString()}
+              <h2 className="text-xs">
+                <div className="flex items-center  gap-1">
+                  <span className="font-semibold">Author:</span>
+                  <span>{pool!.creator.nickname}</span>
+                  <Image
+                    className="rounded-full"
+                    src={pool!.creator.avatarUrl}
+                    alt="Profile picture"
+                    layout="fixed"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <span className="font-semibold">Ends at:</span>{' '}
+                {new Date(pool?.endDate!).toLocaleString()}
               </h2>
             </div>
             <div className="self-center">

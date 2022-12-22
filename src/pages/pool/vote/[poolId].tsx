@@ -12,6 +12,7 @@ import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
@@ -24,7 +25,8 @@ const Vote: NextPage = () => {
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
-  const [pool, setPool] = useState<Pool>();
+  const [pool, setPool] = useState<PoolWithCreator>();
+  console.log('🚀 ~ file: [poolId].tsx:28 ~ pool', pool);
   const [characters, setCharacters] = useState<Array<Anilist.Character>>([]);
   const [medias, setMedias] = useState<Array<Anilist.Media>>([]);
   const [votes, setVotes] = useState<Array<PoolOption>>([]);
@@ -246,7 +248,20 @@ const Vote: NextPage = () => {
             <div>
               <Title>{pool?.title}</Title>
               <h2 className="text-xs">
-                Pool ends in: {new Date(pool?.endDate!).toLocaleString()}
+                <div className="flex items-center  gap-1">
+                  <span className="font-semibold">Author:</span>
+                  <span>{pool!.creator.nickname}</span>
+                  <Image
+                    className="rounded-full"
+                    src={pool!.creator.avatarUrl}
+                    alt="Profile picture"
+                    layout="fixed"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <span className="font-semibold">Ends at:</span>{' '}
+                {new Date(pool?.endDate!).toLocaleString()}
               </h2>
             </div>
             <div>

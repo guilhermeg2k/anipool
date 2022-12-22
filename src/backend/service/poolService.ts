@@ -1,9 +1,20 @@
 import poolRepository from '@backend/repository/poolRepository';
 import poolVoteService from './poolVoteService';
+import userService from './userService';
 
 const get = async (id: string) => {
   const pool = await poolRepository.get(id);
-  return pool;
+  const poolCreator = await userService.get(pool.userId!);
+
+  const poolWithCreator = {
+    ...pool,
+    creator: {
+      nickname: poolCreator.nickname,
+      avatarUrl: poolCreator.avatarUrl,
+    },
+  };
+
+  return poolWithCreator;
 };
 
 const getResult = async (id: string) => {

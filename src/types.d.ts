@@ -61,6 +61,13 @@ interface Pool {
   options: Array<PoolOption>;
 }
 
+type PoolWithCreator = Pool & {
+  creator: {
+    nickname: string;
+    avatarUrl: string;
+  };
+};
+
 interface PoolVote {
   id?: string;
   userId?: string;

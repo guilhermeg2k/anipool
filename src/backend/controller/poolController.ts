@@ -32,6 +32,7 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500).send('');
   }
 };
+
 const createPool = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, endDate, options, multiOptions } = req.body;
