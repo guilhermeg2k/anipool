@@ -17,11 +17,11 @@ const getUserVotesOnPool = async (userId: string, poolId: string) => {
 const create = async (
   userId: string,
   poolId: string,
-  poolVotes: Array<PoolOption>
+  poolVotes: Array<PollOption>
 ) => {
-  const parsedPoolVotes = Array<PoolVote>();
+  const parsedPoolVotes = Array<PollVote>();
 
-  poolVotes.forEach((poolVote: PoolOption) => {
+  poolVotes.forEach((poolVote: PollOption) => {
     parsedPoolVotes.push({
       ...poolVote,
       poolId,

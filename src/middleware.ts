@@ -11,11 +11,11 @@ const getTokenPayload = async (
 };
 
 const isAuthRoute = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/pool/result')) {
+  if (req.nextUrl.pathname.startsWith('/poll/result')) {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/pool/vote')) {
+  if (req.nextUrl.pathname.startsWith('/poll/vote')) {
     return false;
   }
 
@@ -23,11 +23,11 @@ const isAuthRoute = (req: NextRequest) => {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/pool/get')) {
+  if (req.nextUrl.pathname.startsWith('/api/poll/get')) {
     return false;
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/pool/result')) {
+  if (req.nextUrl.pathname.startsWith('/api/poll/result')) {
     return false;
   }
 
@@ -59,5 +59,5 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  matcher: ['/pool/:path*', '/api/:path*'],
+  matcher: ['/poll/:path*', '/api/:path*'],
 };

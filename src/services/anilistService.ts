@@ -28,7 +28,6 @@ const getUserByAccessToken = async (accessToken: string) => {
 };
 
 const getMediasByIds = async (ids: Array<number>) => {
-  console.log('🚀 ~ file: anilistService.ts:31 ~ getMediasByIds ~ ids', ids);
   const query = gql`
     query getMedias($ids: [Int]!, $size: Int!) {
       Page(page: 1, perPage: $size) {
@@ -59,10 +58,6 @@ const getMediasByIds = async (ids: Array<number>) => {
     ids,
     size,
   });
-  console.log(
-    '🚀 ~ file: anilistService.ts:61 ~ getMediasByIds ~ queryResult',
-    queryResult
-  );
 
   return queryResult.Page.media as Array<Anilist.Media>;
 };

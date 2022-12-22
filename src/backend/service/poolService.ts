@@ -29,13 +29,13 @@ const getResult = async (id: string) => {
     return {
       ...option,
       votes: optionVotes ? optionVotes?.length : 0,
-    } as PoolResult;
+    } as PollResult;
   });
 
   return poolResults;
 };
 
-const createAndReturnId = async (pool: Pool) => {
+const createAndReturnId = async (pool: Poll) => {
   const id = await poolRepository.createAndReturnId(pool);
   return id;
 };

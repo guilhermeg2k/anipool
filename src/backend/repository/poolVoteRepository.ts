@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 const TABLE_NAME = 'pool_votes';
 
-const create = async (votes: Array<PoolVote>) => {
+const create = async (votes: Array<PollVote>) => {
   const poolVotes = Array<{
     PutRequest: {
-      Item: PoolVote;
+      Item: PollVote;
     };
   }>();
 
@@ -44,7 +44,7 @@ const getByUserIdAndPoolId = async (userId: string, poolId: string) => {
   const scanResult = await dynamoDb.scan(params).promise();
 
   if (scanResult.Items!.length > 0) {
-    const votes = scanResult.Items! as Array<PoolVote>;
+    const votes = scanResult.Items! as Array<PollVote>;
     return votes;
   }
 
@@ -63,7 +63,7 @@ const getByPoolId = async (poolId: string) => {
   const scanResult = await dynamoDb.scan(params).promise();
 
   if (scanResult.Items!.length > 0) {
-    const votes = scanResult.Items! as Array<PoolVote>;
+    const votes = scanResult.Items! as Array<PollVote>;
     return votes;
   }
 

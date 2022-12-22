@@ -4,8 +4,8 @@ import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
-import CharacterResultCard from '@components/pool/results/CharacterResultCard';
-import MediaResultCard from '@components/pool/results/MediaResultCard';
+import CharacterResultCard from '@components/poll/results/CharacterResultCard';
+import MediaResultCard from '@components/poll/results/MediaResultCard';
 import { LinkIcon, PlusIcon, RefreshIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
@@ -17,16 +17,16 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-type CharacterResult = Anilist.Character & PoolResult;
-type MediaResult = Anilist.Media & PoolResult;
+type CharacterResult = Anilist.Character & PollResult;
+type MediaResult = Anilist.Media & PollResult;
 
 const PoolResult: NextPage = () => {
   const [isLoadingPoolAndResults, setIsLoadingPoolAndResults] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
 
-  const [pool, setPool] = useState<PoolWithCreator>();
-  const [results, setResults] = useState(Array<PoolResult>());
+  const [pool, setPool] = useState<PollWithCreator>();
+  const [results, setResults] = useState(Array<PollResult>());
   const [charactersResults, setCharactersResults] = useState(
     Array<CharacterResult>()
   );
@@ -228,7 +228,7 @@ const PoolResult: NextPage = () => {
                 <span>Share</span>
                 <LinkIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={() => router.push('/pool/create')}>
+              <Button color="white" onClick={() => router.push('/poll/create')}>
                 <span>Create New</span>
                 <PlusIcon className="w-5" />
               </Button>

@@ -44,31 +44,31 @@ interface User {
   avatarUrl: string;
 }
 
-interface PoolOption {
+interface PollOption {
   anilistId: number;
   type: string;
   text?: string;
 }
 
-type PoolResult = PoolOption & { votes: number };
+type PollResult = PollOption & { votes: number };
 
-interface Pool {
+interface Poll {
   id?: string;
   userId?: string;
   title: string;
   endDate: string;
   multiOptions: boolean;
-  options: Array<PoolOption>;
+  options: Array<PollOption>;
 }
 
-type PoolWithCreator = Pool & {
+type PollWithCreator = Poll & {
   creator: {
     nickname: string;
     avatarUrl: string;
   };
 };
 
-interface PoolVote {
+interface PollVote {
   id?: string;
   userId?: string;
   poolId: string;

@@ -66,7 +66,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
     await poolVoteService.create(
       String(userId),
       String(poolId),
-      poolVotes as Array<PoolOption>
+      poolVotes as Array<PollOption>
     );
 
     return res.status(200).send('Votes created');

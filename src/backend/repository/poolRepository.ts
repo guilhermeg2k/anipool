@@ -11,10 +11,10 @@ const get = async (id: string) => {
     })
     .promise();
 
-  return user as Pool;
+  return user as Poll;
 };
 
-const createAndReturnId = async (pool: Pool) => {
+const createAndReturnId = async (pool: Poll) => {
   const id = uuidv4();
 
   const params = {

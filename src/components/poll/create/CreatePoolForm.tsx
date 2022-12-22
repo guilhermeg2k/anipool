@@ -44,7 +44,7 @@ const PoolFormOption = ({ id, type, text, onRemove }: PoolFormOptionProps) => {
 const CreatePoolForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(new Date());
-  const [options, setOptions] = useState(new Array<PoolOption>());
+  const [options, setOptions] = useState(new Array<PollOption>());
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -53,12 +53,12 @@ const CreatePoolForm = () => {
   const shouldCreateButtonBeEnabled =
     title && dayjs(endDate) > dayjs() && options.length > 1;
 
-  const onAddOptionHandler = (option: PoolOption) => {
+  const onAddOptionHandler = (option: PollOption) => {
     const newOptions = [...options, option];
     setOptions(newOptions);
   };
 
-  const onRemoveOptionHandler = (optionToRemove: PoolOption) => {
+  const onRemoveOptionHandler = (optionToRemove: PollOption) => {
     const newOptions = options.filter(
       (option) => option.anilistId !== optionToRemove.anilistId
     );
@@ -78,9 +78,9 @@ const CreatePoolForm = () => {
       const poolId = await toastPromise(poolService.create(pool), {
         pending: 'Creating pool',
         success: 'Pool created',
-        error: 'Failed to create pool',
+        error: 'Failed to create poll',
       });
-      router.push(`/pool/vote/${poolId}`);
+      router.push(`/poll/vote/${poolId}`);
     } finally {
       setIsCreatingPool(false);
     }
@@ -98,8 +98,8 @@ const CreatePoolForm = () => {
 
       <TextField
         value={title}
-        id="pool-title"
-        label="Pool title"
+        id="poll-title"
+        label="Poll title"
         placeHolder="What anime should i watch next?"
         className="w-full"
         onChange={(title) => setTitle(title)}
@@ -162,7 +162,7 @@ const CreatePoolForm = () => {
           className="w-full sm:w-auto"
           onClick={onSubmitHandler}
         >
-          Create pool
+          create poll
         </Button>
       </FormGroup>
     </Box>

@@ -5,8 +5,8 @@ import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
 import SignInModal from '@components/core/SignInModal';
 import Title from '@components/core/Title';
-import CharacterVoteOption from '@components/pool/vote/CharacterVoteOption';
-import MediaVoteOption from '@components/pool/vote/MediaVoteOption';
+import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
+import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
@@ -20,19 +20,18 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { OptionType } from 'src/enums';
 
-type CharacterOption = Anilist.Character & PoolOption;
-type MediaOption = Anilist.Media & PoolOption;
+type CharacterOption = Anilist.Character & PollOption;
+type MediaOption = Anilist.Media & PollOption;
 
 const Vote: NextPage = () => {
   const [isLoadingPool, setIsLoadingPool] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
-  const [pool, setPool] = useState<PoolWithCreator>();
-  console.log('🚀 ~ file: [poolId].tsx:28 ~ pool', pool);
+  const [pool, setPool] = useState<PollWithCreator>();
   const [characters, setCharacters] = useState<Array<Anilist.Character>>([]);
   const [medias, setMedias] = useState<Array<Anilist.Media>>([]);
-  const [votes, setVotes] = useState<Array<PoolOption>>([]);
+  const [votes, setVotes] = useState<Array<PollOption>>([]);
   const router = useRouter();
   const { poolId } = router.query;
   const options = pool?.options.map((option) => {
@@ -54,7 +53,7 @@ const Vote: NextPage = () => {
   const isUserLogged = isLogged();
   const canSubmit = votes.length > 0 && isUserLogged;
 
-  const goToResults = () => router.push(`/pool/result/${poolId}`);
+  const goToResults = () => router.push(`/poll/result/${poolId}`);
 
   const hasUserAlreadyVoted = async () => {
     if (poolId) {
@@ -128,7 +127,7 @@ const Vote: NextPage = () => {
     }
   };
 
-  const onSelectedHandler = (selectedOption: PoolOption) => {
+  const onSelectedHandler = (selectedOption: PollOption) => {
     if (pool!.multiOptions) {
       const isAlreadyAdded = votes.find(
         (vote) => vote.anilistId === selectedOption.anilistId
@@ -155,7 +154,7 @@ const Vote: NextPage = () => {
     toastSuccess('Share link copied to clipboard');
   };
 
-  const submitVotes = async (poolVotes: Array<PoolOption>) => {
+  const submitVotes = async (poolVotes: Array<PollOption>) => {
     try {
       setIsVoting(true);
       await poolService.vote(String(poolId), poolVotes);
@@ -276,7 +275,7 @@ const Vote: NextPage = () => {
             <div>
               <Button
                 color="white"
-                onClick={() => router.push(`/pool/result/${poolId}`)}
+                onClick={() => router.push(`/poll/result/${poolId}`)}
               >
                 <span>Results</span>
                 <ChartBarIcon className="w-5" />

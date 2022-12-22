@@ -90,7 +90,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
 interface SearchOptionModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (poolOption: PoolOption) => void;
+  onAdd: (poolOption: PollOption) => void;
 }
 
 const SearchOptionModal = ({
