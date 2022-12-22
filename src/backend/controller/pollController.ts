@@ -18,6 +18,22 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { userId } = req.query;
+
+    if (userId) {
+      const poll = await pollService.listByUserId(String(userId));
+      return res.status(200).send(poll);
+    }
+
+    return res.status(400).send('');
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send('');
+  }
+};
+
 const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { pollId } = req.query;
@@ -60,6 +76,7 @@ const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const pollController = {
   get,
+  listByUserId,
   getResult,
   createPoll,
 };
