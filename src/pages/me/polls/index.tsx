@@ -14,14 +14,12 @@ import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const MyPolls: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [polls, setPolls] = useState(Array<Poll>());
   const { id } = useUserStore();
-  const router = useRouter();
 
   const loadPolls = async () => {
     try {
