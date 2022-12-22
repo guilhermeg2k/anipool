@@ -1,6 +1,7 @@
 import create from 'zustand';
 
 type UserState = User & {
+  isLogged: () => boolean;
   setUser: (user: User) => void;
 };
 
@@ -12,8 +13,12 @@ export const EMPTY_USER = {
   oauthProvider: '',
 };
 
-const useUserStore = create<UserState>((set) => ({
+const useUserStore = create<UserState>((set, get) => ({
   ...EMPTY_USER,
+  isLogged: () => {
+    console.log(Boolean(get().id));
+    return Boolean(get().id);
+  },
   setUser: (user: User) =>
     set(() => ({
       ...user,

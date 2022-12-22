@@ -3,6 +3,7 @@ import Button from '@components/core/Button';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
+import SignInModal from '@components/core/SignInModal';
 import Title from '@components/core/Title';
 import CharacterVoteOption from '@components/pool/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/pool/vote/MediaVoteOption';
@@ -10,6 +11,7 @@ import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import poolService from '@services/poolService';
+import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import Head from 'next/head';
@@ -48,7 +50,9 @@ const Vote: NextPage = () => {
       ...media,
     };
   });
-  const canSubmit = votes.length > 0;
+  const { isLogged } = useUserStore();
+  const isUserLogged = isLogged();
+  const canSubmit = votes.length > 0 && isUserLogged;
 
   const goToResults = () => router.push(`/pool/result/${poolId}`);
 
@@ -60,7 +64,7 @@ const Vote: NextPage = () => {
   };
 
   const loadPoolIfUserDoesNotHasVoted = async () => {
-    if (await hasUserAlreadyVoted()) {
+    if (isUserLogged && (await hasUserAlreadyVoted())) {
       toastWarning('You already has voted on this pool');
       goToResults();
     } else {
@@ -216,7 +220,7 @@ const Vote: NextPage = () => {
 
   useEffect(() => {
     loadPoolIfUserDoesNotHasVoted();
-  }, []);
+  }, [poolId]);
 
   useEffect(() => {
     if (pool) {
@@ -242,6 +246,7 @@ const Vote: NextPage = () => {
 
   return (
     <Page bgImage="/images/bg-vote-pool.jpg">
+      {!isUserLogged && <SignInModal />}
       <Head>
         <title>Pool: {pool?.title}</title>
       </Head>

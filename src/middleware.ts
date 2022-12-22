@@ -11,7 +11,11 @@ const getTokenPayload = async (
 };
 
 const isAuthRoute = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/pool/results')) {
+  if (req.nextUrl.pathname.startsWith('/pool/result')) {
+    return false;
+  }
+
+  if (req.nextUrl.pathname.startsWith('/pool/vote')) {
     return false;
   }
 
@@ -51,7 +55,6 @@ export const middleware = async (req: NextRequest) => {
   if (isAuthRoute(req)) {
     return await authMiddleware(req, res);
   }
-
   return res;
 };
 
