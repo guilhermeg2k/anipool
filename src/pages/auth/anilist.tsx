@@ -1,8 +1,7 @@
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
-import userService from '@services/userService';
-import useUserStore from '@store/userStore';
+import { sendUserHasAuthenticated } from '@utils/channelUtils';
 import Cookies from 'js-cookie';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -24,7 +23,6 @@ const getAccessTokenFromUrl = (url: string) => {
 };
 
 const Auth: NextPage = () => {
-  const { setUser } = useUserStore();
   const router = useRouter();
 
   const authenticateUser = async (accessToken: string) => {
@@ -33,9 +31,8 @@ const Auth: NextPage = () => {
         accessToken
       );
       Cookies.set('userToken', userToken);
-      const user = await userService.getCurrentUser();
-      setUser(user);
-      await router.push('/poll/create');
+      sendUserHasAuthenticated();
+      window.close();
     } catch (error) {
       toastError('Failed to authenticate user');
     }
