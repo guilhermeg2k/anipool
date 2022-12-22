@@ -1,8 +1,13 @@
 import Box from '@components/core/Box';
+import ExternalLink from '@components/core/ExternalLink';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
+import Title from '@components/core/Title';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import PackageJSON from '../../package.json';
+
+const VERSION = `Version ${PackageJSON.version}-beta (${PackageJSON.versionName})`;
 
 const About: NextPage = () => {
   return (
@@ -12,42 +17,35 @@ const About: NextPage = () => {
       </Head>
       <div className="mx-auto mt-20 flex max-w-3xl flex-col gap-6">
         <PageHeader />
-        <Box>
-          <h1 className="text-2xl">About</h1>
-          <span className="text-sm">
-            Anipool is a platform to create anime quizes and polls.
-            <br />
-            It consumes&nbsp;
-            <a
-              href="https://anilist.co/"
-              className="text-blue-700"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Anilist
-            </a>
-            &nbsp;API but it doesn&apos;t has any relation with Anilist or its
-            creators.
-            <br />
-            You can find my on&nbsp;
-            <a
-              href="https://github.com/guilhermeg2k"
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-700"
-            >
-              GitHub
-            </a>
-            <br /> And if you want to check check, there&apos;s my &nbsp;
-            <a
-              href="https://anilist.co/user/guilhermeg2k/"
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-700"
-            >
-              Anilist profile
-            </a>
-          </span>
+        <Box className="flex flex-col gap-3">
+          <Title>ABOUT</Title>
+
+          <div className="flex flex-col">
+            <span>
+              Anipool is an open source platform to create anime quizes and
+              polls. It consumes&nbsp;
+              <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
+              &nbsp;API but it doesn&apos;t has any relation with Anilist or its
+              creators.
+            </span>
+            <span>
+              You can find my on&nbsp;
+              <ExternalLink href="https://github.com/guilhermeg2k">
+                GitHub
+              </ExternalLink>
+              &nbsp; and if you want to check check there&apos;s my&nbsp;
+              <ExternalLink href="https://anilist.co/user/guilhermeg2k/">
+                Anilist Profile
+              </ExternalLink>
+            </span>
+          </div>
+
+          <div className="text-xs font-semibold uppercase self-end flex flex-col items-end">
+            <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/develop/CHANGELOG.md">
+              Change Logs
+            </ExternalLink>
+            <span>{VERSION}</span>
+          </div>
         </Box>
       </div>
     </Page>

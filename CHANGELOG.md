@@ -10,4 +10,4 @@ All notable changes will be documented in this file
 
 - Added "My polls" page
 - Added "My polls" and "Create new poll" links to user card
-- Added current version and change log link to about
+- Added current version and change log link to about page

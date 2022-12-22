@@ -1,10 +1,9 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
-interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-}
-
-const IconButton = ({ children, ...rest }: IconButtonProps) => {
+const IconButton = ({
+  children,
+  ...rest
+}: HTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       className="rounded-full border-2 p-2 border-transparent hover:bg-slate-200"
