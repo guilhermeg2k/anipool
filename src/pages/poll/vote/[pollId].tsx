@@ -260,10 +260,10 @@ const Vote: NextPage = () => {
               <h2 className="text-xs">
                 <div className="flex items-center  gap-1">
                   <span className="font-semibold">Author:</span>
-                  <span>{poll!.creator.nickname}</span>
+                  <span>{poll?.creator.nickname}</span>
                   <Image
                     className="rounded-full"
-                    src={poll!.creator.avatarUrl}
+                    src={poll?.creator.avatarUrl || ''}
                     alt="Profile picture"
                     layout="fixed"
                     width={25}
