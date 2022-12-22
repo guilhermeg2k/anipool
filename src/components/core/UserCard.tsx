@@ -1,5 +1,8 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon, LoginIcon } from '@heroicons/react/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline';
 import useUserStore from '@store/userStore';
 import { openAnilistAuthUrl } from '@utils/utils';
 import Image from 'next/image';
@@ -8,8 +11,10 @@ import Button from './Button';
 import MenuDropdown from './MenuDropdown';
 
 const MENU_LINKS = [
-  { id: 1, label: 'About', path: '/about' },
-  { id: 2, label: 'Sign out', path: '/auth/sign-out' },
+  { id: 1, label: 'My Polls', path: '/me/polls' },
+  { id: 2, label: 'Create new poll', path: '/poll/create' },
+  { id: 3, label: 'About', path: '/about' },
+  { id: 4, label: 'Sign out', path: '/auth/sign-out' },
 ];
 
 const UserCard = () => {
@@ -57,7 +62,7 @@ const UserCard = () => {
         <div className="flex items-center w-full">
           <Button onClick={openAnilistAuthUrl} color="white" className="w-full">
             Sign in
-            <LoginIcon className="w-5 h-5" />
+            <ArrowRightOnRectangleIcon className="w-5 h-5" />
           </Button>
         </div>
       )}

@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import { CalendarIcon } from '@heroicons/react/outline';
+import { CalendarIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react';
 import { getFormattedTime } from './dateTimePickerUtils';
 import DaySelector from './DaySelector';

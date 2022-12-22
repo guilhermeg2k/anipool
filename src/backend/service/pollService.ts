@@ -17,6 +17,11 @@ const get = async (id: string) => {
   return pollWithCreator;
 };
 
+const listByUserId = async (userId: string) => {
+  const polls = await pollRepository.listByUserId(userId);
+  return polls;
+};
+
 const getResult = async (id: string) => {
   const poll = await pollRepository.get(id);
   const pollVotes = await pollVoteService.getPollVotes(id);
@@ -42,6 +47,7 @@ const createAndReturnId = async (poll: Poll) => {
 
 const pollService = {
   get,
+  listByUserId,
   getResult,
   createAndReturnId,
 };

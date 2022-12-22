@@ -6,7 +6,7 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
-import { LinkIcon, PlusIcon, RefreshIcon } from '@heroicons/react/outline';
+import { LinkIcon, PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
@@ -199,7 +199,7 @@ const PollResult: NextPage = () => {
             <div className="self-center">
               <Button color="white" onClick={() => loadPollAndResult()}>
                 <span>Refresh</span>
-                <RefreshIcon className="w-5" />
+                <ArrowPathIcon className="w-5" />
               </Button>
               <Button color="white" onClick={onShareHandler}>
                 <span>Share</span>

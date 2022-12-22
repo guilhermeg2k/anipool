@@ -16,6 +16,7 @@ module.exports = {
       green: colors.green,
       indigo: colors.indigo,
       blue: colors.blue,
+      slate: colors.slate,
     }),
     fontFamily: {
       sans: [
