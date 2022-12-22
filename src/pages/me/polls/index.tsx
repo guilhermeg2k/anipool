@@ -47,7 +47,7 @@ const MyPolls: NextPage = () => {
 
   const openPoll = (id: string) => {
     const link = getPollLinkById(id);
-    router.push(link);
+    window.open(link, '_blank');
   };
 
   useEffect(() => {
