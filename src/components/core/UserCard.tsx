@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Button from './Button';
 import MenuDropdown from './MenuDropdown';
+
 const MENU_LINKS = [
   { id: 1, label: 'About', path: '/about' },
   { id: 2, label: 'Sign out', path: '/auth/sign-out' },
