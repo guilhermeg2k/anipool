@@ -16,13 +16,13 @@ const Home: NextPage = () => {
   return (
     <Page bgImage="/images/bg-home.jpg">
       <Head>
-        <title>Anipool</title>
+        <title>anipool</title>
       </Head>
       <div className="flex h-full w-full flex-col items-center justify-center lg:flex-row">
         <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">
           <Logo className="text-7xl lg:text-8xl" />
           <span className="max-w-md text-xl text-white lg:text-2xl">
-            Create anime quiz polls integrated with anilist.co
+            Create anime quizes and polls integrated with anilist.co
           </span>
           {isLogged ? (
             <Button

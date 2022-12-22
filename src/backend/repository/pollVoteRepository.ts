@@ -1,10 +1,10 @@
 import dynamoDb from '@backend/database';
 import { v4 as uuidv4 } from 'uuid';
 
-const TABLE_NAME = 'pool_votes';
+const TABLE_NAME = 'poll_votes';
 
 const create = async (votes: Array<PollVote>) => {
-  const poolVotes = Array<{
+  const pollVotes = Array<{
     PutRequest: {
       Item: PollVote;
     };
@@ -12,7 +12,7 @@ const create = async (votes: Array<PollVote>) => {
 
   votes.forEach((vote) => {
     const id = uuidv4();
-    poolVotes.push({
+    pollVotes.push({
       PutRequest: {
         Item: {
           ...vote,
@@ -24,18 +24,18 @@ const create = async (votes: Array<PollVote>) => {
 
   let params = {
     RequestItems: {
-      pool_votes: poolVotes,
+      poll_votes: pollVotes,
     },
   };
 
   await dynamoDb.batchWrite(params).promise();
 };
 
-const getByUserIdAndPoolId = async (userId: string, poolId: string) => {
+const getByUserIdAndpollId = async (userId: string, pollId: string) => {
   const params = {
-    FilterExpression: 'poolId = :poolId and userId = :userId',
+    FilterExpression: 'pollId = :pollId and userId = :userId',
     ExpressionAttributeValues: {
-      ':poolId': poolId,
+      ':pollId': pollId,
       ':userId': userId,
     },
     TableName: TABLE_NAME,
@@ -51,11 +51,11 @@ const getByUserIdAndPoolId = async (userId: string, poolId: string) => {
   return null;
 };
 
-const getByPoolId = async (poolId: string) => {
+const getBypollId = async (pollId: string) => {
   const params = {
-    FilterExpression: 'poolId = :poolId',
+    FilterExpression: 'pollId = :pollId',
     ExpressionAttributeValues: {
-      ':poolId': poolId,
+      ':pollId': pollId,
     },
     TableName: TABLE_NAME,
   };
@@ -70,10 +70,10 @@ const getByPoolId = async (poolId: string) => {
   return null;
 };
 
-const poolVotesRepository = {
-  getByPoolId,
-  getByUserIdAndPoolId,
+const pollVotesRepository = {
+  getBypollId,
+  getByUserIdAndpollId,
   create,
 };
 
-export default poolVotesRepository;
+export default pollVotesRepository;

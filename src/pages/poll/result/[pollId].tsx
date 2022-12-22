@@ -9,7 +9,7 @@ import MediaResultCard from '@components/poll/results/MediaResultCard';
 import { LinkIcon, PlusIcon, RefreshIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
-import poolService from '@services/poolService';
+import pollService from '@services/pollService';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -20,12 +20,12 @@ import { OptionType } from 'src/enums';
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
 
-const PoolResult: NextPage = () => {
-  const [isLoadingPoolAndResults, setIsLoadingPoolAndResults] = useState(true);
+const pollResult: NextPage = () => {
+  const [isLoadingpollAndResults, setIsLoadingpollAndResults] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
 
-  const [pool, setPool] = useState<PollWithCreator>();
+  const [poll, setpoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
   const [charactersResults, setCharactersResults] = useState(
     Array<CharacterResult>()
@@ -34,7 +34,7 @@ const PoolResult: NextPage = () => {
 
   const router = useRouter();
 
-  const { poolId } = router.query;
+  const { pollId } = router.query;
 
   const resultsSorted = [...charactersResults, ...mediaResults].sort(
     (resultA, resultB) => (resultA.votes > resultB.votes ? -1 : 1)
@@ -78,25 +78,25 @@ const PoolResult: NextPage = () => {
     return mediasWithVotes;
   };
 
-  const loadPoolAndResult = async () => {
-    setIsLoadingPoolAndResults(true);
+  const loadpollAndResult = async () => {
+    setIsLoadingpollAndResults(true);
     try {
-      if (poolId) {
-        const poolPromise = poolService.get(String(poolId));
-        const poolResultsPromise = poolService.getResult(String(poolId));
+      if (pollId) {
+        const pollPromise = pollService.get(String(pollId));
+        const pollResultsPromise = pollService.getResult(String(pollId));
 
-        const [pool, poolOptionsResult] = await Promise.all([
-          poolPromise,
-          poolResultsPromise,
+        const [poll, pollOptionsResult] = await Promise.all([
+          pollPromise,
+          pollResultsPromise,
         ]);
 
-        setPool(pool);
-        setResults(poolOptionsResult);
+        setpoll(poll);
+        setResults(pollOptionsResult);
       }
     } catch (error) {
-      toastError('Failed to load pool and results');
+      toastError('Failed to load poll and results');
     } finally {
-      setIsLoadingPoolAndResults(false);
+      setIsLoadingpollAndResults(false);
     }
   };
 
@@ -177,8 +177,8 @@ const PoolResult: NextPage = () => {
     });
 
   useEffect(() => {
-    loadPoolAndResult();
-  }, [poolId]);
+    loadpollAndResult();
+  }, [pollId]);
 
   useEffect(() => {
     if (results.length > 0) {
@@ -187,28 +187,28 @@ const PoolResult: NextPage = () => {
     }
   }, [results]);
 
-  if (isLoadingPoolAndResults || isLoadingCharacters || isLoadingMedias) {
+  if (isLoadingpollAndResults || isLoadingCharacters || isLoadingMedias) {
     return <LoadingPage text="Loading results..." />;
   }
 
   return (
-    <Page bgImage="/images/bg-pool-results.jpg">
+    <Page bgImage="/images/bg-poll-results.jpg">
       <Head>
-        <title>Results: {pool?.title}</title>
+        <title>Results: {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6 ">
         <PageHeader />
         <Box className="flex flex-col gap-5 pb-7">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
-              <Title>{pool?.title}</Title>
+              <Title>{poll?.title}</Title>
               <h2 className="text-xs">
                 <div className="flex items-center  gap-1">
                   <span className="font-semibold">Author:</span>
-                  <span>{pool!.creator.nickname}</span>
+                  <span>{poll!.creator.nickname}</span>
                   <Image
                     className="rounded-full"
-                    src={pool!.creator.avatarUrl}
+                    src={poll!.creator.avatarUrl}
                     alt="Profile picture"
                     layout="fixed"
                     width={25}
@@ -216,11 +216,11 @@ const PoolResult: NextPage = () => {
                   />
                 </div>
                 <span className="font-semibold">Ends at:</span>{' '}
-                {new Date(pool?.endDate!).toLocaleString()}
+                {new Date(poll?.endDate!).toLocaleString()}
               </h2>
             </div>
             <div className="self-center">
-              <Button color="white" onClick={() => loadPoolAndResult()}>
+              <Button color="white" onClick={() => loadpollAndResult()}>
                 <span>Refresh</span>
                 <RefreshIcon className="w-5" />
               </Button>
@@ -243,4 +243,4 @@ const PoolResult: NextPage = () => {
   );
 };
 
-export default PoolResult;
+export default pollResult;

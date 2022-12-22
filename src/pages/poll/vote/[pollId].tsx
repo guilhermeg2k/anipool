@@ -10,7 +10,7 @@ import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/outline';
 import { toastError, toastSuccess, toastWarning } from '@libs/toastify';
 import anilistService from '@services/anilistService';
-import poolService from '@services/poolService';
+import pollService from '@services/pollService';
 import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
@@ -24,17 +24,17 @@ type CharacterOption = Anilist.Character & PollOption;
 type MediaOption = Anilist.Media & PollOption;
 
 const Vote: NextPage = () => {
-  const [isLoadingPool, setIsLoadingPool] = useState(true);
+  const [isLoadingpoll, setIsLoadingpoll] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
   const [isVoting, setIsVoting] = useState(false);
-  const [pool, setPool] = useState<PollWithCreator>();
+  const [poll, setpoll] = useState<PollWithCreator>();
   const [characters, setCharacters] = useState<Array<Anilist.Character>>([]);
   const [medias, setMedias] = useState<Array<Anilist.Media>>([]);
   const [votes, setVotes] = useState<Array<PollOption>>([]);
   const router = useRouter();
-  const { poolId } = router.query;
-  const options = pool?.options.map((option) => {
+  const { pollId } = router.query;
+  const options = poll?.options.map((option) => {
     if (option.type === OptionType.Character) {
       const character = characters.find(({ id }) => option.anilistId === id);
       return {
@@ -53,42 +53,42 @@ const Vote: NextPage = () => {
   const isUserLogged = isLogged();
   const canSubmit = votes.length > 0 && isUserLogged;
 
-  const goToResults = () => router.push(`/poll/result/${poolId}`);
+  const goToResults = () => router.push(`/poll/result/${pollId}`);
 
   const hasUserAlreadyVoted = async () => {
-    if (poolId) {
-      const userVotes = await poolService.getUserVotes(String(poolId));
+    if (pollId) {
+      const userVotes = await pollService.getUserVotes(String(pollId));
       return userVotes && userVotes.length > 0;
     }
   };
 
-  const loadPoolIfUserDoesNotHasVoted = async () => {
+  const loadpollIfUserDoesNotHasVoted = async () => {
     if (isUserLogged && (await hasUserAlreadyVoted())) {
-      toastWarning('You already has voted on this pool');
+      toastWarning('You already has voted on this poll');
       goToResults();
     } else {
-      await loadPool();
+      await loadpoll();
     }
   };
 
-  const loadPool = async () => {
+  const loadpoll = async () => {
     try {
-      setIsLoadingPool(true);
-      if (poolId) {
-        const pool = await poolService.get(String(poolId));
-        setPool(pool);
+      setIsLoadingpoll(true);
+      if (pollId) {
+        const poll = await pollService.get(String(pollId));
+        setpoll(poll);
       }
     } catch (error) {
-      toastError('Failed  to load pool');
+      toastError('Failed  to load poll');
     } finally {
-      setIsLoadingPool(false);
+      setIsLoadingpoll(false);
     }
   };
 
   const loadMedias = async () => {
     try {
       setIsLoadingMedias(true);
-      const optionsThatAreMediaIds = pool?.options
+      const optionsThatAreMediaIds = poll?.options
         .filter(
           ({ type }) => type === OptionType.Manga || type === OptionType.Anime
         )
@@ -101,7 +101,7 @@ const Vote: NextPage = () => {
         setMedias(medias);
       }
     } catch (error) {
-      toastError('Failed to load pool media options');
+      toastError('Failed to load poll media options');
     } finally {
       setIsLoadingMedias(false);
     }
@@ -110,7 +110,7 @@ const Vote: NextPage = () => {
   const loadCharacters = async () => {
     try {
       setIsLoadingCharacters(true);
-      const optionsThatAreCharacters = pool?.options
+      const optionsThatAreCharacters = poll?.options
         .filter(({ type }) => type === OptionType.Character)
         .map(({ anilistId }) => anilistId);
 
@@ -121,14 +121,14 @@ const Vote: NextPage = () => {
         setCharacters(characters);
       }
     } catch (error) {
-      toastError('Failed to load pool character options');
+      toastError('Failed to load poll character options');
     } finally {
       setIsLoadingCharacters(false);
     }
   };
 
   const onSelectedHandler = (selectedOption: PollOption) => {
-    if (pool!.multiOptions) {
+    if (poll!.multiOptions) {
       const isAlreadyAdded = votes.find(
         (vote) => vote.anilistId === selectedOption.anilistId
       );
@@ -154,10 +154,10 @@ const Vote: NextPage = () => {
     toastSuccess('Share link copied to clipboard');
   };
 
-  const submitVotes = async (poolVotes: Array<PollOption>) => {
+  const submitVotes = async (pollVotes: Array<PollOption>) => {
     try {
       setIsVoting(true);
-      await poolService.vote(String(poolId), poolVotes);
+      await pollService.vote(String(pollId), pollVotes);
       toastSuccess('Your vote was registered');
       goToResults();
     } catch (error) {
@@ -218,14 +218,14 @@ const Vote: NextPage = () => {
     });
 
   useEffect(() => {
-    loadPoolIfUserDoesNotHasVoted();
-  }, [poolId]);
+    loadpollIfUserDoesNotHasVoted();
+  }, [pollId]);
 
   useEffect(() => {
-    if (pool) {
-      const poolEndDate = dayjs(pool.endDate);
+    if (poll) {
+      const pollEndDate = dayjs(poll.endDate);
 
-      if (poolEndDate < dayjs()) {
+      if (pollEndDate < dayjs()) {
         goToResults();
         return;
       }
@@ -233,9 +233,9 @@ const Vote: NextPage = () => {
       loadMedias();
       loadCharacters();
     }
-  }, [pool]);
+  }, [poll]);
 
-  if (isLoadingPool || isLoadingCharacters || isLoadingMedias) {
+  if (isLoadingpoll || isLoadingCharacters || isLoadingMedias) {
     return <LoadingPage />;
   }
 
@@ -244,24 +244,24 @@ const Vote: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/bg-vote-pool.jpg">
+    <Page bgImage="/images/bg-vote-poll.jpg">
       {!isUserLogged && <SignInModal />}
       <Head>
-        <title>Pool: {pool?.title}</title>
+        <title>poll: {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
         <Box className="flex flex-col gap-5">
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
-              <Title>{pool?.title}</Title>
+              <Title>{poll?.title}</Title>
               <h2 className="text-xs">
                 <div className="flex items-center  gap-1">
                   <span className="font-semibold">Author:</span>
-                  <span>{pool!.creator.nickname}</span>
+                  <span>{poll!.creator.nickname}</span>
                   <Image
                     className="rounded-full"
-                    src={pool!.creator.avatarUrl}
+                    src={poll!.creator.avatarUrl}
                     alt="Profile picture"
                     layout="fixed"
                     width={25}
@@ -269,13 +269,13 @@ const Vote: NextPage = () => {
                   />
                 </div>
                 <span className="font-semibold">Ends at:</span>{' '}
-                {new Date(pool?.endDate!).toLocaleString()}
+                {new Date(poll?.endDate!).toLocaleString()}
               </h2>
             </div>
             <div>
               <Button
                 color="white"
-                onClick={() => router.push(`/poll/result/${poolId}`)}
+                onClick={() => router.push(`/poll/result/${pollId}`)}
               >
                 <span>Results</span>
                 <ChartBarIcon className="w-5" />

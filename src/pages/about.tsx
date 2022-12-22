@@ -15,7 +15,7 @@ const About: NextPage = () => {
         <Box>
           <h1 className="text-2xl">About</h1>
           <span className="text-sm">
-            Anipool is a platform to create anime quizes and polls.
+            anipool is a platform to create anime quizes and polls.
             <br />
             It consumes&nbsp;
             <a

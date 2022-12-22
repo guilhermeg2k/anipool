@@ -1,12 +1,12 @@
 import dynamoDb from '@backend/database';
 import { v4 as uuidv4 } from 'uuid';
 
-const POOL_TABLE_NAME = 'pools';
+const POLL_TABLE_NAME = 'polls';
 
 const get = async (id: string) => {
   const { Item: user } = await dynamoDb
     .get({
-      TableName: POOL_TABLE_NAME,
+      TableName: POLL_TABLE_NAME,
       Key: { id },
     })
     .promise();
@@ -14,14 +14,14 @@ const get = async (id: string) => {
   return user as Poll;
 };
 
-const createAndReturnId = async (pool: Poll) => {
+const createAndReturnId = async (poll: Poll) => {
   const id = uuidv4();
 
   const params = {
-    TableName: POOL_TABLE_NAME,
+    TableName: POLL_TABLE_NAME,
     Item: {
       id,
-      ...pool,
+      ...poll,
     },
   };
 
@@ -30,9 +30,9 @@ const createAndReturnId = async (pool: Poll) => {
   return id;
 };
 
-const poolRepository = {
+const pollRepository = {
   get,
   createAndReturnId,
 };
 
-export default poolRepository;
+export default pollRepository;

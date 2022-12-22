@@ -71,7 +71,7 @@ type PollWithCreator = Poll & {
 interface PollVote {
   id?: string;
   userId?: string;
-  poolId: string;
+  pollId: string;
   anilistId: number;
   type: string;
 }

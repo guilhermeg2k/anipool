@@ -1,4 +1,4 @@
-import poolController from '@backend/controller/poolController';
+import pollController from '@backend/controller/pollController';
 import { applyRateLimit } from '@src/utils/rateLimit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -11,7 +11,7 @@ export default async function handler(
   switch (method) {
     case 'POST':
       await applyRateLimit(req, res);
-      await poolController.createPool(req, res);
+      await pollController.createpoll(req, res);
       break;
     default:
       res.status(405).end();
