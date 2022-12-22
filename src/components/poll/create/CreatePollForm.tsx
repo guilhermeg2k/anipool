@@ -14,14 +14,14 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import SearchOptionModal from './SearchOptionModal';
 
-interface pollFormOptionProps {
+interface PollFormOptionProps {
   id: string;
   type: string;
   text: string;
   onRemove: () => void;
 }
 
-const pollFormOption = ({ id, type, text, onRemove }: pollFormOptionProps) => {
+const PollFormOption = ({ id, type, text, onRemove }: PollFormOptionProps) => {
   return (
     <FormGroup
       id={id}
@@ -41,7 +41,7 @@ const pollFormOption = ({ id, type, text, onRemove }: pollFormOptionProps) => {
   );
 };
 
-const CreatepollForm = () => {
+const CreatePollForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(new Date());
   const [options, setOptions] = useState(new Array<PollOption>());
@@ -77,7 +77,7 @@ const CreatepollForm = () => {
 
       const pollId = await toastPromise(pollService.create(poll), {
         pending: 'Creating poll',
-        success: 'poll created',
+        success: 'Poll created',
         error: 'Failed to create poll',
       });
       router.push(`/poll/vote/${pollId}`);
@@ -114,7 +114,7 @@ const CreatepollForm = () => {
           >
             {options.length > 0 ? (
               options.map((option, index) => (
-                <pollFormOption
+                <PollFormOption
                   key={option.anilistId}
                   id={(index + 1).toString()}
                   type={option.type}
@@ -162,11 +162,11 @@ const CreatepollForm = () => {
           className="w-full sm:w-auto"
           onClick={onSubmitHandler}
         >
-          create poll
+          Create poll
         </Button>
       </FormGroup>
     </Box>
   );
 };
 
-export default CreatepollForm;
+export default CreatePollForm;

@@ -30,7 +30,7 @@ const Home: NextPage = () => {
               size="large"
               onClick={() => router.push('/poll/create')}
             >
-              create poll
+              Create poll
             </Button>
           ) : (
             <Button size="large" onClick={openAnilistAuthUrl}>

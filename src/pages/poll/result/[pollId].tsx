@@ -20,7 +20,7 @@ import { OptionType } from 'src/enums';
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
 
-const pollResult: NextPage = () => {
+const PollResult: NextPage = () => {
   const [isLoadingpollAndResults, setIsLoadingpollAndResults] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
@@ -243,4 +243,4 @@ const pollResult: NextPage = () => {
   );
 };
 
-export default pollResult;
+export default PollResult;
