@@ -249,7 +249,7 @@ const Vote: NextPage = () => {
     <Page bgImage="/images/bg-vote-poll.jpg">
       {!isUserLogged && <SignInModal />}
       <Head>
-        <title>poll: {poll?.title}</title>
+        <title>Poll: {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
