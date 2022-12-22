@@ -16,9 +16,9 @@ export const EMPTY_USER = {
 const useUserStore = create<UserState>((set, get) => ({
   ...EMPTY_USER,
   isLogged: () => {
-    console.log(Boolean(get().id));
     return Boolean(get().id);
   },
+
   setUser: (user: User) =>
     set(() => ({
       ...user,

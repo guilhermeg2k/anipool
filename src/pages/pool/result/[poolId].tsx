@@ -144,7 +144,7 @@ const PoolResult: NextPage = () => {
 
   const onShareHandler = () => {
     navigator.clipboard.writeText(
-      window.location.href.replace('results', 'vote')
+      window.location.href.replace('result', 'vote')
     );
     toastSuccess('Share link copied to clipboard');
   };

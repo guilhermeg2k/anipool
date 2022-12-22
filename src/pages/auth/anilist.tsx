@@ -38,6 +38,7 @@ const Auth: NextPage = () => {
       );
       Cookies.set('userToken', userToken);
       const user = await userService.getCurrentUser();
+
       setUser(user);
       router.push('/pool/create');
     } catch (error) {
