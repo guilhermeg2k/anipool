@@ -1,4 +1,5 @@
 import poolController from '@backend/controller/poolController';
+import { applyRateLimit } from '@src/utils/rateLimit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -9,6 +10,7 @@ export default async function handler(
 
   switch (method) {
     case 'POST':
+      await applyRateLimit(req, res);
       await poolController.createPool(req, res);
       break;
     default:

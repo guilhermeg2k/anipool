@@ -9,7 +9,8 @@
       "@services/*": ["src/services/*"],
       "@store/*": ["src/store/*"],
       "@backend/*": ["src/backend/*"],
-      "@libs/*": ["src/libs/*"]
+      "@libs/*": ["src/libs/*"],
+      "@src/*": ["src/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
