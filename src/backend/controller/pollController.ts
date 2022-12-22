@@ -1,4 +1,5 @@
 import pollService from '@backend/service/pollService';
+import { getTokenPayload } from '@utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -33,10 +34,11 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const createpoll = async (req: NextApiRequest, res: NextApiResponse) => {
+const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, endDate, options, multiOptions } = req.body;
-    const { id } = req.cookies;
+    const { userToken } = req.cookies;
+    const { id } = await getTokenPayload(String(userToken));
 
     if (id && title && endDate && options && multiOptions != null) {
       const pollId = await pollService.createAndReturnId({
@@ -59,7 +61,7 @@ const createpoll = async (req: NextApiRequest, res: NextApiResponse) => {
 const pollController = {
   get,
   getResult,
-  createpoll,
+  createPoll,
 };
 
 export default pollController;

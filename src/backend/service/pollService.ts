@@ -19,7 +19,7 @@ const get = async (id: string) => {
 
 const getResult = async (id: string) => {
   const poll = await pollRepository.get(id);
-  const pollVotes = await pollVoteService.getpollResults(id);
+  const pollVotes = await pollVoteService.getPollVotes(id);
 
   const pollResults = poll.options.map((option) => {
     const optionVotes = pollVotes?.filter(

@@ -11,7 +11,7 @@ export default async function handler(
   switch (method) {
     case 'POST':
       await applyRateLimit(req, res);
-      await pollController.createpoll(req, res);
+      await pollController.createPoll(req, res);
       break;
     default:
       res.status(405).end();

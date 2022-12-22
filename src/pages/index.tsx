@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   return (
     <Page bgImage="/images/bg-home.jpg">
       <Head>
-        <title>anipool</title>
+        <title>Anipool</title>
       </Head>
       <div className="flex h-full w-full flex-col items-center justify-center lg:flex-row">
         <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">

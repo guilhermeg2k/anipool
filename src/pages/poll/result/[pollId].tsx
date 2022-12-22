@@ -21,11 +21,10 @@ type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
 
 const PollResult: NextPage = () => {
-  const [isLoadingpollAndResults, setIsLoadingpollAndResults] = useState(true);
+  const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [isLoadingCharacters, setIsLoadingCharacters] = useState(true);
   const [isLoadingMedias, setIsLoadingMedias] = useState(true);
-
-  const [poll, setpoll] = useState<PollWithCreator>();
+  const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
   const [charactersResults, setCharactersResults] = useState(
     Array<CharacterResult>()
@@ -78,8 +77,8 @@ const PollResult: NextPage = () => {
     return mediasWithVotes;
   };
 
-  const loadpollAndResult = async () => {
-    setIsLoadingpollAndResults(true);
+  const loadPollAndResult = async () => {
+    setIsLoadingPollAndResults(true);
     try {
       if (pollId) {
         const pollPromise = pollService.get(String(pollId));
@@ -90,13 +89,13 @@ const PollResult: NextPage = () => {
           pollResultsPromise,
         ]);
 
-        setpoll(poll);
+        setPoll(poll);
         setResults(pollOptionsResult);
       }
     } catch (error) {
       toastError('Failed to load poll and results');
     } finally {
-      setIsLoadingpollAndResults(false);
+      setIsLoadingPollAndResults(false);
     }
   };
 
@@ -177,7 +176,7 @@ const PollResult: NextPage = () => {
     });
 
   useEffect(() => {
-    loadpollAndResult();
+    loadPollAndResult();
   }, [pollId]);
 
   useEffect(() => {
@@ -187,7 +186,7 @@ const PollResult: NextPage = () => {
     }
   }, [results]);
 
-  if (isLoadingpollAndResults || isLoadingCharacters || isLoadingMedias) {
+  if (isLoadingPollAndResults || isLoadingCharacters || isLoadingMedias) {
     return <LoadingPage text="Loading results..." />;
   }
 
@@ -220,7 +219,7 @@ const PollResult: NextPage = () => {
               </h2>
             </div>
             <div className="self-center">
-              <Button color="white" onClick={() => loadpollAndResult()}>
+              <Button color="white" onClick={() => loadPollAndResult()}>
                 <span>Refresh</span>
                 <RefreshIcon className="w-5" />
               </Button>

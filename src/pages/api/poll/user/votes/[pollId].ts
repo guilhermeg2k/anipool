@@ -9,7 +9,7 @@ export default async function handler(
 
   switch (method) {
     case 'GET':
-      await pollVoteController.getUserVotesOnpoll(req, res);
+      await pollVoteController.getUserVotesOnPoll(req, res);
       break;
     default:
       res.status(405).end();

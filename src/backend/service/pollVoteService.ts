@@ -1,12 +1,12 @@
 import pollVotesRepository from '@backend/repository/pollVoteRepository';
 
-const getpollVotes = async (pollId: string) => {
-  const pollVotes = await pollVotesRepository.getBypollId(pollId);
+const getPollVotes = async (pollId: string) => {
+  const pollVotes = await pollVotesRepository.getByPollId(pollId);
   return pollVotes;
 };
 
-const getUserVotesOnpoll = async (userId: string, pollId: string) => {
-  const userVotes = await pollVotesRepository.getByUserIdAndpollId(
+const getUserVotesOnPoll = async (userId: string, pollId: string) => {
+  const userVotes = await pollVotesRepository.getByUserIdAndPollId(
     userId,
     pollId
   );
@@ -19,22 +19,22 @@ const create = async (
   pollId: string,
   pollVotes: Array<PollOption>
 ) => {
-  const parsedpollVotes = Array<PollVote>();
+  const parsedPollVotes = Array<PollVote>();
 
   pollVotes.forEach((pollVote: PollOption) => {
-    parsedpollVotes.push({
+    parsedPollVotes.push({
       ...pollVote,
       pollId,
       userId,
     });
   });
 
-  await pollVotesRepository.create(parsedpollVotes);
+  await pollVotesRepository.create(parsedPollVotes);
 };
 
 const pollVoteService = {
-  getpollResults: getpollVotes,
-  getUserVotesOnpoll,
+  getPollVotes,
+  getUserVotesOnPoll,
   create,
 };
 

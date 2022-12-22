@@ -31,7 +31,7 @@ const create = async (votes: Array<PollVote>) => {
   await dynamoDb.batchWrite(params).promise();
 };
 
-const getByUserIdAndpollId = async (userId: string, pollId: string) => {
+const getByUserIdAndPollId = async (userId: string, pollId: string) => {
   const params = {
     FilterExpression: 'pollId = :pollId and userId = :userId',
     ExpressionAttributeValues: {
@@ -51,7 +51,7 @@ const getByUserIdAndpollId = async (userId: string, pollId: string) => {
   return null;
 };
 
-const getBypollId = async (pollId: string) => {
+const getByPollId = async (pollId: string) => {
   const params = {
     FilterExpression: 'pollId = :pollId',
     ExpressionAttributeValues: {
@@ -71,8 +71,8 @@ const getBypollId = async (pollId: string) => {
 };
 
 const pollVotesRepository = {
-  getBypollId,
-  getByUserIdAndpollId,
+  getByPollId,
+  getByUserIdAndPollId,
   create,
 };
 

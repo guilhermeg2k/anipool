@@ -48,7 +48,7 @@ const CreatePollForm = () => {
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [isCreatingpoll, setIsCreatingpoll] = useState(false);
+  const [isCreatingPoll, setIsCreatingPoll] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
     title && dayjs(endDate) > dayjs() && options.length > 1;
@@ -67,7 +67,7 @@ const CreatePollForm = () => {
 
   const onSubmitHandler = async () => {
     try {
-      setIsCreatingpoll(true);
+      setIsCreatingPoll(true);
       const poll = {
         title,
         endDate: endDate.toISOString(),
@@ -82,7 +82,7 @@ const CreatePollForm = () => {
       });
       router.push(`/poll/vote/${pollId}`);
     } finally {
-      setIsCreatingpoll(false);
+      setIsCreatingPoll(false);
     }
   };
 
@@ -156,7 +156,7 @@ const CreatePollForm = () => {
           Enable multiple selection
         </CheckBox>
         <Button
-          disabled={!shouldCreateButtonBeEnabled || isCreatingpoll}
+          disabled={!shouldCreateButtonBeEnabled || isCreatingPoll}
           size="large"
           color="green"
           className="w-full sm:w-auto"

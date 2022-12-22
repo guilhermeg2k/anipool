@@ -34,7 +34,6 @@ const Auth: NextPage = () => {
       );
       Cookies.set('userToken', userToken);
       const user = await userService.getCurrentUser();
-
       setUser(user);
       await router.push('/poll/create');
     } catch (error) {

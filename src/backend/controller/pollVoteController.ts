@@ -1,5 +1,6 @@
 import pollService from '@backend/service/pollService';
 import pollVoteService from '@backend/service/pollVoteService';
+import { getTokenPayload } from '@utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 
@@ -39,7 +40,7 @@ const areVotesValid = async (pollId: any, userId: any, pollVotes: any) => {
     return false;
   }
 
-  const userVotes = await pollVoteService.getUserVotesOnpoll(
+  const userVotes = await pollVoteService.getUserVotesOnPoll(
     String(userId),
     String(pollId)
   );
@@ -55,7 +56,8 @@ const areVotesValid = async (pollId: any, userId: any, pollVotes: any) => {
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { pollId } = req.query;
-    const { id: userId } = req.cookies;
+    const { userToken } = req.cookies;
+    const { id: userId } = await getTokenPayload(String(userToken));
     const { pollVotes } = req.body;
 
     const areUserVotesValid = await areVotesValid(pollId, userId, pollVotes);
@@ -76,21 +78,22 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const getUserVotesOnpoll = async (
+const getUserVotesOnPoll = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   const { pollId } = req.query;
-  const { id: userId } = req.cookies;
+  const { userToken } = req.cookies;
+  const { id: userId } = await getTokenPayload(String(userToken));
 
   try {
     if (pollId && userId) {
-      const userpollVotes = await pollVoteService.getUserVotesOnpoll(
+      const userPollVotes = await pollVoteService.getUserVotesOnPoll(
         String(userId),
         String(pollId)
       );
 
-      return res.status(200).send(userpollVotes);
+      return res.status(200).send(userPollVotes);
     }
   } catch (error) {
     console.log(error);
@@ -98,12 +101,12 @@ const getUserVotesOnpoll = async (
   }
 };
 
-const getpollResults = async (req: NextApiRequest, res: NextApiResponse) => {
+const getPollResults = async (req: NextApiRequest, res: NextApiResponse) => {
   const { pollId } = req.query;
 
   try {
     if (pollId) {
-      const pollOptionsResult = await pollVoteService.getpollResults(
+      const pollOptionsResult = await pollVoteService.getPollVotes(
         String(pollId)
       );
       return res.status(200).send(pollOptionsResult);
@@ -115,8 +118,8 @@ const getpollResults = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const pollVoteController = {
-  getpollResults,
-  getUserVotesOnpoll,
+  getPollResults,
+  getUserVotesOnPoll,
   create,
 };
 
