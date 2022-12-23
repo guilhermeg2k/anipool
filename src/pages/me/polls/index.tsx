@@ -8,6 +8,7 @@ import Title from '@components/core/Title';
 import {
   ArrowTopRightOnSquareIcon,
   LinkIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import pollService from '@services/pollService';
@@ -15,7 +16,6 @@ import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const MyPolls: NextPage = () => {
@@ -35,19 +35,23 @@ const MyPolls: NextPage = () => {
     }
   };
 
-  const getPollLinkById = (id: string) => `/poll/vote/${id}`;
+  const getPollVoteLinkById = (id: string) => `/poll/vote/${id}`;
 
-  const copyPollLink = (id: string) => {
-    let link = getPollLinkById(id);
+  const copyPollVoteLink = (id: string) => {
+    let link = getPollVoteLinkById(id);
     link = window.location.origin + link;
 
     navigator.clipboard.writeText(link);
     toastSuccess('Share link copied to clipboard');
   };
 
-  const openPoll = (id: string) => {
-    const link = getPollLinkById(id);
+  const openPollVotePage = (id: string) => {
+    const link = getPollVoteLinkById(id);
     window.open(link, '_blank');
+  };
+
+  const openPollResultsPage = (id: string) => {
+    window.open(`/poll/result/${id}`, '_blank');
   };
 
   useEffect(() => {
@@ -83,16 +87,27 @@ const MyPolls: NextPage = () => {
                   key={id}
                   className="flex justify-between hover:bg-slate-100 p-2 items-center"
                 >
-                  <span>{title}</span>
-                  <span title="End date">{dayjs(endDate).toString()}</span>
+                  <span className="w-[200px]">{title}</span>
+                  <span className="hidden md:inline" title="End date">
+                    {dayjs(endDate).toString()}
+                  </span>
                   <div className="flex gap-2">
                     <IconButton
-                      onClick={() => copyPollLink(id!)}
-                      title="Copy poll link"
+                      onClick={() => copyPollVoteLink(id!)}
+                      title="Copy poll vote link"
                     >
                       <LinkIcon />
                     </IconButton>
-                    <IconButton onClick={() => openPoll(id!)} title="Open poll">
+                    <IconButton
+                      onClick={() => openPollResultsPage(id!)}
+                      title="Open poll results page"
+                    >
+                      <ChartBarIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => openPollVotePage(id!)}
+                      title="Open poll vote page"
+                    >
                       <ArrowTopRightOnSquareIcon />
                     </IconButton>
                   </div>
