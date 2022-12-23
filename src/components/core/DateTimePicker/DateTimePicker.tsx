@@ -51,6 +51,7 @@ const DateTimePicker = ({
       <input
         value={renderValue()}
         type="text"
+        aria-label="Date and Time"
         className="w-full cursor-pointer border border-neutral-300  hover:border-indigo-900 focus:border-indigo-600 focus:ring-0"
         readOnly
       />

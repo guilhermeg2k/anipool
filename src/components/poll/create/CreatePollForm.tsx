@@ -149,9 +149,10 @@ const CreatePollForm = () => {
           onChange={(date) => setEndDate(date)}
         />
         <CheckBox
-          value={shouldEnableMultipleSelection}
-          onChange={(shouldEnable) =>
-            setShouldEnableMultipleSelection(shouldEnable)
+          id="enable-multiple-selection"
+          checked={shouldEnableMultipleSelection}
+          onChange={(event) =>
+            setShouldEnableMultipleSelection(event.target.checked)
           }
         >
           Enable multiple selection
