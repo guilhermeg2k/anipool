@@ -1,27 +1,20 @@
 import { getTokenPayload } from '@utils/authUtils';
 import { NextRequest, NextResponse } from 'next/server';
 
+const NOT_AUTHENTICATED_ROUTES = [
+  '/poll/result',
+  '/poll/vote',
+  '/api/auth',
+  '/api/poll/get',
+  '/api/poll/result',
+];
+
 const isAuthRoute = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/poll/result')) {
-    return false;
+  for (const notAuthenticatedRoute of NOT_AUTHENTICATED_ROUTES) {
+    if (req.nextUrl.pathname.startsWith(notAuthenticatedRoute)) {
+      return false;
+    }
   }
-
-  if (req.nextUrl.pathname.startsWith('/poll/vote')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/auth')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/poll/get')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/poll/result')) {
-    return false;
-  }
-
   return true;
 };
 
