@@ -29,7 +29,7 @@ interface MediaCardProps {
 const MediaCard: React.FC<MediaCardProps> = ({ media, onAdd }) => (
   <>
     <h1 className="font-medium text-neutral-800 text-center">
-      {media.title.romaji}
+      {media.title.romaji ?? media.title.native}
     </h1>
     <div className="h-[155px] w-[112px]">
       <Image
@@ -131,7 +131,11 @@ const SearchOptionModal = ({
   };
 
   const addMediaHandler = (media: Anilist.Media) => {
-    onAdd({ anilistId: media.id, type: media.type, text: media.title.english });
+    onAdd({
+      anilistId: media.id,
+      type: media.type,
+      text: media.title.english ?? media.title.romaji ?? media.title.native,
+    });
     toastSuccess(`${media.title.english} added`);
   };
 
@@ -165,7 +169,9 @@ const SearchOptionModal = ({
   };
 
   const renderOption = (option: Anilist.Media | Anilist.Character) => {
-    if (isMedia(option)) return option.title.english;
+    if (isMedia(option)) {
+      return option.title.english ?? option.title.romaji ?? option.title.native;
+    }
 
     if (isCharacter(option)) return option.name.full;
   };
