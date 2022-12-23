@@ -136,7 +136,7 @@ const SearchOptionModal = ({
       type: media.type,
       text: media.title.english ?? media.title.romaji ?? media.title.native,
     });
-    toastSuccess(`${media.title.english} added`);
+    toastSuccess(`${media.title.english ?? media.title.romaji ?? media.title.native} added`);
   };
 
   const addCharacterHandler = (character: Anilist.Character) => {
