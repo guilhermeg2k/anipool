@@ -29,11 +29,16 @@ const Home: NextPage = () => {
               className="min-w-[250px]"
               size="large"
               onClick={() => router.push('/poll/create')}
+              name="Create poll"
             >
               Create poll
             </Button>
           ) : (
-            <Button size="large" onClick={openAnilistAuthUrl}>
+            <Button
+              size="large"
+              onClick={openAnilistAuthUrl}
+              name="Sign in with anilist"
+            >
               Login with anilist
             </Button>
           )}

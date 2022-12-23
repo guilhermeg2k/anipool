@@ -49,7 +49,11 @@ const MediaCard: React.FC<MediaCardProps> = ({ media, onAdd }) => (
       </span>
     </div>
     <div>
-      <Button color="green" onClick={() => onAdd(media)}>
+      <Button
+        color="green"
+        onClick={() => onAdd(media)}
+        name="Add selected option"
+      >
         <span className="px-9">ADD</span>
       </Button>
     </div>
@@ -80,7 +84,11 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
       <span className="text-sm text-center">{character.name.native}</span>
     </div>
     <div>
-      <Button color="green" onClick={() => onAdd(character)}>
+      <Button
+        color="green"
+        onClick={() => onAdd(character)}
+        name="Add selected option"
+      >
         <span className="px-9">ADD</span>
       </Button>
     </div>
@@ -205,7 +213,9 @@ const SearchOptionModal = ({
               className="w-full"
               onChange={(text) => setSearchText(text)}
             />
-            <Button type="submit">Search</Button>
+            <Button type="submit" name="search">
+              Search
+            </Button>
           </form>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">

@@ -197,15 +197,23 @@ const PollResult: NextPage = () => {
               </h2>
             </div>
             <div className="self-center">
-              <Button color="white" onClick={() => loadPollAndResult()}>
+              <Button
+                color="white"
+                onClick={() => loadPollAndResult()}
+                name="refresh"
+              >
                 <span>Refresh</span>
                 <ArrowPathIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={onShareHandler}>
+              <Button color="white" onClick={onShareHandler} name="share">
                 <span>Share</span>
                 <LinkIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={() => router.push('/poll/create')}>
+              <Button
+                color="white"
+                onClick={() => router.push('/poll/create')}
+                name="Create new poll"
+              >
                 <span>Create New</span>
                 <PlusIcon className="w-5" />
               </Button>

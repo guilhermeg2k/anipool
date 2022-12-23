@@ -278,11 +278,12 @@ const Vote: NextPage = () => {
               <Button
                 color="white"
                 onClick={() => router.push(`/poll/result/${pollId}`)}
+                name="Results"
               >
                 <span>Results</span>
                 <ChartBarIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={onShareHandler}>
+              <Button color="white" onClick={onShareHandler} name="share">
                 <span>Share</span>
                 <LinkIcon className="w-5" />
               </Button>
@@ -295,6 +296,7 @@ const Vote: NextPage = () => {
             <Button
               color="green"
               disabled={!canSubmit}
+              name="vote"
               onClick={() => submitVotes(votes)}
             >
               vote

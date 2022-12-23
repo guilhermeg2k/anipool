@@ -13,7 +13,11 @@ const SignInModal = () => {
       onClose={() => setOpen(false)}
     >
       <div className="flex items-center w-full justify-center">
-        <Button size="large" onClick={openAnilistAuthUrl}>
+        <Button
+          size="large"
+          onClick={openAnilistAuthUrl}
+          name="Login with anilist"
+        >
           Login with anilist
         </Button>
       </div>
