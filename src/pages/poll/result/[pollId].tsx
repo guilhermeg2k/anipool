@@ -165,7 +165,7 @@ const PollResult: NextPage = () => {
   }, [pollId]);
 
   if (isLoadingPollAndResults) {
-    return <LoadingPage text="Loading results..." />;
+    return <LoadingPage text="Loading results..." title="Results" />;
   }
 
   return (

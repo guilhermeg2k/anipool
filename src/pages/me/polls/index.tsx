@@ -55,7 +55,7 @@ const MyPolls: NextPage = () => {
   }, [id]);
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <LoadingPage title="My polls" />;
   }
 
   return (

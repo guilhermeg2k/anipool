@@ -238,7 +238,7 @@ const Vote: NextPage = () => {
   }, [poll]);
 
   if (isLoadingPoll) {
-    return <LoadingPage />;
+    return <LoadingPage title="Vote" />;
   }
 
   if (isVoting) {

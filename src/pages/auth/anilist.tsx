@@ -45,7 +45,7 @@ const Auth: NextPage = () => {
     }
   }, []);
 
-  return <LoadingPage text="Authenticating..." />;
+  return <LoadingPage text="Authenticating..." title="Authenticating" />;
 };
 
 export default Auth;
