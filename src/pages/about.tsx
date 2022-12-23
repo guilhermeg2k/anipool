@@ -11,7 +11,7 @@ const VERSION = `Version ${PackageJSON.version}-beta (${PackageJSON.versionName}
 
 const About: NextPage = () => {
   return (
-    <Page bgImage="/images/bg-home.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>About</title>
       </Head>

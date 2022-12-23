@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const isLogged = Boolean(id);
 
   return (
-    <Page bgImage="/images/bg-home.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>Anipool</title>
       </Head>

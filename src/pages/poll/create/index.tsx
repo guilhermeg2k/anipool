@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 const CreatePoll: NextPage = () => {
   return (
-    <Page bgImage="/images/bg-create-poll.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>Create Poll</title>
       </Head>

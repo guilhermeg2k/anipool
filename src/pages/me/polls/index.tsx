@@ -59,7 +59,7 @@ const MyPolls: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/bg-create-poll.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>My polls</title>
       </Head>

@@ -13,7 +13,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
 }) => {
   return (
     <Page
-      bgImage="/images/bg-home.jpg"
+      bgImage="/images/background.jpg"
       className="flex flex-col items-center justify-center text-white gap-4"
     >
       <Head>

@@ -246,7 +246,7 @@ const Vote: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/bg-vote-poll.jpg">
+    <Page bgImage="/images/background.jpg">
       {!isUserLogged && <SignInModal />}
       <Head>
         <title>Poll: {poll?.title}</title>

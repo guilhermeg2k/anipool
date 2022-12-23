@@ -169,7 +169,7 @@ const PollResult: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/bg-poll-results.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>Results: {poll?.title}</title>
       </Head>
