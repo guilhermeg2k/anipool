@@ -12,9 +12,9 @@ declare module Anilist {
     id: number;
     type: string;
     title: {
-      romaji: string;
-      english: string;
-      native: string;
+      romaji?: string;
+      english?: string;
+      native?: string;
     };
     coverImage: {
       extraLarge: string;

@@ -22,8 +22,9 @@ const CharacterVoteOption = ({
   return (
     <button
       className="w-full pr-4 md:w-auto md:pr-0"
+      name={`Select character ${name.full} to vote`}
+      title={`Select character ${name.full} to vote`}
       onClick={onClick}
-      title={name.full}
     >
       <DataDisplay
         className={`flex ${activeClass} gap-2 p-2 hover:border-indigo-500 md:h-[340px] md:w-[200px] md:flex-col md:p-5`}

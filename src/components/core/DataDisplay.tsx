@@ -1,13 +1,12 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-interface DataDisplayProps {
-  className?: string;
-  children: ReactNode | Array<ReactNode>;
-}
-
-const DataDisplay = ({ children, className = '' }: DataDisplayProps) => {
+const DataDisplay = ({
+  children,
+  className = '',
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div className={`border border-neutral-300 p-2 ${className}`}>
+    <div className={`border border-neutral-300 p-2 ${className}`} {...rest}>
       {children}
     </div>
   );

@@ -7,6 +7,7 @@ import Spinner from '@components/core/Spinner';
 import TextField from '@components/core/TextField';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
+import { getMediaName } from '@utils/mediaUtils';
 import Image from 'next/image';
 import { useState } from 'react';
 import { OptionType } from 'src/enums';
@@ -20,8 +21,6 @@ const poll_OPTION_TYPES = [
 const isMedia = (obj: any): obj is Anilist.Media => Boolean(obj && obj.title);
 const isCharacter = (obj: any): obj is Anilist.Character =>
   Boolean(obj && obj.name);
-
-const getMediaName = (media: Anilist.Media) => media.title.english ?? media.title.romaji ?? media.title.native;
 
 interface MediaCardProps {
   media: Anilist.Media;

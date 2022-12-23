@@ -22,6 +22,7 @@ const CharacterResultCard = ({
   return (
     <DataDisplay
       className={`flex w-full gap-2 md:h-[370px] md:w-[200px] md:flex-col md:p-5`}
+      title={name.full}
     >
       <div className="w-[50px] md:w-auto">
         <Image
