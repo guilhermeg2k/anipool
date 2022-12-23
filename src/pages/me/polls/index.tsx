@@ -42,7 +42,7 @@ const MyPolls: NextPage = () => {
     link = window.location.origin + link;
 
     navigator.clipboard.writeText(link);
-    toastSuccess('Share link copied to clipboard');
+    toastSuccess('Vote link copied to clipboard');
   };
 
   const openPollVotePage = (id: string) => {

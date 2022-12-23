@@ -157,7 +157,7 @@ const Vote: NextPage = () => {
 
   const onShareHandler = () => {
     navigator.clipboard.writeText(window.location.href);
-    toastSuccess('Share link copied to clipboard');
+    toastSuccess('Vote link copied to clipboard');
   };
 
   const submitVotes = async (pollVotes: Array<PollOption>) => {
@@ -238,18 +238,20 @@ const Vote: NextPage = () => {
   }, [poll]);
 
   if (isLoadingPoll) {
-    return <LoadingPage title="Vote" />;
+    return (
+      <LoadingPage title={poll?.title ? `Vote on ${poll?.title}` : 'Vote'} />
+    );
   }
 
   if (isVoting) {
-    return <LoadingPage text="Voting..." />;
+    return <LoadingPage text="Voting..." title={`Voting on ${poll?.title}`} />;
   }
 
   return (
     <Page bgImage="/images/background.jpg">
       {!isUserLogged && <SignInModal />}
       <Head>
-        <title>Poll: {poll?.title}</title>
+        <title>Vote on {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
@@ -284,7 +286,7 @@ const Vote: NextPage = () => {
                 <ChartBarIcon className="w-5" />
               </Button>
               <Button color="white" onClick={onShareHandler} name="share">
-                <span>Share</span>
+                <span>Copy vote link</span>
                 <LinkIcon className="w-5" />
               </Button>
             </div>
