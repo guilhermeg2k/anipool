@@ -21,6 +21,10 @@ const isMedia = (obj: any): obj is Anilist.Media => Boolean(obj && obj.title);
 const isCharacter = (obj: any): obj is Anilist.Character =>
   Boolean(obj && obj.name);
 
+const mediaName = (obj: any): obj is Anilist.Media => {
+  return obj.title.english ?? obj.title.romaji ?? obj.title.native;
+};
+
 interface MediaCardProps {
   media: Anilist.Media;
   onAdd: (media: Anilist.Media) => void;
@@ -134,9 +138,9 @@ const SearchOptionModal = ({
     onAdd({
       anilistId: media.id,
       type: media.type,
-      text: media.title.english ?? media.title.romaji ?? media.title.native,
+      text: mediaName(media),
     });
-    toastSuccess(`${media.title.english ?? media.title.romaji ?? media.title.native} added`);
+    toastSuccess(`${mediaName(media)} added`);
   };
 
   const addCharacterHandler = (character: Anilist.Character) => {
@@ -170,7 +174,7 @@ const SearchOptionModal = ({
 
   const renderOption = (option: Anilist.Media | Anilist.Character) => {
     if (isMedia(option)) {
-      return option.title.english ?? option.title.romaji ?? option.title.native;
+      return mediaName(option);
     }
 
     if (isCharacter(option)) return option.name.full;
