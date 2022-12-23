@@ -1,5 +1,6 @@
 import Box from '@components/core/Box';
 import IconButton from '@components/core/IconButton';
+import InternalLink from '@components/core/InternalLink';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
@@ -14,6 +15,7 @@ import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const MyPolls: NextPage = () => {
@@ -68,26 +70,35 @@ const MyPolls: NextPage = () => {
         <Box className="flex flex-col gap-5 pb-7">
           <Title>MY POLLS</Title>
           <div className="flex flex-col gap-2">
-            {polls.map(({ id, title, endDate }) => (
-              <div
-                key={id}
-                className="flex justify-between hover:bg-slate-100 p-2 items-center"
-              >
-                <span>{title}</span>
-                <span title="End date">{dayjs(endDate).toString()}</span>
-                <div className="flex gap-2">
-                  <IconButton
-                    onClick={() => copyPollLink(id!)}
-                    title="Copy poll link"
-                  >
-                    <LinkIcon />
-                  </IconButton>
-                  <IconButton onClick={() => openPoll(id!)} title="Open poll">
-                    <ArrowTopRightOnSquareIcon />
-                  </IconButton>
-                </div>
+            {polls.length === 0 ? (
+              <div className="flex flex-col items-center justify-center uppercase">
+                <span>You don&apos;t have any poll yet</span>
+                <InternalLink href="/poll/create">
+                  Click here to create one
+                </InternalLink>
               </div>
-            ))}
+            ) : (
+              polls.map(({ id, title, endDate }) => (
+                <div
+                  key={id}
+                  className="flex justify-between hover:bg-slate-100 p-2 items-center"
+                >
+                  <span>{title}</span>
+                  <span title="End date">{dayjs(endDate).toString()}</span>
+                  <div className="flex gap-2">
+                    <IconButton
+                      onClick={() => copyPollLink(id!)}
+                      title="Copy poll link"
+                    >
+                      <LinkIcon />
+                    </IconButton>
+                    <IconButton onClick={() => openPoll(id!)} title="Open poll">
+                      <ArrowTopRightOnSquareIcon />
+                    </IconButton>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </Box>
       </div>
