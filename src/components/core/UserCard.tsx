@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import {
   ArrowRightOnRectangleIcon,
-  ChevronDownIcon,
+  Bars3Icon,
 } from '@heroicons/react/24/outline';
 import useUserStore from '@store/userStore';
 import { openAnilistAuthUrl } from '@utils/utils';
@@ -52,15 +52,18 @@ const UserCard = () => {
             </div>
           </div>
 
-          <MenuDropdown items={menuItems} className="h-[20px]">
-            <div>
-              <ChevronDownIcon className="h-5 w-5 hover:text-indigo-700" />
-            </div>
+          <MenuDropdown items={menuItems} className="h-[20px]" name="Menu">
+            <Bars3Icon className="h-5 w-5 hover:text-indigo-700" />
           </MenuDropdown>
         </>
       ) : (
         <div className="flex items-center w-full">
-          <Button onClick={openAnilistAuthUrl} color="white" className="w-full">
+          <Button
+            onClick={openAnilistAuthUrl}
+            color="white"
+            className="w-full"
+            name="Sign in"
+          >
             Sign in
             <ArrowRightOnRectangleIcon className="w-5 h-5" />
           </Button>
