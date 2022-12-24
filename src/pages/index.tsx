@@ -25,13 +25,22 @@ const Home: NextPage = () => {
             Create anime quizes and polls integrated with anilist.co
           </span>
           {isLogged ? (
-            <Button
-              className="min-w-[250px]"
-              size="large"
-              onClick={() => router.push('/poll/create')}
-            >
-              Create poll
-            </Button>
+            <div className="flex flex-row h-full w-full gap-x-4">
+              <Button
+                className="min-w-[250px]"
+                size="large"
+                onClick={() => router.push('/poll/create')}
+              >
+                Create poll
+              </Button>
+              <Button
+                className="min-w-[250px]"
+                size="large"
+                onClick={() => router.push('/me/polls')}
+              >
+                Create poll
+              </Button>
+            </div>
           ) : (
             <Button size="large" onClick={openAnilistAuthUrl}>
               Login with anilist

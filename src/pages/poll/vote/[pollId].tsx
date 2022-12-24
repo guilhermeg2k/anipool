@@ -118,7 +118,7 @@ const Vote: NextPage = () => {
         setOptions(options);
       }
     } catch (error) {
-      toastError('Failed  to load poll');
+      toastError('Failed to load poll');
     } finally {
       setIsLoadingPoll(false);
     }
