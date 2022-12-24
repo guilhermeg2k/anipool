@@ -38,7 +38,7 @@ const Home: NextPage = () => {
                 size="large"
                 onClick={() => router.push('/me/polls')}
               >
-                Create poll
+                My Polls
               </Button>
             </div>
           ) : (
