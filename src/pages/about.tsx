@@ -26,7 +26,7 @@ const About: NextPage = () => {
               <ExternalLink href="https://github.com/guilhermeg2k/anipool">
                 open source
               </ExternalLink>
-              &nbsp; platform to create anime quizes and polls. It
+              &nbsp;platform to create anime related quizes and polls. It
               consumes&nbsp;
               <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
               &nbsp;API but it doesn&apos;t has any relation with Anilist or its
@@ -45,7 +45,7 @@ const About: NextPage = () => {
           </div>
 
           <div className="text-xs font-semibold uppercase self-end flex flex-col items-end">
-            <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/develop/CHANGELOG.md">
+            <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md">
               Change Logs
             </ExternalLink>
             <span>{VERSION}</span>
