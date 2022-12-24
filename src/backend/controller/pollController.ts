@@ -8,7 +8,7 @@ import {
   validateGetQueryParams,
   validateGetResultQueryParams,
   validateListByUserIdQueryParams,
-} from '@backend/controller/validators/pollValidators';
+} from '@backend/controller/validators/pollControllerValidators';
 import { getTokenPayload } from '@utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
