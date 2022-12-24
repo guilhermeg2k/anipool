@@ -2,7 +2,7 @@ import { OAuthProvider } from '@backend/enums';
 import authService from '@backend/service/authService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
-import { SignInBody, validateSignInBody } from '../validators/authValidators';
+import { SignInBody, validateSignInBody } from './validators/authValidators';
 
 const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
   try {
