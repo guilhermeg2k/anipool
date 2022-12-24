@@ -19,15 +19,17 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     validateSignInBody(req.body);
     const { oathProvider, accessToken } = req.body as SignInBody;
-    if (oathProvider === OAuthProvider.Anilist) {
-      return signInWithAnilist(accessToken, res);
+    switch (oathProvider) {
+      case OAuthProvider.Anilist:
+        return signInWithAnilist(accessToken, res);
+      default:
+        throw new Error('Invalid OAuth provider');
     }
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
-      return res.status(400).send('');
+      return res.status(400).send('Bad request');
     }
-    return res.status(500).send('');
+    return res.status(500).send('Internal server error');
   }
 };
 

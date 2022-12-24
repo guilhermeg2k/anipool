@@ -1,11 +1,10 @@
+import { OAuthProvider } from '@backend/enums';
 import { z } from 'zod';
 
-export const signInBodySchema = z
-  .object({
-    oathProvider: z.enum(['ANILIST']),
-    accessToken: z.string(),
-  })
-  .required();
+export const signInBodySchema = z.object({
+  oathProvider: z.nativeEnum(OAuthProvider),
+  accessToken: z.string(),
+});
 
 export type SignInBody = z.infer<typeof signInBodySchema>;
 

@@ -1,76 +1,83 @@
 import pollService from '@backend/service/pollService';
+import {
+  CreatePollBody,
+  GetQueryParams,
+  GetResultQueryParams,
+  ListByUserIdQueryParams,
+  validateCreatePollBody,
+  validateGetQueryParams,
+  validateGetResultQueryParams,
+  validateListByUserIdQueryParams,
+} from '@backend/validators/pollValidators';
 import { getTokenPayload } from '@utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ZodError } from 'zod';
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { id } = req.query;
-
-    if (id) {
-      const poll = await pollService.get(String(id));
-      return res.status(200).send(poll);
-    }
-
-    return res.status(400).send('');
+    validateGetQueryParams(req.query);
+    const { id } = req.query as GetQueryParams;
+    const poll = await pollService.get(String(id));
+    return res.status(200).send(poll);
   } catch (error) {
-    console.log(error);
-    return res.status(500).send('');
+    if (error instanceof ZodError) {
+      return res.status(400).send('Bad request');
+    }
+    return res.status(500).send('Internal server error');
   }
 };
 
 const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { userId } = req.query;
-
-    if (userId) {
-      const poll = await pollService.listByUserId(String(userId));
-      return res.status(200).send(poll);
-    }
-
-    return res.status(400).send('');
+    validateListByUserIdQueryParams(req.query);
+    const { userId } = req.query as ListByUserIdQueryParams;
+    const poll = await pollService.listByUserId(String(userId));
+    return res.status(200).send(poll);
   } catch (error) {
-    console.log(error);
-    return res.status(500).send('');
+    if (error instanceof ZodError) {
+      return res.status(400).send('Bad request');
+    }
+    return res.status(500).send('Internal server error');
   }
 };
 
 const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { pollId } = req.query;
-
-    if (pollId) {
-      const pollResults = await pollService.getResult(String(pollId));
-      return res.status(200).send(pollResults);
-    }
-
-    return res.status(400).send('');
+    validateGetResultQueryParams(req.query);
+    const { pollId } = req.query as GetResultQueryParams;
+    const pollResults = await pollService.getResult(String(pollId));
+    return res.status(200).send(pollResults);
   } catch (error) {
-    console.log(error);
-    return res.status(500).send('');
+    if (error instanceof ZodError) {
+      return res.status(400).send('Bad request');
+    }
+    return res.status(500).send('Internal server error');
   }
 };
 
 const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { title, endDate, options, multiOptions } = req.body;
+    validateCreatePollBody(req.body);
+
+    const { title, endDate, options, multiOptions } =
+      req.body as CreatePollBody;
     const { userToken } = req.cookies;
-    const { id } = await getTokenPayload(String(userToken));
+    const { id: userId } = await getTokenPayload(String(userToken));
 
-    if (id && title && endDate && options && multiOptions != null) {
-      const pollId = await pollService.createAndReturnId({
-        userId: id,
-        title,
-        endDate,
-        options,
-        multiOptions,
-      });
+    const pollId = await pollService.createAndReturnId({
+      userId,
+      title,
+      endDate,
+      options,
+      multiOptions,
+    });
 
-      return res.status(200).send(pollId);
-    }
-    return res.status(400).send('');
+    return res.status(200).send(pollId);
   } catch (error) {
-    console.log(error);
-    return res.status(500).send('');
+    if (error instanceof ZodError) {
+      return res.status(400).send('Bad request');
+    }
+    return res.status(500).send('Internal server error');
   }
 };
 
