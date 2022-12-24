@@ -18,12 +18,13 @@ const isAuthRoute = (req: NextRequest) => {
   return true;
 };
 
-const authMiddleware = async (req: NextRequest, res: NextResponse) => {
+const authMiddleware = async (req: NextRequest) => {
   const userToken = req.cookies.get('userToken');
+
   if (userToken) {
     try {
       await getTokenPayload(userToken);
-      return res;
+      return NextResponse.next();
     } catch (error) {
       return NextResponse.redirect(new URL('/401', req.url));
     }
@@ -33,14 +34,12 @@ const authMiddleware = async (req: NextRequest, res: NextResponse) => {
 };
 
 export const middleware = async (req: NextRequest) => {
-  const res = NextResponse.next();
-
   if (isAuthRoute(req)) {
-    return await authMiddleware(req, res);
+    return await authMiddleware(req);
   }
-  return res;
+  return NextResponse.next();
 };
 
 export const config = {
-  matcher: ['/poll/:path*', '/api/:path*'],
+  matcher: ['/poll/:path*', '/api/:path*', '/me/:path*'],
 };

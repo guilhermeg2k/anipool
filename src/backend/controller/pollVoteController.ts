@@ -36,6 +36,7 @@ const areVotesValid = async (pollId: any, userId: any, pollVotes: any) => {
   const pollEndDate = new Date(poll.endDate);
   const now = new Date();
   const isVoteDateValid = pollEndDate > now;
+
   if (!isVoteDateValid) {
     return false;
   }
