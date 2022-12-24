@@ -1,12 +1,13 @@
 import DataDisplay from '@components/core/DataDisplay';
+import { getMediaName } from '@utils/mediaUtils';
 import Image from 'next/image';
 
 interface MediaVoteOptionProps {
   coverUrl: string;
   title: {
-    native: string;
-    romaji: string;
-    english: string;
+    native?: string;
+    romaji?: string;
+    english?: string;
   };
   selected?: boolean;
   onClick: () => void;
@@ -23,8 +24,9 @@ const MediaVoteOption = ({
   return (
     <button
       className="w-full pr-4 md:w-auto md:pr-0"
+      title={`Select ${getMediaName({ title })} to vote`}
+      name={`Select ${getMediaName({ title })} to vote`}
       onClick={onClick}
-      title={title.romaji}
     >
       <DataDisplay
         className={`${activeClass} flex  gap-2 p-2 hover:border-indigo-500 md:h-[340px] md:w-[200px] md:flex-col md:p-5`}

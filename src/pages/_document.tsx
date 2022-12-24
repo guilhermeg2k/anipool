@@ -3,7 +3,7 @@ import Document, { Head, Html, Main, NextScript } from 'next/document';
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
@@ -91,6 +91,10 @@ export default class MyDocument extends Document {
             content="/ms-icon-144x144.png "
           />
           <meta name="theme-color" content="#ffffff"></meta>
+          <meta
+            name="description"
+            content="Create anime related polls and quizes and share them with your friends"
+          />
         </Head>
         <body className="text-sm font-normal text-neutral-700 md:text-base">
           <Main />

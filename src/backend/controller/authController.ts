@@ -1,31 +1,39 @@
 import { OAuthProvider } from '@backend/enums';
 import authService from '@backend/service/authService';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ZodError } from 'zod';
+import {
+  SignInBody,
+  validateSignInBody,
+} from './validators/authControllerValidators';
+
+const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
+  const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
+  return res.status(200).send({
+    jwtToken,
+  });
+};
 
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { oathProvider, accessToken } = req.body;
-
-  if (!oathProvider || !accessToken) {
-    return res.status(400).send('');
-  }
-
   try {
+    validateSignInBody(req.body);
+    const { oathProvider, accessToken } = req.body as SignInBody;
     switch (oathProvider) {
       case OAuthProvider.Anilist:
-        const jwtToken = await authService.signInByAnilistAccessToken(
-          accessToken
-        );
-        return res.status(200).send({
-          jwtToken,
-        });
-
+        return signInWithAnilist(accessToken, res);
       default:
-        return res.status(400).send('');
+        throw new Error('Invalid OAuth provider');
     }
   } catch (error) {
-    console.log(error);
-    return res.status(401).send('');
+    return handleError(error, res);
   }
+};
+
+const handleError = (error: unknown, res: NextApiResponse) => {
+  if (error instanceof ZodError) {
+    return res.status(400).send('Bad request');
+  }
+  return res.status(401).send('Unauthorized');
 };
 
 const authController = {

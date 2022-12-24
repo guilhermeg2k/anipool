@@ -1,4 +1,5 @@
 import Button from '@components/core/Button';
+import LoadingPage from '@components/core/LoadingPage';
 import Logo from '@components/core/Logo';
 import Page from '@components/core/Page';
 import useUserStore from '@store/userStore';
@@ -7,14 +8,27 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Home: NextPage = () => {
-  const { id } = useUserStore();
+  const { isLogged } = useUserStore();
   const router = useRouter();
-  const isLogged = Boolean(id);
+  const isUserLogged = isLogged();
+
+  const redirectToMyPollsIfLogged = () => {
+    if (isUserLogged) {
+      router.push(`me/polls`);
+    }
+  };
+
+  useEffect(redirectToMyPollsIfLogged, [isLogged]);
+
+  if (isUserLogged) {
+    return <LoadingPage title="Anipool" />;
+  }
 
   return (
-    <Page bgImage="/images/bg-home.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>Anipool</title>
       </Head>
@@ -22,21 +36,16 @@ const Home: NextPage = () => {
         <div className="flex w-full flex-col items-center gap-y-4 lg:w-auto lg:items-start">
           <Logo className="text-7xl lg:text-8xl" />
           <span className="max-w-md text-xl text-white lg:text-2xl">
-            Create anime quizes and polls integrated with anilist.co
+            Create anime related polls and quizes and share them with your
+            friends
           </span>
-          {isLogged ? (
-            <Button
-              className="min-w-[250px]"
-              size="large"
-              onClick={() => router.push('/poll/create')}
-            >
-              Create poll
-            </Button>
-          ) : (
-            <Button size="large" onClick={openAnilistAuthUrl}>
-              Login with anilist
-            </Button>
-          )}
+          <Button
+            size="large"
+            onClick={openAnilistAuthUrl}
+            name="Sign in with anilist"
+          >
+            Login with anilist
+          </Button>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
           <Image

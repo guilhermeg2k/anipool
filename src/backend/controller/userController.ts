@@ -6,14 +6,9 @@ const getCurrentUser = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { userToken } = req.cookies;
     const { id } = await getTokenPayload(String(userToken));
-
-    if (id) {
-      const user = await userService.get(id);
-      return res.status(200).send(user);
-    }
-    return res.status(204).send('');
+    const user = await userService.get(id);
+    return res.status(200).send(user);
   } catch (error) {
-    console.log(error);
     return res.status(500).send('');
   }
 };

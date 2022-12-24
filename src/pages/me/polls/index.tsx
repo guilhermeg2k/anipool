@@ -1,5 +1,6 @@
 import Box from '@components/core/Box';
 import IconButton from '@components/core/IconButton';
+import InternalLink from '@components/core/InternalLink';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
@@ -7,6 +8,7 @@ import Title from '@components/core/Title';
 import {
   ArrowTopRightOnSquareIcon,
   LinkIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import pollService from '@services/pollService';
@@ -33,19 +35,23 @@ const MyPolls: NextPage = () => {
     }
   };
 
-  const getPollLinkById = (id: string) => `/poll/vote/${id}`;
+  const getPollVoteLinkById = (id: string) => `/poll/vote/${id}`;
 
-  const copyPollLink = (id: string) => {
-    let link = getPollLinkById(id);
+  const copyPollVoteLink = (id: string) => {
+    let link = getPollVoteLinkById(id);
     link = window.location.origin + link;
 
     navigator.clipboard.writeText(link);
-    toastSuccess('Share link copied to clipboard');
+    toastSuccess('Vote link copied to clipboard');
   };
 
-  const openPoll = (id: string) => {
-    const link = getPollLinkById(id);
+  const openPollVotePage = (id: string) => {
+    const link = getPollVoteLinkById(id);
     window.open(link, '_blank');
+  };
+
+  const openPollResultsPage = (id: string) => {
+    window.open(`/poll/result/${id}`, '_blank');
   };
 
   useEffect(() => {
@@ -55,11 +61,11 @@ const MyPolls: NextPage = () => {
   }, [id]);
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <LoadingPage title="My polls" />;
   }
 
   return (
-    <Page bgImage="/images/bg-create-poll.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>My polls</title>
       </Head>
@@ -68,26 +74,46 @@ const MyPolls: NextPage = () => {
         <Box className="flex flex-col gap-5 pb-7">
           <Title>MY POLLS</Title>
           <div className="flex flex-col gap-2">
-            {polls.map(({ id, title, endDate }) => (
-              <div
-                key={id}
-                className="flex justify-between hover:bg-slate-100 p-2 items-center"
-              >
-                <span>{title}</span>
-                <span title="End date">{dayjs(endDate).toString()}</span>
-                <div className="flex gap-2">
-                  <IconButton
-                    onClick={() => copyPollLink(id!)}
-                    title="Copy poll link"
-                  >
-                    <LinkIcon />
-                  </IconButton>
-                  <IconButton onClick={() => openPoll(id!)} title="Open poll">
-                    <ArrowTopRightOnSquareIcon />
-                  </IconButton>
-                </div>
+            {polls.length === 0 ? (
+              <div className="flex flex-col items-center justify-center uppercase">
+                <span>You don&apos;t have any poll yet</span>
+                <InternalLink href="/poll/create">
+                  Click here to create one
+                </InternalLink>
               </div>
-            ))}
+            ) : (
+              polls.map(({ id, title, endDate }) => (
+                <div
+                  key={id}
+                  className="flex justify-between hover:bg-slate-100 p-2 items-center"
+                >
+                  <span className="w-[200px]">{title}</span>
+                  <span className="hidden md:inline" title="End date">
+                    {dayjs(endDate).toString()}
+                  </span>
+                  <div className="flex gap-2">
+                    <IconButton
+                      onClick={() => copyPollVoteLink(id!)}
+                      title="Copy poll vote link"
+                    >
+                      <LinkIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => openPollResultsPage(id!)}
+                      title="Open poll results page"
+                    >
+                      <ChartBarIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => openPollVotePage(id!)}
+                      title="Open poll vote page"
+                    >
+                      <ArrowTopRightOnSquareIcon />
+                    </IconButton>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </Box>
       </div>

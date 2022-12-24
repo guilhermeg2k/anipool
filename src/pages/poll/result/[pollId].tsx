@@ -6,7 +6,11 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
-import { LinkIcon, PlusIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathIcon,
+  ArrowTopRightOnSquareIcon,
+  LinkIcon,
+} from '@heroicons/react/24/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
@@ -126,11 +130,9 @@ const PollResult: NextPage = () => {
     }
   };
 
-  const onShareHandler = () => {
-    navigator.clipboard.writeText(
-      window.location.href.replace('result', 'vote')
-    );
-    toastSuccess('Share link copied to clipboard');
+  const onCopyLinkHandler = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toastSuccess('Results link copied to clipboard');
   };
 
   const renderResultsCards = () =>
@@ -165,13 +167,18 @@ const PollResult: NextPage = () => {
   }, [pollId]);
 
   if (isLoadingPollAndResults) {
-    return <LoadingPage text="Loading results..." />;
+    return (
+      <LoadingPage
+        text="Loading results..."
+        title={poll?.title ? `Results of ${poll?.title}` : 'Results'}
+      />
+    );
   }
 
   return (
-    <Page bgImage="/images/bg-poll-results.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
-        <title>Results: {poll?.title}</title>
+        <title>Results of {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6 ">
         <PageHeader />
@@ -197,17 +204,25 @@ const PollResult: NextPage = () => {
               </h2>
             </div>
             <div className="self-center">
-              <Button color="white" onClick={() => loadPollAndResult()}>
+              <Button
+                color="white"
+                name="refresh"
+                onClick={() => loadPollAndResult()}
+              >
                 <span>Refresh</span>
                 <ArrowPathIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={onShareHandler}>
-                <span>Share</span>
+              <Button color="white" name="share" onClick={onCopyLinkHandler}>
+                <span>Copy results link</span>
                 <LinkIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={() => router.push('/poll/create')}>
-                <span>Create New</span>
-                <PlusIcon className="w-5" />
+              <Button
+                color="white"
+                name="Create new poll"
+                onClick={() => router.push(`/poll/vote/${pollId}`)}
+              >
+                <span>Vote</span>
+                <ArrowTopRightOnSquareIcon className="w-5" />
               </Button>
             </div>
           </div>

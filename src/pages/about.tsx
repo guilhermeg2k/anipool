@@ -11,7 +11,7 @@ const VERSION = `Version ${PackageJSON.version}-beta (${PackageJSON.versionName}
 
 const About: NextPage = () => {
   return (
-    <Page bgImage="/images/bg-home.jpg">
+    <Page bgImage="/images/background.jpg">
       <Head>
         <title>About</title>
       </Head>
@@ -22,8 +22,12 @@ const About: NextPage = () => {
 
           <div className="flex flex-col">
             <span>
-              Anipool is an open source platform to create anime quizes and
-              polls. It consumes&nbsp;
+              Anipool is an&nbsp;
+              <ExternalLink href="https://github.com/guilhermeg2k/anipool">
+                open source
+              </ExternalLink>
+              &nbsp; platform to create anime quizes and polls. It
+              consumes&nbsp;
               <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
               &nbsp;API but it doesn&apos;t has any relation with Anilist or its
               creators.

@@ -1,36 +1,30 @@
 import { getTokenPayload } from '@utils/authUtils';
 import { NextRequest, NextResponse } from 'next/server';
 
+const NOT_AUTHENTICATED_ROUTES = [
+  '/poll/result',
+  '/poll/vote',
+  '/api/auth',
+  '/api/poll/get',
+  '/api/poll/result',
+];
+
 const isAuthRoute = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/poll/result')) {
-    return false;
+  for (const notAuthenticatedRoute of NOT_AUTHENTICATED_ROUTES) {
+    if (req.nextUrl.pathname.startsWith(notAuthenticatedRoute)) {
+      return false;
+    }
   }
-
-  if (req.nextUrl.pathname.startsWith('/poll/vote')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/auth')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/poll/get')) {
-    return false;
-  }
-
-  if (req.nextUrl.pathname.startsWith('/api/poll/result')) {
-    return false;
-  }
-
   return true;
 };
 
-const authMiddleware = async (req: NextRequest, res: NextResponse) => {
+const authMiddleware = async (req: NextRequest) => {
   const userToken = req.cookies.get('userToken');
+
   if (userToken) {
     try {
       await getTokenPayload(userToken);
-      return res;
+      return NextResponse.next();
     } catch (error) {
       return NextResponse.redirect(new URL('/401', req.url));
     }
@@ -40,14 +34,12 @@ const authMiddleware = async (req: NextRequest, res: NextResponse) => {
 };
 
 export const middleware = async (req: NextRequest) => {
-  const res = NextResponse.next();
-
   if (isAuthRoute(req)) {
-    return await authMiddleware(req, res);
+    return await authMiddleware(req);
   }
-  return res;
+  return NextResponse.next();
 };
 
 export const config = {
-  matcher: ['/poll/:path*', '/api/:path*'],
+  matcher: ['/poll/:path*', '/api/:path*', '/me/:path*'],
 };

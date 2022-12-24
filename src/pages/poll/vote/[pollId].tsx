@@ -133,6 +133,26 @@ const Vote: NextPage = () => {
     }
   };
 
+  const submitVotes = async (pollVotes: Array<PollOption>) => {
+    try {
+      setIsVoting(true);
+      await pollService.vote(String(pollId), pollVotes);
+      toastSuccess('Your vote was registered');
+      goToResults();
+    } catch (error) {
+      toastError('Error while registering your vote');
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
+  const redirectToResultsIfPollHasEnded = () => {
+    if (poll && dayjs().isAfter(dayjs(poll.endDate))) {
+      toastWarning('This poll has ended');
+      goToResults();
+    }
+  };
+
   const onSelectedHandler = (selectedOption: PollOption) => {
     if (poll!.multiOptions) {
       const isAlreadyAdded = votes.find(
@@ -157,20 +177,7 @@ const Vote: NextPage = () => {
 
   const onShareHandler = () => {
     navigator.clipboard.writeText(window.location.href);
-    toastSuccess('Share link copied to clipboard');
-  };
-
-  const submitVotes = async (pollVotes: Array<PollOption>) => {
-    try {
-      setIsVoting(true);
-      await pollService.vote(String(pollId), pollVotes);
-      toastSuccess('Your vote was registered');
-      goToResults();
-    } catch (error) {
-      toastError('Error while registering your vote');
-    } finally {
-      setIsVoting(false);
-    }
+    toastSuccess('Vote link copied to clipboard');
   };
 
   const renderCharacterVoteOption = (characterOption: CharacterOption) => {
@@ -227,29 +234,23 @@ const Vote: NextPage = () => {
     loadPollIfUserDoesNotHasVoted();
   }, [pollId]);
 
-  useEffect(() => {
-    if (poll) {
-      const pollEndDate = dayjs(poll.endDate);
-      if (pollEndDate < dayjs()) {
-        goToResults();
-        return;
-      }
-    }
-  }, [poll]);
+  useEffect(redirectToResultsIfPollHasEnded, [poll]);
 
   if (isLoadingPoll) {
-    return <LoadingPage />;
+    return (
+      <LoadingPage title={poll?.title ? `Vote on ${poll?.title}` : 'Vote'} />
+    );
   }
 
   if (isVoting) {
-    return <LoadingPage text="Voting..." />;
+    return <LoadingPage text="Voting..." title={`Voting on ${poll?.title}`} />;
   }
 
   return (
-    <Page bgImage="/images/bg-vote-poll.jpg">
+    <Page bgImage="/images/background.jpg">
       {!isUserLogged && <SignInModal />}
       <Head>
-        <title>Poll: {poll?.title}</title>
+        <title>Vote on {poll?.title}</title>
       </Head>
       <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
@@ -278,12 +279,13 @@ const Vote: NextPage = () => {
               <Button
                 color="white"
                 onClick={() => router.push(`/poll/result/${pollId}`)}
+                name="Results"
               >
                 <span>Results</span>
                 <ChartBarIcon className="w-5" />
               </Button>
-              <Button color="white" onClick={onShareHandler}>
-                <span>Share</span>
+              <Button color="white" onClick={onShareHandler} name="share">
+                <span>Copy vote link</span>
                 <LinkIcon className="w-5" />
               </Button>
             </div>
@@ -295,6 +297,7 @@ const Vote: NextPage = () => {
             <Button
               color="green"
               disabled={!canSubmit}
+              name="vote"
               onClick={() => submitVotes(votes)}
             >
               vote
