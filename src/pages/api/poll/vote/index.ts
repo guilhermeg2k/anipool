@@ -1,6 +1,6 @@
 import pollVoteController from '@backend/controller/pollVoteController';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { applyRateLimit } from '@src/utils/rateLimit';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,

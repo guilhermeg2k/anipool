@@ -1,12 +1,13 @@
 import DataDisplay from '@components/core/DataDisplay';
+import { getMediaName } from '@utils/mediaUtils';
 import Image from 'next/image';
 
 interface MediaResultCardProps {
   coverUrl: string;
   title: {
-    native: string;
-    romaji: string;
-    english: string;
+    native?: string;
+    romaji?: string;
+    english?: string;
   };
   votes: number;
   totalVotes: number;
@@ -23,6 +24,7 @@ const MediaResultCard: React.FC<MediaResultCardProps> = ({
   return (
     <DataDisplay
       className={`flex w-full gap-2 md:h-[370px] md:w-[200px] md:flex-col md:p-5`}
+      title={getMediaName({ title })}
     >
       <div className="w-[50px] md:w-auto">
         <Image

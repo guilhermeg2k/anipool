@@ -39,7 +39,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <LoadingPage title="Anipool" />;
   }
 
   return (

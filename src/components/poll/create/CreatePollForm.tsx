@@ -132,6 +132,7 @@ const CreatePollForm = () => {
             className="self-end w-full"
             color="green"
             onClick={() => setIsSearchModalOpen(true)}
+            name="Open add options modal"
           >
             ADD OPTIONS
           </Button>
@@ -148,9 +149,10 @@ const CreatePollForm = () => {
           onChange={(date) => setEndDate(date)}
         />
         <CheckBox
-          value={shouldEnableMultipleSelection}
-          onChange={(shouldEnable) =>
-            setShouldEnableMultipleSelection(shouldEnable)
+          id="enable-multiple-selection"
+          checked={shouldEnableMultipleSelection}
+          onChange={(event) =>
+            setShouldEnableMultipleSelection(event.target.checked)
           }
         >
           Enable multiple selection
@@ -159,6 +161,7 @@ const CreatePollForm = () => {
           disabled={!shouldCreateButtonBeEnabled || isCreatingPoll}
           size="large"
           color="green"
+          name="Create poll"
           className="w-full sm:w-auto"
           onClick={onSubmitHandler}
         >

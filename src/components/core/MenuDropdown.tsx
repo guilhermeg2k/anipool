@@ -2,6 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
 interface MenuDropdownProps {
+  name?: string;
   items: Array<React.ReactNode>;
   className?: string;
   children: React.ReactNode;
@@ -10,11 +11,12 @@ interface MenuDropdownProps {
 const MenuDropdown = ({
   items,
   className = '',
+  name = '',
   children,
 }: MenuDropdownProps) => {
   return (
     <Menu as="div" className={`${className} relative inline-block text-left`}>
-      <Menu.Button>{children}</Menu.Button>
+      <Menu.Button name={name}>{children}</Menu.Button>
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

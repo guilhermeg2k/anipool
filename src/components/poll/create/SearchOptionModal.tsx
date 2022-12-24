@@ -7,6 +7,7 @@ import Spinner from '@components/core/Spinner';
 import TextField from '@components/core/TextField';
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
+import { getMediaName } from '@utils/mediaUtils';
 import Image from 'next/image';
 import { useState } from 'react';
 import { OptionType } from 'src/enums';
@@ -49,7 +50,11 @@ const MediaCard: React.FC<MediaCardProps> = ({ media, onAdd }) => (
       </span>
     </div>
     <div>
-      <Button color="green" onClick={() => onAdd(media)}>
+      <Button
+        color="green"
+        onClick={() => onAdd(media)}
+        name="Add selected option"
+      >
         <span className="px-9">ADD</span>
       </Button>
     </div>
@@ -80,7 +85,11 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
       <span className="text-sm text-center">{character.name.native}</span>
     </div>
     <div>
-      <Button color="green" onClick={() => onAdd(character)}>
+      <Button
+        color="green"
+        onClick={() => onAdd(character)}
+        name="Add selected option"
+      >
         <span className="px-9">ADD</span>
       </Button>
     </div>
@@ -134,9 +143,9 @@ const SearchOptionModal = ({
     onAdd({
       anilistId: media.id,
       type: media.type,
-      text: media.title.english ?? media.title.romaji ?? media.title.native,
+      text: getMediaName(media),
     });
-    toastSuccess(`${media.title.english} added`);
+    toastSuccess(`${getMediaName(media)} added`);
   };
 
   const addCharacterHandler = (character: Anilist.Character) => {
@@ -170,7 +179,7 @@ const SearchOptionModal = ({
 
   const renderOption = (option: Anilist.Media | Anilist.Character) => {
     if (isMedia(option)) {
-      return option.title.english ?? option.title.romaji ?? option.title.native;
+      return getMediaName(option);
     }
 
     if (isCharacter(option)) return option.name.full;
@@ -205,7 +214,9 @@ const SearchOptionModal = ({
               className="w-full"
               onChange={(text) => setSearchText(text)}
             />
-            <Button type="submit">Search</Button>
+            <Button type="submit" name="search">
+              Search
+            </Button>
           </form>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">

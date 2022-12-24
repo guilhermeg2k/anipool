@@ -19,7 +19,7 @@ const SignOut: NextPage = () => {
     signOut();
   }, []);
 
-  return <LoadingPage text="Signing out" />;
+  return <LoadingPage text="Signing out" title="Signing out" />;
 };
 
 export default SignOut;
