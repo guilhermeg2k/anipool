@@ -21,7 +21,8 @@ const create = async (poll: Poll) => {
 };
 
 const vote = async (pollId: string, pollVotes: Array<PollOption>) => {
-  await axiosClient.post(`/poll/vote/${pollId}`, {
+  await axiosClient.post(`/poll/vote/`, {
+    pollId,
     pollVotes,
   });
 };
