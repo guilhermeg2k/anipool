@@ -93,7 +93,7 @@ export default class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff"></meta>
           <meta
             name="description"
-            content="Create polls and quizes related to animes and share them with your friends"
+            content="Create anime related polls and quizes and share them with your friends"
           />
         </Head>
         <body className="text-sm font-normal text-neutral-700 md:text-base">
