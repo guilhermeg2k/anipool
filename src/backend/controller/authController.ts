@@ -8,14 +8,10 @@ import {
 } from './validators/authControllerValidators';
 
 const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
-  try {
-    const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
-    return res.status(200).send({
-      jwtToken,
-    });
-  } catch (error) {
-    return res.status(401).send('');
-  }
+  const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
+  return res.status(200).send({
+    jwtToken,
+  });
 };
 
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -29,11 +25,15 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
         throw new Error('Invalid OAuth provider');
     }
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).send('Bad request');
-    }
-    return res.status(500).send('Internal server error');
+    return handleError(error, res);
   }
+};
+
+const handleError = (error: unknown, res: NextApiResponse) => {
+  if (error instanceof ZodError) {
+    return res.status(400).send('Bad request');
+  }
+  return res.status(401).send('Unauthorized');
 };
 
 const authController = {

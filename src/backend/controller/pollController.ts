@@ -20,10 +20,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
     const poll = await pollService.get(String(id));
     return res.status(200).send(poll);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).send('Bad request');
-    }
-    return res.status(500).send('Internal server error');
+    return handleError(error, res);
   }
 };
 
@@ -34,10 +31,7 @@ const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
     const poll = await pollService.listByUserId(String(userId));
     return res.status(200).send(poll);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).send('Bad request');
-    }
-    return res.status(500).send('Internal server error');
+    return handleError(error, res);
   }
 };
 
@@ -48,10 +42,7 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
     const pollResults = await pollService.getResult(String(pollId));
     return res.status(200).send(pollResults);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).send('Bad request');
-    }
-    return res.status(500).send('Internal server error');
+    return handleError(error, res);
   }
 };
 
@@ -74,11 +65,15 @@ const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).send(pollId);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).send('Bad request');
-    }
-    return res.status(500).send('Internal server error');
+    return handleError(error, res);
   }
+};
+
+const handleError = (error: unknown, res: NextApiResponse) => {
+  if (error instanceof ZodError) {
+    return res.status(400).send('Bad request');
+  }
+  return res.status(500).send('Internal server error');
 };
 
 const pollController = {
