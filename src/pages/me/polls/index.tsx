@@ -26,7 +26,7 @@ const MyPolls: NextPage = () => {
   const loadPolls = async () => {
     try {
       setIsLoading(true);
-      const polls = await pollService.listByUserId(String(id));
+      const polls = await pollService.listByUserId(id!);
       setPolls(polls);
     } catch (error) {
       toastError('Failed to load user polls');

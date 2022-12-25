@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   size?: string;
-  color?: string;
+  color?: 'indigo' | 'green' | 'white' | 'gray';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -26,6 +26,8 @@ const Button: React.FC<ButtonProps> = ({
         return 'bg-green-500 hover:bg-green-400 active:bg-green-500';
       case 'white':
         return 'bg-white hover:bg-neutral-100 active:bg-neutral-200 text-neutral-800';
+      case 'gray':
+        return 'bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-300';
       default:
         return '';
     }
