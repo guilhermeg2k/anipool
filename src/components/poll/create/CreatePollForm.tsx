@@ -45,7 +45,7 @@ const PollFormOption = ({ id, type, text, onRemove }: PollFormOptionProps) => {
 const CreatePollForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(new Date());
-  const [options, setOptions] = useState(new Array<PollOption>());
+  const [options, setOptions] = useState<PollOption[]>([]);
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -55,14 +55,32 @@ const CreatePollForm = () => {
   const shouldCreateButtonBeEnabled =
     title && dayjs(endDate) > dayjs() && options.length > 1;
 
+  const removeAlreadyAddedOptions = (
+    options: PollOption[],
+    alreadyAddedOptions: PollOption[]
+  ) => {
+    const cleanOptions = options.filter((optionToAdd) => {
+      const wasNotAdded = !alreadyAddedOptions.some(
+        (option) =>
+          option.anilistId === optionToAdd.anilistId &&
+          option.type === optionToAdd.type
+      );
+      return wasNotAdded;
+    });
+    return cleanOptions;
+  };
+
   const onAddOptionHandler = (optionsToAdd: PollOption[]) => {
-    const newOptions = [...options, ...optionsToAdd];
+    const cleanOptionsToAdd = removeAlreadyAddedOptions(optionsToAdd, options);
+    const newOptions = [...options, ...cleanOptionsToAdd];
     setOptions(newOptions);
   };
 
   const onRemoveOptionHandler = (optionToRemove: PollOption) => {
     const newOptions = options.filter(
-      (option) => option.anilistId !== optionToRemove.anilistId
+      (option) =>
+        option.anilistId !== optionToRemove.anilistId ||
+        option.type !== optionToRemove.type
     );
     setOptions(newOptions);
   };

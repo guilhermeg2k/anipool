@@ -131,7 +131,7 @@ const ImportOptionsModal = ({
         <div className="overflow-y-auto max-h-[400px]">
           {polls.map((poll) => (
             <div
-              key={id}
+              key={poll.id}
               className="flex justify-between hover:bg-slate-100 p-2 items-center cursor-pointer"
               onClick={() => importPoll(poll)}
             >

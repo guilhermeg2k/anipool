@@ -147,6 +147,7 @@ const SearchOptionModal = ({
         text: getMediaName(media),
       },
     ]);
+    setSelectedOption(null);
     toastSuccess(`${getMediaName(media)} added`);
   };
 
@@ -158,6 +159,7 @@ const SearchOptionModal = ({
         text: character.name.full,
       },
     ]);
+    setSelectedOption(null);
     toastSuccess(`${character.name.full} added`);
   };
 
