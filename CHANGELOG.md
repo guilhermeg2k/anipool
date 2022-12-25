@@ -20,7 +20,7 @@ All notable changes will be documented in this file
 - Added a button to go to the vote page on the results page
 - Change the share button name to "Copy link"
 - Now the pages are using all the same background image
-- Fixed a bug on the create poll page in the search options modal that was showing null on the toast when adding some options (Thanks to [Akaita](https://github.com/yakaita))
+- Fixed a bug on the create poll page in the search options modal that was showing null on the toast when adding some options (Thanks to [Yakaita](https://github.com/yakaita))
 - Improves on SEO and Accessibility
 - Improves on the Auth middleware
 - Improves on the backend controllers
