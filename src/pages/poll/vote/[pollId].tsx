@@ -124,7 +124,7 @@ const Vote: NextPage = () => {
     }
   };
 
-  const loadPollIfUserDoesNotHasVoted = async () => {
+  const loadPollOrRedirectToResultsIfUserHasAlreadyVoted = async () => {
     if (isUserLogged && (await hasUserAlreadyVoted())) {
       toastWarning('You already has voted on this poll');
       goToResults();
@@ -138,7 +138,7 @@ const Vote: NextPage = () => {
       setIsVoting(true);
       await pollService.vote(String(pollId), pollVotes);
       toastSuccess('Your vote was registered');
-      goToResults();
+      await goToResults();
     } catch (error) {
       toastError('Error while registering your vote');
     } finally {
@@ -231,7 +231,7 @@ const Vote: NextPage = () => {
     });
 
   useEffect(() => {
-    loadPollIfUserDoesNotHasVoted();
+    loadPollOrRedirectToResultsIfUserHasAlreadyVoted();
   }, [pollId]);
 
   useEffect(redirectToResultsIfPollHasEnded, [poll]);

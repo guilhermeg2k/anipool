@@ -11,6 +11,7 @@ NodeJS >= 16
 You need to create a .env.local file, [as the example](https://github.com/guilhermeg2k/anipool/blob/main/.env.local.example), on the root of the project with the following variables:
 
 NEXT_PUBLIC_ANILIST_CLIENT_ID: Anilist client id, you can get it [here](https://anilist.co/settings/developer)
+
 ANIPOOL_AWS_ACCESS_KEY_ID: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
 ANIPOOL_AWS_SECRET_ACCESS_KEY : AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))

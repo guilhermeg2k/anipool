@@ -99,7 +99,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onAdd }) => (
 interface SearchOptionModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (pollOption: PollOption) => void;
+  onAdd: (pollOption: PollOption[]) => void;
 }
 
 const SearchOptionModal = ({
@@ -140,20 +140,26 @@ const SearchOptionModal = ({
   };
 
   const addMediaHandler = (media: Anilist.Media) => {
-    onAdd({
-      anilistId: media.id,
-      type: media.type,
-      text: getMediaName(media),
-    });
+    onAdd([
+      {
+        anilistId: media.id,
+        type: media.type,
+        text: getMediaName(media),
+      },
+    ]);
+    setSelectedOption(null);
     toastSuccess(`${getMediaName(media)} added`);
   };
 
   const addCharacterHandler = (character: Anilist.Character) => {
-    onAdd({
-      anilistId: character.id,
-      type: OptionType.Character,
-      text: character.name.full,
-    });
+    onAdd([
+      {
+        anilistId: character.id,
+        type: OptionType.Character,
+        text: character.name.full,
+      },
+    ]);
+    setSelectedOption(null);
     toastSuccess(`${character.name.full} added`);
   };
 
@@ -224,7 +230,7 @@ const SearchOptionModal = ({
             <AutoAnimate as="ul" className="h-full">
               {isLoadingOptions ? (
                 <div className="flex flex-col w-full h-full items-center justify-center">
-                  <Spinner className="text-indigo-900" />
+                  <Spinner />
                 </div>
               ) : options.length === 0 ? (
                 <span className="text-xs uppercase font-semibold">
