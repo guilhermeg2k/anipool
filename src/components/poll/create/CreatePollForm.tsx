@@ -53,7 +53,7 @@ const CreatePollForm = () => {
   const [isCreatingPoll, setIsCreatingPoll] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
-    title && dayjs(endDate) > dayjs() && options.length > 1;
+    title && dayjs(endDate).isAfter(dayjs()) && options.length > 1;
 
   const removeAlreadyAddedOptions = (
     options: PollOption[],
