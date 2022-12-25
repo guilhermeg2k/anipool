@@ -1,7 +1,7 @@
 {
   "name": "anipool",
-  "version": "0.3.0",
-  "versionName": "Bocchi",
+  "version": "0.4.0",
+  "versionName": "Chisato",
   "private": true,
   "scripts": {
     "dev": "next dev",

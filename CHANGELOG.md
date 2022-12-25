@@ -24,3 +24,9 @@ All notable changes will be documented in this file
 - Improves on SEO and Accessibility
 - Improves on the Auth middleware
 - Improves on the backend controllers
+
+## 0.4-beta (Chisato)
+
+- Added a new button on the create poll page where you can import options from previous created polls
+- Block adding the same option twice on a poll
+- Improve date validations on the backend
