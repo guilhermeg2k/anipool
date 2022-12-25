@@ -56,7 +56,7 @@ interface Poll {
   id?: string;
   userId?: string;
   title: string;
-  endDate: string;
+  endDate: Date;
   multiOptions: boolean;
   options: Array<PollOption>;
 }

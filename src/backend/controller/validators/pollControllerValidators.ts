@@ -34,7 +34,10 @@ export const validateGetResultQueryParams = (query: unknown) => {
 
 const createPollBodySchema = z.object({
   title: z.string(),
-  endDate: z.string(),
+  endDate: z.preprocess((endDate) => {
+    if (typeof endDate == 'string' || endDate instanceof Date)
+      return new Date(endDate);
+  }, z.date().min(new Date())),
   options: z.array(
     z.object({
       anilistId: z.number(),
