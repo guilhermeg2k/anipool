@@ -12,6 +12,7 @@ import pollService from '@services/pollService';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import ImportOptionsModal from './ImportOptionsModal';
 import SearchOptionModal from './SearchOptionModal';
 
 interface PollFormOptionProps {
@@ -48,13 +49,14 @@ const CreatePollForm = () => {
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isCreatingPoll, setIsCreatingPoll] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
     title && dayjs(endDate) > dayjs() && options.length > 1;
 
-  const onAddOptionHandler = (option: PollOption) => {
-    const newOptions = [...options, option];
+  const onAddOptionHandler = (optionsToAdd: PollOption[]) => {
+    const newOptions = [...options, ...optionsToAdd];
     setOptions(newOptions);
   };
 
@@ -95,6 +97,13 @@ const CreatePollForm = () => {
           onClose={() => setIsSearchModalOpen(false)}
         />
       )}
+      {isImportModalOpen && (
+        <ImportOptionsModal
+          open={isImportModalOpen}
+          onAdd={onAddOptionHandler}
+          onClose={() => setIsImportModalOpen(false)}
+        />
+      )}
 
       <TextField
         value={title}
@@ -115,7 +124,7 @@ const CreatePollForm = () => {
             {options.length > 0 ? (
               options.map((option, index) => (
                 <PollFormOption
-                  key={option.anilistId}
+                  key={`${option.type}-${option.anilistId}`}
                   id={(index + 1).toString()}
                   type={option.type}
                   text={option.text!}
@@ -128,14 +137,24 @@ const CreatePollForm = () => {
               </li>
             )}
           </AutoAnimate>
-          <Button
-            className="self-end w-full"
-            color="green"
-            onClick={() => setIsSearchModalOpen(true)}
-            name="Open add options modal"
-          >
-            ADD OPTIONS
-          </Button>
+          <div className="flex flex-col md:flex-row gap-2">
+            <Button
+              className="self-end w-full"
+              color="green"
+              onClick={() => setIsSearchModalOpen(true)}
+              name="Open add options modal"
+            >
+              SEARCH OPTIONS
+            </Button>
+            <Button
+              className="self-end w-full"
+              color="green"
+              onClick={() => setIsImportModalOpen(true)}
+              name="Open add options modal"
+            >
+              IMPORT FROM MY POLLS
+            </Button>
+          </div>
         </DataDisplay>
       </FormGroup>
       <FormGroup
