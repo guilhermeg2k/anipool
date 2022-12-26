@@ -2,14 +2,14 @@ import { OAuthProvider } from '@backend/enums';
 import { generateUserJWTToken } from '@backend/utils/authUtils';
 import userService from '../userService';
 
-interface Provider<Credencials> {
+interface Provider<TCredencials> {
   name: OAuthProvider;
-  getUser: (credencials: Credencials) => Promise<ProviderUser>;
+  getUser: (credencials: TCredencials) => Promise<ProviderUser>;
 }
 
-const signIn = async <Credencials>(
-  provider: Provider<Credencials>,
-  credencials: Credencials
+const signIn = async <TCredencials>(
+  provider: Provider<TCredencials>,
+  credencials: TCredencials
 ) => {
   const providerUser = await provider.getUser(credencials);
 

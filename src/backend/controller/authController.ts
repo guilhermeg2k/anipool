@@ -4,12 +4,18 @@ import twitterProvider from '@backend/service/auth/providers/twitterProvider';
 import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
+import {
+  SignInWithAnilistBody,
+  SignInWithTwitterBody,
+  validateSignInWithAnilistBody,
+  validateSignInWithTwitterBody,
+} from './validators/authControllerValidators';
 
 const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { OAuthToken, OAuthVerifier } = req.body;
-    const credencials = { OAuthToken, OAuthVerifier };
+    validateSignInWithTwitterBody(req.body);
 
+    const credencials = req.body as SignInWithTwitterBody;
     const jwtToken = await authService.signIn<Twitter.Credencials>(
       twitterProvider,
       credencials
@@ -25,8 +31,8 @@ const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { accessToken } = req.body;
-    const credencials = { accessToken };
+    validateSignInWithAnilistBody(req.body);
+    const credencials = req.body as SignInWithAnilistBody;
 
     const jwtToken = await authService.signIn<Anilist.Credencials>(
       anilistProvider,

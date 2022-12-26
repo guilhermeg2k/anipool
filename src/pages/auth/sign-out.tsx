@@ -9,10 +9,10 @@ const SignOut: NextPage = () => {
   const { setUser } = useUserStore();
   const router = useRouter();
 
-  const signOut = () => {
+  const signOut = async () => {
     setUser(EMPTY_USER);
     Cookies.remove('userToken');
-    router.push('/');
+    await router.push('/');
   };
 
   useEffect(() => {
