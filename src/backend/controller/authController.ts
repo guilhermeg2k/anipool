@@ -19,7 +19,9 @@ import {
 
 const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
   validateSignInWithAnilistBody(req.body);
+
   const { credencials } = req.body as SignInWithAnilistBody;
+
   const jwtToken = await authService.signIn<Anilist.Credencials>(
     anilistProvider,
     credencials
@@ -32,11 +34,14 @@ const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const signInWithDiscord = async (req: NextApiRequest, res: NextApiResponse) => {
   validateSignInWithDiscordBody(req.body);
+
   const { credencials } = req.body as SignInWithDiscordBody;
+
   const jwtToken = await authService.signIn<Discord.Credencials>(
     discordProvider,
     credencials
   );
+
   return res.status(200).send({
     jwtToken,
   });
@@ -44,11 +49,14 @@ const signInWithDiscord = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
   validateSignInWithTwitterBody(req.body);
+
   const { credencials } = req.body as SignInWithTwitterBody;
+
   const jwtToken = await authService.signIn<Twitter.Credencials>(
     twitterProvider,
     credencials
   );
+
   return res.status(200).send({
     jwtToken,
   });
@@ -57,7 +65,6 @@ const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     validateSignInBody(req.body);
-
     const { provider } = req.body as SignInBody;
 
     switch (String(provider).toUpperCase()) {
@@ -66,7 +73,7 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
       case OAuthProvider.Discord:
         return signInWithDiscord(req, res);
       case OAuthProvider.Twitter:
-        return signInWithDiscord(req, res);
+        return signInWithTwitter(req, res);
     }
 
     return res.status(400).send('Bad request');
@@ -95,9 +102,6 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 
 const authController = {
   signIn,
-  signInWithDiscord,
-  signInWithAnilist,
-  signInWithTwitter,
   getTwitterAuthUrl,
 };
 

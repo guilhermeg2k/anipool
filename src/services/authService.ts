@@ -4,13 +4,13 @@ import axiosClient from '@libs/axios';
 const signIn = async <
   TCredencials extends
     | Anilist.Credencials
-    | Discord.Credencials
     | Twitter.Credencials
+    | Discord.Credencials
 >(
   provider: OAuthProvider,
   credencials: TCredencials
 ) => {
-  const response = await axiosClient.post('/auth/sign-in-with-anilist', {
+  const response = await axiosClient.post('/auth/sign-in', {
     provider,
     credencials,
   });
