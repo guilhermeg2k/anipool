@@ -1,14 +1,9 @@
 import { OAuthProvider } from '@backend/enums';
 import axiosClient from '@libs/axios';
 
-const signIn = async <
-  TCredencials extends
-    | Anilist.Credencials
-    | Twitter.Credencials
-    | Discord.Credencials
->(
+const signIn = async (
   provider: OAuthProvider,
-  credencials: TCredencials
+  credencials: ProviderCredencials
 ) => {
   const response = await axiosClient.post('/auth/sign-in', {
     provider,

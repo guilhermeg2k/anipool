@@ -86,8 +86,6 @@ interface PollOption {
   text?: string;
 }
 
-type PollResult = PollOption & { votes: number };
-
 interface Poll {
   id?: string;
   userId?: string;
@@ -97,13 +95,6 @@ interface Poll {
   options: Array<PollOption>;
 }
 
-type PollWithCreator = Poll & {
-  creator: {
-    nickname: string;
-    avatarUrl: string;
-  };
-};
-
 interface PollVote {
   id?: string;
   userId?: string;
@@ -111,3 +102,17 @@ interface PollVote {
   anilistId: number;
   type: string;
 }
+
+type ProviderCredencials =
+  | Anilist.Credencials
+  | Twitter.Credencials
+  | Discord.Credencials;
+
+type PollResult = PollOption & { votes: number };
+
+type PollWithCreator = Poll & {
+  creator: {
+    nickname: string;
+    avatarUrl: string;
+  };
+};

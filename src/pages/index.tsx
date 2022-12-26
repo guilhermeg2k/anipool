@@ -46,6 +46,32 @@ const Home: NextPage = () => {
           >
             Login with anilist
           </Button>
+
+          <Button
+            size="large"
+            onClick={() =>
+              window.open(
+                'http://localhost:3000/auth/sign-in/by/discord',
+                '_blank'
+              )
+            }
+            name="Sign in with discord"
+          >
+            Login with discord
+          </Button>
+
+          <Button
+            size="large"
+            onClick={() =>
+              window.open(
+                'http://localhost:3000/auth/sign-in/by/twitter',
+                '_blank'
+              )
+            }
+            name="Sign in with twitter"
+          >
+            Login with twitter
+          </Button>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
           <Image
