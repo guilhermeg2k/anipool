@@ -22,7 +22,7 @@ const getAccessTokenFromUrl = (url: string) => {
   return null;
 };
 
-const Auth: NextPage = () => {
+const AnilistAuth: NextPage = () => {
   const router = useRouter();
 
   const authenticateUser = async (accessToken: string) => {
@@ -48,4 +48,4 @@ const Auth: NextPage = () => {
   return <LoadingPage text="Authenticating..." title="Authenticating" />;
 };
 
-export default Auth;
+export default AnilistAuth;

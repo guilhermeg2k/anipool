@@ -1,4 +1,5 @@
 import { OAuthProvider } from '@backend/enums';
+import twitterAuthService from '@backend/service/auth/twitterAuthService';
 import authService from '@backend/service/authService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
@@ -6,6 +7,18 @@ import {
   SignInBody,
   validateSignInBody,
 } from './validators/authControllerValidators';
+
+const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { OAuthToken, OAuthVerifier } = req.body;
+    const jwtToken = await twitterAuthService.signIn(OAuthToken, OAuthVerifier);
+    return res.status(200).send({
+      jwtToken,
+    });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
 
 const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
   const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
@@ -29,6 +42,17 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+const getTwitterAuthUrl = async (_: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const twitterAuthUrl = await twitterAuthService.getAuthUrl();
+    return res.status(200).send({
+      twitterAuthUrl,
+    });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
 const handleError = (error: unknown, res: NextApiResponse) => {
   if (error instanceof ZodError) {
     return res.status(400).send('Bad request');
@@ -38,6 +62,8 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 
 const authController = {
   signIn,
+  getTwitterAuthUrl,
+  signInWithTwitter,
 };
 
 export default authController;

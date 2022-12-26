@@ -1,5 +1,5 @@
 import userService from '@backend/service/userService';
-import { getTokenPayload } from '@utils/authUtils';
+import { getTokenPayload } from '@backend/utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const getCurrentUser = async (req: NextApiRequest, res: NextApiResponse) => {

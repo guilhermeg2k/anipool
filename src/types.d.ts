@@ -36,6 +36,15 @@ declare module Anilist {
     };
   }
 }
+
+declare module Twitter {
+  interface User {
+    id: string;
+    username: string;
+    profileImageURL: string;
+  }
+}
+
 interface User {
   id?: string;
   oauthProvider: string;

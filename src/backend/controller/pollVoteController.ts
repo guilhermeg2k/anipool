@@ -1,5 +1,5 @@
 import pollVoteService from '@backend/service/pollVoteService';
-import { getTokenPayload } from '@utils/authUtils';
+import { getTokenPayload } from '@backend/utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
