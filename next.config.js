@@ -2,6 +2,6 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['s4.anilist.co'],
+    domains: ['s4.anilist.co', 'pbs.twimg.com'],
   },
 };

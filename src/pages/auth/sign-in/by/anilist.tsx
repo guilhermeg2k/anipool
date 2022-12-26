@@ -1,8 +1,7 @@
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
-import { sendUserHasAuthenticated } from '@utils/channelUtils';
-import Cookies from 'js-cookie';
+import { authenticateUser } from '@utils/authUtils';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -25,14 +24,12 @@ const getAccessTokenFromUrl = (url: string) => {
 const AnilistAuth: NextPage = () => {
   const router = useRouter();
 
-  const authenticateUser = async (accessToken: string) => {
+  const signIn = async (accessToken: string) => {
     try {
-      const userToken = await authService.signWithAnilistAccessToken(
-        accessToken
-      );
-      Cookies.set('userToken', userToken);
-      sendUserHasAuthenticated();
-      window.close();
+      const userToken = await authService.signWithAnilistAccessToken({
+        accessToken,
+      });
+      authenticateUser(userToken);
     } catch (error) {
       toastError('Failed to authenticate user');
     }
@@ -41,7 +38,9 @@ const AnilistAuth: NextPage = () => {
   useEffect(() => {
     const accessToken = getAccessTokenFromUrl(router.asPath);
     if (accessToken) {
-      authenticateUser(accessToken);
+      signIn(accessToken);
+    } else {
+      router.push('/');
     }
   }, []);
 

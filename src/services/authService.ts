@@ -1,20 +1,19 @@
-import { OAuthProvider } from '@backend/enums';
 import axiosClient from '@libs/axios';
 
-const signWithAnilistAccessToken = async (accessToken: string) => {
-  const response = await axiosClient.post('/auth/sign-in', {
-    oathProvider: OAuthProvider.Anilist,
-    accessToken,
-  });
+const signWithAnilist = async (credencials: Anilist.Credencials) => {
+  const response = await axiosClient.post(
+    '/auth/sign-in-with-anilist',
+    credencials
+  );
   const userToken = <string>response.data.jwtToken;
   return userToken;
 };
 
-const signWithTwitter = async (OAuthToken: string, OAuthVerifier: string) => {
-  const response = await axiosClient.post('/auth/sign-in-with-twitter', {
-    OAuthToken,
-    OAuthVerifier,
-  });
+const signWithTwitter = async (credencials: Twitter.Credencials) => {
+  const response = await axiosClient.post(
+    '/auth/sign-in-with-twitter',
+    credencials
+  );
   const userToken = <string>response.data.jwtToken;
   return userToken;
 };
@@ -28,7 +27,7 @@ const getTwitterAuthUrl = async () => {
 const authService = {
   getTwitterAuthUrl,
   signWithTwitter,
-  signWithAnilistAccessToken,
+  signWithAnilistAccessToken: signWithAnilist,
 };
 
 export default authService;

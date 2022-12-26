@@ -1,13 +1,13 @@
-import { OAuthProvider } from '@backend/enums';
-import { generateUserJWTToken } from '@backend/utils/authUtils';
 import axiosClient from '@libs/axios';
 import crypto from 'crypto';
 import OAuth from 'oauth-1.0a';
-import userService from '../userService';
 
 const TWITTER_CALLBACK_URL =
-  process.env.TWITTER_CALLBACK_URL || 'http://localhost:3000/auth/twitter';
+  process.env.TWITTER_CALLBACK_URL ||
+  'http://localhost:3000/auth/sign-in/by/twitter';
+
 const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || '';
+
 const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET || '';
 
 const twitterOAuth = new OAuth({
@@ -44,14 +44,17 @@ const getAuthUrl = async () => {
   return twitterAuthUrl;
 };
 
-const getUserToken = async (oauthToken: string, oauthVerifier: string) => {
+const getUserToken = async ({
+  OAuthToken,
+  OAuthVerifier,
+}: Twitter.Credencials) => {
   const userOAuthToken = await axiosClient.post(
-    `https://api.twitter.com/oauth/access_token?oauth_verifier=${oauthVerifier}&oauth_token=${oauthToken}`
+    `https://api.twitter.com/oauth/access_token?oauth_verifier=${OAuthVerifier}&oauth_token=${OAuthToken}`
   );
 
-  const tokenAndSecret = userOAuthToken.data.split('&');
-  const key = tokenAndSecret[0].split('=')[1];
-  const secret = tokenAndSecret[1].split('=')[1];
+  const keyAndSecret = userOAuthToken.data.split('&');
+  const key = keyAndSecret[0].split('=')[1];
+  const secret = keyAndSecret[1].split('=')[1];
 
   return {
     key,
@@ -59,7 +62,8 @@ const getUserToken = async (oauthToken: string, oauthVerifier: string) => {
   };
 };
 
-const getUser = async (userToken: { key: string; secret: string }) => {
+const getUser = async ({ OAuthToken, OAuthVerifier }: Twitter.Credencials) => {
+  const userToken = await getUserToken({ OAuthToken, OAuthVerifier });
   const userDataRequest = {
     url: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=false&include_entities=false&skip_status=true',
     method: 'GET',
@@ -76,41 +80,16 @@ const getUser = async (userToken: { key: string; secret: string }) => {
 
   const { id_str, profile_image_url_https, screen_name } = userData.data;
 
-  return <Twitter.User>{
-    id: id_str,
-    username: screen_name,
-    profileImageURL: profile_image_url_https,
+  return {
+    id_str,
+    screen_name,
+    profile_image_url_https: profile_image_url_https.replace('_normal', ''),
   };
 };
 
-const signIn = async (oauthToken: string, oauthVerifier: string) => {
-  const userTokens = await getUserToken(oauthToken, oauthVerifier);
-  const twitterUser = await getUser(userTokens);
-
-  const user = await userService.getByOAuthProviderAndOauthId(
-    OAuthProvider.Twitter,
-    twitterUser.id
-  );
-
-  if (user) {
-    const jwtToken = await generateUserJWTToken(user);
-    return jwtToken;
-  }
-
-  const createdUser = await userService.create({
-    oauthProvider: OAuthProvider.Twitter,
-    oauthId: twitterUser.id,
-    nickname: twitterUser.username,
-    avatarUrl: twitterUser.profileImageURL,
-  });
-
-  const jwtToken = await generateUserJWTToken(createdUser);
-  return jwtToken;
-};
-
-const twitterAuthService = {
+const twitterService = {
   getAuthUrl,
-  signIn,
+  getUser,
 };
 
-export default twitterAuthService;
+export default twitterService;

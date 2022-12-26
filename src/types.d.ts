@@ -1,3 +1,16 @@
+declare module Twitter {
+  interface Credencials {
+    OAuthToken: string;
+    OAuthVerifier: string;
+  }
+
+  interface User {
+    id_str: string;
+    screen_name: string;
+    profile_image_url_https: string;
+  }
+}
+
 declare module Anilist {
   interface User {
     id: number;
@@ -6,6 +19,10 @@ declare module Anilist {
       large: string;
       medium: string;
     };
+  }
+
+  interface Credencials {
+    accessToken: string;
   }
 
   interface Media {
@@ -37,12 +54,10 @@ declare module Anilist {
   }
 }
 
-declare module Twitter {
-  interface User {
-    id: string;
-    username: string;
-    profileImageURL: string;
-  }
+interface ProviderUser {
+  id: string;
+  username: string;
+  avatarUrl: string;
 }
 
 interface User {

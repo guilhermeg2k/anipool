@@ -1,17 +1,20 @@
-import { OAuthProvider } from '@backend/enums';
-import twitterAuthService from '@backend/service/auth/twitterAuthService';
-import authService from '@backend/service/authService';
+import authService from '@backend/service/auth/authService';
+import anilistProvider from '@backend/service/auth/providers/anilistProvider';
+import twitterProvider from '@backend/service/auth/providers/twitterProvider';
+import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
-import {
-  SignInBody,
-  validateSignInBody,
-} from './validators/authControllerValidators';
 
 const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { OAuthToken, OAuthVerifier } = req.body;
-    const jwtToken = await twitterAuthService.signIn(OAuthToken, OAuthVerifier);
+    const credencials = { OAuthToken, OAuthVerifier };
+
+    const jwtToken = await authService.signIn<Twitter.Credencials>(
+      twitterProvider,
+      credencials
+    );
+
     return res.status(200).send({
       jwtToken,
     });
@@ -20,31 +23,27 @@ const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
-  const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
-  return res.status(200).send({
-    jwtToken,
-  });
-};
-
-const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
+const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateSignInBody(req.body);
-    const { oathProvider, accessToken } = req.body as SignInBody;
-    switch (oathProvider) {
-      case OAuthProvider.Anilist:
-        return signInWithAnilist(accessToken, res);
-      default:
-        throw new Error('Invalid OAuth provider');
-    }
+    const { accessToken } = req.body;
+    const credencials = { accessToken };
+
+    const jwtToken = await authService.signIn<Anilist.Credencials>(
+      anilistProvider,
+      credencials
+    );
+
+    return res.status(200).send({
+      jwtToken,
+    });
   } catch (error) {
     return handleError(error, res);
   }
 };
 
-const getTwitterAuthUrl = async (_: NextApiRequest, res: NextApiResponse) => {
+const getTwitterAuthUrl = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const twitterAuthUrl = await twitterAuthService.getAuthUrl();
+    const twitterAuthUrl = await twitterService.getAuthUrl();
     return res.status(200).send({
       twitterAuthUrl,
     });
@@ -61,9 +60,9 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 };
 
 const authController = {
-  signIn,
-  getTwitterAuthUrl,
+  signInWithAnilist,
   signInWithTwitter,
+  getTwitterAuthUrl,
 };
 
 export default authController;
