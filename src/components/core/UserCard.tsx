@@ -4,11 +4,13 @@ import {
   Bars3Icon,
 } from '@heroicons/react/24/outline';
 import useUserStore from '@store/userStore';
-import { openAnilistAuthUrl } from '@utils/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import Button from './Button';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import Button from './Button/Button';
 import MenuDropdown from './MenuDropdown';
+import SignInModal from './SignInModal';
 
 const MENU_LINKS = [
   { id: 1, label: 'My Polls', path: '/me/polls' },
@@ -18,8 +20,11 @@ const MENU_LINKS = [
 ];
 
 const UserCard = () => {
-  const { avatarUrl, nickname } = useUserStore();
-  const isLogged = Boolean(nickname);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const { avatarUrl, nickname, isLogged } = useUserStore();
+  const isUserLogged = isLogged();
+  const router = useRouter();
+  const isOnVotePage = router.asPath.includes('/vote/');
 
   const menuItems = MENU_LINKS.map((link) => (
     <Menu.Item as={Link} key={link.id} href={link.path}>
@@ -29,9 +34,21 @@ const UserCard = () => {
     </Menu.Item>
   ));
 
+  useEffect(() => {
+    if (!isUserLogged && isOnVotePage) {
+      setIsSignInModalOpen(true);
+    }
+  }, []);
+
   return (
     <div className="flex w-full items-center justify-between self-end rounded-sm bg-white p-3 sm:w-[225px]">
-      {isLogged ? (
+      {isSignInModalOpen && (
+        <SignInModal
+          open={isSignInModalOpen}
+          onClose={() => setIsSignInModalOpen(false)}
+        />
+      )}
+      {isUserLogged ? (
         <>
           <div className="flex gap-2">
             <Image
@@ -59,7 +76,7 @@ const UserCard = () => {
       ) : (
         <div className="flex items-center w-full">
           <Button
-            onClick={openAnilistAuthUrl}
+            onClick={() => setIsSignInModalOpen(true)}
             color="white"
             className="w-full"
             name="Sign in"

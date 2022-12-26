@@ -48,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${className} ${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] font-roboto font-bold uppercase text-white duration-200 ease-in-out`}
+      className={`${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] font-roboto font-bold uppercase text-white duration-200 ease-in-out rounded-sm ${className}`}
       disabled={disabled}
       {...rest}
     >

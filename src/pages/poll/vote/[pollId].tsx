@@ -1,9 +1,8 @@
 import Box from '@components/core/Box';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
-import SignInModal from '@components/core/SignInModal';
 import Title from '@components/core/Title';
 import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
@@ -248,7 +247,6 @@ const Vote: NextPage = () => {
 
   return (
     <Page bgImage="/images/background.jpg">
-      {!isUserLogged && <SignInModal />}
       <Head>
         <title>Vote on {poll?.title}</title>
       </Head>

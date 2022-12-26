@@ -1,5 +1,5 @@
 import Box from '@components/core/Box';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';

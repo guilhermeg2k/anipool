@@ -1,6 +1,6 @@
 import AutoAnimate from '@components/core/AutoAnimate';
 import Box from '@components/core/Box';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import CheckBox from '@components/core/CheckBox';
 import DataDisplay from '@components/core/DataDisplay';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
