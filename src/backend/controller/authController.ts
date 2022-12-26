@@ -1,23 +1,26 @@
 import authService from '@backend/service/auth/authService';
 import anilistProvider from '@backend/service/auth/providers/anilistProvider';
+import discordProvider from '@backend/service/auth/providers/discordProvider';
 import twitterProvider from '@backend/service/auth/providers/twitterProvider';
 import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
   SignInWithAnilistBody,
+  SignInWithDiscordBody,
   SignInWithTwitterBody,
   validateSignInWithAnilistBody,
+  validateSignInWithDiscordBody,
   validateSignInWithTwitterBody,
 } from './validators/authControllerValidators';
 
-const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
+const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateSignInWithTwitterBody(req.body);
+    validateSignInWithAnilistBody(req.body);
+    const credencials = req.body as SignInWithAnilistBody;
 
-    const credencials = req.body as SignInWithTwitterBody;
-    const jwtToken = await authService.signIn<Twitter.Credencials>(
-      twitterProvider,
+    const jwtToken = await authService.signIn<Anilist.Credencials>(
+      anilistProvider,
       credencials
     );
 
@@ -29,13 +32,31 @@ const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
+const signInWithDiscord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateSignInWithAnilistBody(req.body);
-    const credencials = req.body as SignInWithAnilistBody;
+    validateSignInWithDiscordBody(req.body);
+    const credencials = req.body as SignInWithDiscordBody;
 
-    const jwtToken = await authService.signIn<Anilist.Credencials>(
-      anilistProvider,
+    const jwtToken = await authService.signIn<Discord.Credencials>(
+      discordProvider,
+      credencials
+    );
+
+    return res.status(200).send({
+      jwtToken,
+    });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
+const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    validateSignInWithTwitterBody(req.body);
+
+    const credencials = req.body as SignInWithTwitterBody;
+    const jwtToken = await authService.signIn<Twitter.Credencials>(
+      twitterProvider,
       credencials
     );
 
@@ -66,6 +87,7 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 };
 
 const authController = {
+  signInWithDiscord,
   signInWithAnilist,
   signInWithTwitter,
   getTwitterAuthUrl,

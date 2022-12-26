@@ -6,13 +6,15 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+const authUrl = process.env.NEXT_PUBLIC_DISCORD_AUTH_URL || '';
+
 const getAccessTokenFromUrl = (url: string) => {
-  /* Anilist OAuth appends access token in a fragment (#), the url will looks like:
-      http://localhost:3000/auth#access_token={token}&token_type=Bearer&expires_in={expires_in}
+  /* Discord auth appends access token in a fragment (#), the url will looks like:
+      http://localhost:3000/auth/sign-in/by/discord#token_type=Bearer&access_token=${TOKEN}&expires_in=604800&scope=identify
   */
   const urlFragment = url.split('#')[1];
   if (urlFragment) {
-    const fragmentParameters = urlFragment.split('&')[0];
+    const fragmentParameters = urlFragment.split('&')[1];
     if (fragmentParameters) {
       const accessTokenValue = fragmentParameters.split('=')[1];
       return accessTokenValue;
@@ -21,12 +23,12 @@ const getAccessTokenFromUrl = (url: string) => {
   return null;
 };
 
-const AnilistAuth: NextPage = () => {
+const DiscordAuth: NextPage = () => {
   const router = useRouter();
 
   const signIn = async (accessToken: string) => {
     try {
-      const userToken = await authService.signWithAnilist({
+      const userToken = await authService.signWithDiscord({
         accessToken,
       });
       authenticateUser(userToken);
@@ -35,16 +37,21 @@ const AnilistAuth: NextPage = () => {
     }
   };
 
+  const openDiscordAuthPage = async () => {
+    window.open(authUrl, '_self');
+  };
+
   useEffect(() => {
     const accessToken = getAccessTokenFromUrl(router.asPath);
+
     if (accessToken) {
-      signIn(accessToken);
+      signIn(String(accessToken));
     } else {
-      router.push('/');
+      openDiscordAuthPage();
     }
   }, []);
 
   return <LoadingPage text="Authenticating..." title="Authenticating" />;
 };
 
-export default AnilistAuth;
+export default DiscordAuth;

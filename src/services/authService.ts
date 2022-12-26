@@ -18,6 +18,15 @@ const signWithTwitter = async (credencials: Twitter.Credencials) => {
   return userToken;
 };
 
+const signWithDiscord = async (credencials: Discord.Credencials) => {
+  const response = await axiosClient.post(
+    '/auth/sign-in-with-discord',
+    credencials
+  );
+  const userToken = <string>response.data.jwtToken;
+  return userToken;
+};
+
 const getTwitterAuthUrl = async () => {
   const response = await axiosClient.get('/auth/get-twitter-auth-url');
   const twitterAuthUrl = <string>response.data.twitterAuthUrl;
@@ -26,8 +35,9 @@ const getTwitterAuthUrl = async () => {
 
 const authService = {
   getTwitterAuthUrl,
+  signWithAnilist,
+  signWithDiscord,
   signWithTwitter,
-  signWithAnilistAccessToken: signWithAnilist,
 };
 
 export default authService;

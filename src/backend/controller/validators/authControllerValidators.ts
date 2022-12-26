@@ -20,3 +20,13 @@ export type SignInWithTwitterBody = z.infer<typeof signInWithTwitterBodySchema>;
 export const validateSignInWithTwitterBody = (body: unknown) => {
   signInWithTwitterBodySchema.parse(body);
 };
+
+const signInWithDiscordBodySchema = z.object({
+  accessToken: z.string(),
+});
+
+export type SignInWithDiscordBody = z.infer<typeof signInWithDiscordBodySchema>;
+
+export const validateSignInWithDiscordBody = (body: unknown) => {
+  signInWithDiscordBodySchema.parse(body);
+};

@@ -11,6 +11,18 @@ declare module Twitter {
   }
 }
 
+declare module Discord {
+  interface Credencials {
+    accessToken: string;
+  }
+
+  interface User {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  }
+}
+
 declare module Anilist {
   interface User {
     id: number;
