@@ -7,76 +7,45 @@ import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
-  SignInBody,
-  SignInWithAnilistBody,
-  SignInWithDiscordBody,
-  SignInWithTwitterBody,
-  validateSignInBody,
-  validateSignInWithAnilistBody,
-  validateSignInWithDiscordBody,
-  validateSignInWithTwitterBody,
+  signByDiscordBodySchema,
+  signInBodySchema,
+  signInByAnilistBodySchema,
+  signInByTwitterBodySchema,
 } from './validators/authControllerValidators';
 
-const signInWithAnilist = async (req: NextApiRequest, res: NextApiResponse) => {
-  validateSignInWithAnilistBody(req.body);
+const providerControllers = {
+  [OAuthProvider.Anilist]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(anilistProvider, credencials as Anilist.Credencials),
+    validator: signInByAnilistBodySchema,
+  },
 
-  const { credencials } = req.body as SignInWithAnilistBody;
+  [OAuthProvider.Discord]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(discordProvider, credencials as Discord.Credencials),
+    validator: signByDiscordBodySchema,
+  },
 
-  const jwtToken = await authService.signIn<Anilist.Credencials>(
-    anilistProvider,
-    credencials
-  );
-
-  return res.status(200).send({
-    jwtToken,
-  });
-};
-
-const signInWithDiscord = async (req: NextApiRequest, res: NextApiResponse) => {
-  validateSignInWithDiscordBody(req.body);
-
-  const { credencials } = req.body as SignInWithDiscordBody;
-
-  const jwtToken = await authService.signIn<Discord.Credencials>(
-    discordProvider,
-    credencials
-  );
-
-  return res.status(200).send({
-    jwtToken,
-  });
-};
-
-const signInWithTwitter = async (req: NextApiRequest, res: NextApiResponse) => {
-  validateSignInWithTwitterBody(req.body);
-
-  const { credencials } = req.body as SignInWithTwitterBody;
-
-  const jwtToken = await authService.signIn<Twitter.Credencials>(
-    twitterProvider,
-    credencials
-  );
-
-  return res.status(200).send({
-    jwtToken,
-  });
+  [OAuthProvider.Twitter]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(twitterProvider, credencials as Twitter.Credencials),
+    validator: signInByTwitterBodySchema,
+  },
 };
 
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateSignInBody(req.body);
-    const { provider } = req.body as SignInBody;
+    const { provider } = signInBodySchema.parse(req.body);
 
-    switch (String(provider).toUpperCase()) {
-      case OAuthProvider.Anilist:
-        return signInWithAnilist(req, res);
-      case OAuthProvider.Discord:
-        return signInWithDiscord(req, res);
-      case OAuthProvider.Twitter:
-        return signInWithTwitter(req, res);
-    }
+    const { credencials } = providerControllers[provider].validator.parse(
+      req.body
+    );
 
-    return res.status(400).send('Bad request');
+    const jwtToken = await providerControllers[provider].signIn(credencials);
+
+    return res.status(200).send({
+      jwtToken,
+    });
   } catch (error) {
     return handleError(error, res);
   }
