@@ -1,3 +1,4 @@
+import { OAuthProvider } from '@backend/enums';
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
@@ -28,9 +29,11 @@ const DiscordAuth: NextPage = () => {
 
   const signIn = async (accessToken: string) => {
     try {
-      const userToken = await authService.signWithDiscord({
-        accessToken,
-      });
+      const credencials = { accessToken };
+      const userToken = await authService.signIn<Discord.Credencials>(
+        OAuthProvider.Discord,
+        credencials
+      );
       authenticateUser(userToken);
     } catch (error) {
       toastError('Failed to authenticate user');

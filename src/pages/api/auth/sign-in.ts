@@ -9,7 +9,7 @@ export default async function handler(
 
   switch (method) {
     case 'POST':
-      await authController.signInWithAnilist(req, res);
+      await authController.signIn(req, res);
       break;
     default:
       res.status(405).end();

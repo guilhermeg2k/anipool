@@ -1,3 +1,4 @@
+import { OAuthProvider } from '@backend/enums';
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
@@ -26,9 +27,11 @@ const AnilistAuth: NextPage = () => {
 
   const signIn = async (accessToken: string) => {
     try {
-      const userToken = await authService.signWithAnilist({
-        accessToken,
-      });
+      const credencials = { accessToken };
+      const userToken = await authService.signIn<Anilist.Credencials>(
+        OAuthProvider.Anilist,
+        credencials
+      );
       authenticateUser(userToken);
     } catch (error) {
       toastError('Failed to authenticate user');

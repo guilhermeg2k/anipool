@@ -1,3 +1,4 @@
+import { OAuthProvider } from '@backend/enums';
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
@@ -12,10 +13,14 @@ const TwitterAuth: NextPage = () => {
 
   const signIn = async (OAuthToken: string, OAuthVerifier: string) => {
     try {
-      const userToken = await authService.signWithTwitter({
+      const credencials = {
         OAuthToken,
         OAuthVerifier,
-      });
+      };
+      const userToken = await authService.signIn<Twitter.Credencials>(
+        OAuthProvider.Twitter,
+        credencials
+      );
       authenticateUser(userToken);
     } catch (error) {
       toastError('Failed to authenticate user');
