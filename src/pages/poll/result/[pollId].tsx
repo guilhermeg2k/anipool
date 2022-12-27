@@ -1,5 +1,5 @@
 import Box from '@components/core/Box';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
@@ -180,9 +180,9 @@ const PollResult: NextPage = () => {
       <Head>
         <title>Results of {poll?.title}</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6 ">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6 ">
         <PageHeader />
-        <Box className="flex flex-col gap-5 pb-7">
+        <Box className="flex flex-col gap-2 md:gap-5 pb-7 mb-7 sm:mb-0">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <Title>{poll?.title}</Title>
@@ -203,7 +203,7 @@ const PollResult: NextPage = () => {
                 {new Date(poll?.endDate!).toLocaleString()}
               </h2>
             </div>
-            <div className="self-center">
+            <div className="self-center w-full flex justify-between items-center md:block mt-2 md:mt-0 md:w-auto flex-wrap">
               <Button
                 color="white"
                 name="refresh"
@@ -213,7 +213,7 @@ const PollResult: NextPage = () => {
                 <ArrowPathIcon className="w-5" />
               </Button>
               <Button color="white" name="share" onClick={onCopyLinkHandler}>
-                <span>Copy results link</span>
+                <span>Copy link</span>
                 <LinkIcon className="w-5" />
               </Button>
               <Button

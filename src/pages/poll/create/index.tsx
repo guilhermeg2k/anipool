@@ -10,7 +10,7 @@ const CreatePoll: NextPage = () => {
       <Head>
         <title>Create Poll</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-3xl flex-col gap-6 mb-6">
         <PageHeader />
         <CreatePollForm />
       </div>

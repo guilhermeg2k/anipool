@@ -10,8 +10,6 @@ NodeJS >= 16
 
 You need to create a .env.local file, [as the example](https://github.com/guilhermeg2k/anipool/blob/main/.env.local.example), on the root of the project with the following variables:
 
-NEXT_PUBLIC_ANILIST_CLIENT_ID: Anilist client id, you can get it [here](https://anilist.co/settings/developer)
-
 ANIPOOL_AWS_ACCESS_KEY_ID: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
 ANIPOOL_AWS_SECRET_ACCESS_KEY : AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
@@ -19,6 +17,16 @@ ANIPOOL_AWS_SECRET_ACCESS_KEY : AWS access key id to access DynamoDB (you can ge
 ANIPOOL_AWS_REGION: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
 JWT_SECRET: Secret to generate JWT tokens you can use [this](https://www.browserling.com/tools/random-string) to generate a random string
+
+NEXT_PUBLIC_ANILIST_AUTH_URL: Anilist auth url, you can get it [here](https://anilist.gitbook.io/anilist-apiv2-docs/overview/oauth/authorization-url)
+
+NEXT_PUBLIC_DISCORD_AUTH_URL: Discord auth url, you can get it [here](https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example)
+
+TWITTER_CONSUMER_KEY: Twitter consumer key, you can get it [here](https://developer.twitter.com/en/portal/dashboard)
+
+TWITTER_CONSUMER_SECRET: Twitter consumer secret, you can get it [here](https://developer.twitter.com/en/portal/dashboard)
+
+TWITTER_CALLBACK_URL: Twitter callback url, you can get it [here](https://developer.twitter.com/en/portal/dashboard)
 
 ## Developing
 
@@ -45,7 +53,7 @@ I need to organize things but for now you can check what i'm working on [here](h
 
 ## Change Logs
 
-[Change logs](https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md)
+[Change logs](https://github.com/guilhermeg2k/anipool/releases)
 
 ## License
 

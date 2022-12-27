@@ -24,7 +24,7 @@ const CharacterResultCard = ({
       className={`flex w-full gap-2 md:h-[370px] md:w-[200px] md:flex-col md:p-5`}
       title={name.full}
     >
-      <div className="w-[50px] md:w-auto">
+      <div className="min-w-[50px] w-auto">
         <Image
           src={coverUrl}
           className="rounded-sm"
@@ -38,8 +38,8 @@ const CharacterResultCard = ({
         <h2 className="font-semibold text-sm truncate w-full">{`${name.full}`}</h2>
         <h3 className="text-xs truncate w-full">{name.native}</h3>
       </div>
-      <div className="flex flex-col items-center self-center font-roboto">
-        <span className="font-semibold">
+      <div className="flex flex-col items-center self-center font-roboto min-w-[50px]">
+        <span className="text-center font-semibold ">
           {votes === 1 ? `${votes} vote` : `${votes} votes`}
         </span>
         <span className="text-sm">{votesPercentage.toFixed(0)}%</span>

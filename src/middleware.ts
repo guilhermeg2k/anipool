@@ -1,4 +1,4 @@
-import { getTokenPayload } from '@utils/authUtils';
+import { getTokenPayload } from '@backend/utils/authUtils';
 import { NextRequest, NextResponse } from 'next/server';
 
 const NOT_AUTHENTICATED_ROUTES = [

@@ -15,8 +15,9 @@ const create = async (votes: Array<PollVote>) => {
     pollVotes.push({
       PutRequest: {
         Item: {
-          ...vote,
           id,
+          ...vote,
+          createdAt: new Date().toISOString(),
         },
       },
     });

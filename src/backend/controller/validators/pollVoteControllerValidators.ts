@@ -23,11 +23,15 @@ const createBodySchema = z.object({
   ),
 });
 
-export type CreateBody = z.infer<typeof createBodySchema>;
+export const getUserVotesOnPollQuerySchema = z.object({
+  pollId: z.string(),
+});
 
-const validateCreateBody = (body: unknown) => {
-  createBodySchema.parse(body);
-};
+export const getPollResultsQuery = z.object({
+  pollId: z.string(),
+});
+
+type CreateBody = z.infer<typeof createBodySchema>;
 
 const validateMultipleVotes = (
   poll: PollWithCreator,
@@ -64,35 +68,13 @@ const validateIfUserHasAlreadyVoted = async (
   }
 };
 
-export const validateCreateRequest = async (body: unknown, userId: string) => {
-  validateCreateBody(body);
-
-  const { pollId, pollVotes } = body as CreateBody;
+export const parseCreateRequest = async (body: unknown, userId: string) => {
+  const { pollId, pollVotes } = createBodySchema.parse(body);
   const poll = await pollService.get(pollId);
 
   validateMultipleVotes(poll, pollVotes);
   validateIfPollHasEnded(poll);
   await validateIfUserHasAlreadyVoted(userId, pollId);
-};
 
-const getUserVotesOnPollQuerySchema = z.object({
-  pollId: z.string(),
-});
-
-export type GetUserVotesOnPollQuery = z.infer<
-  typeof getUserVotesOnPollQuerySchema
->;
-
-export const validateGetUserVotesOnPollQuery = (query: unknown) => {
-  getUserVotesOnPollQuerySchema.parse(query);
-};
-
-const getPollResultsQuery = z.object({
-  pollId: z.string(),
-});
-
-export type GetPollResultsQuery = z.infer<typeof getPollResultsQuery>;
-
-export const validateGetPollResultsQuery = (query: unknown) => {
-  getPollResultsQuery.parse(query);
+  return body as CreateBody;
 };

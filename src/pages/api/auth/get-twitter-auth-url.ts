@@ -1,5 +1,4 @@
 import authController from '@backend/controller/authController';
-import { applyRateLimit } from '@utils/rateLimit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -9,9 +8,8 @@ export default async function handler(
   const { method } = req;
 
   switch (method) {
-    case 'POST':
-      await applyRateLimit(req, res);
-      await authController.signIn(req, res);
+    case 'GET':
+      await authController.getTwitterAuthUrl(req, res);
       break;
     default:
       res.status(405).end();

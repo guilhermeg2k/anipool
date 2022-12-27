@@ -1,25 +1,27 @@
-import { openAnilistAuthUrl } from '@utils/utils';
-import { useState } from 'react';
-import Button from './Button';
+import AnilistSignInButton from './Button/AnilistSignInButton';
+import DiscordSignInButton from './Button/DiscordSignInButton';
+import TwitterSignInButton from './Button/TwitterSignINButton';
 import Modal from './Modal';
 
-const SignInModal = () => {
-  const [open, setOpen] = useState(true);
+interface SignInModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const SignInModal = ({ open, onClose }: SignInModalProps) => {
   return (
     <Modal
       open={open}
-      title="You need to sign in to be able to vote"
+      title="Sign in to be able to vote"
       disableBackdropClick
-      onClose={() => setOpen(false)}
+      onClose={onClose}
     >
-      <div className="flex items-center w-full justify-center">
-        <Button
-          size="large"
-          onClick={openAnilistAuthUrl}
-          name="Login with anilist"
-        >
-          Login with anilist
-        </Button>
+      <div className="flex justify-center w-full">
+        <div className="flex flex-col gap-2 w-full lg:w-[80%]">
+          <AnilistSignInButton />
+          <DiscordSignInButton />
+          <TwitterSignInButton />
+        </div>
       </div>
     </Modal>
   );

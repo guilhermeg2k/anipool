@@ -1,25 +1,19 @@
 import pollVoteService from '@backend/service/pollVoteService';
-import { getTokenPayload } from '@utils/authUtils';
+import { getTokenPayload } from '@backend/utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
-  CreateBody,
   CREATE_VALIDATION_ERRORS,
-  GetPollResultsQuery,
-  GetUserVotesOnPollQuery,
-  validateCreateRequest,
-  validateGetPollResultsQuery,
-  validateGetUserVotesOnPollQuery,
+  getPollResultsQuery,
+  getUserVotesOnPollQuerySchema,
+  parseCreateRequest,
 } from './validators/pollVoteControllerValidators';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { userToken } = req.cookies;
     const { id: userId } = await getTokenPayload(String(userToken));
-
-    await validateCreateRequest(req.body, userId);
-    const { pollVotes, pollId } = req.body as CreateBody;
-
+    const { pollVotes, pollId } = await parseCreateRequest(req.body, userId);
     await pollVoteService.create(userId, pollId, pollVotes);
     return res.status(200).send('Votes computed');
   } catch (error) {
@@ -32,11 +26,9 @@ const getUserVotesOnPoll = async (
   res: NextApiResponse
 ) => {
   try {
-    validateGetUserVotesOnPollQuery(req.query);
-
     const { userToken } = req.cookies;
     const { id: userId } = await getTokenPayload(String(userToken));
-    const { pollId } = req.query as GetUserVotesOnPollQuery;
+    const { pollId } = getUserVotesOnPollQuerySchema.parse(req.query);
 
     const userPollVotes = await pollVoteService.getUserVotesOnPoll(
       userId,
@@ -51,9 +43,7 @@ const getUserVotesOnPoll = async (
 
 const getPollResults = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateGetPollResultsQuery(req.query);
-
-    const { pollId } = req.query as GetPollResultsQuery;
+    const { pollId } = getPollResultsQuery.parse(req.query);
     const pollOptionsResult = await pollVoteService.getPollVotes(pollId);
     return res.status(200).send(pollOptionsResult);
   } catch (error) {

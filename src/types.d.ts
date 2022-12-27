@@ -1,3 +1,28 @@
+declare module Twitter {
+  interface Credencials {
+    OAuthToken: string;
+    OAuthVerifier: string;
+  }
+
+  interface User {
+    id_str: string;
+    screen_name: string;
+    profile_image_url_https: string;
+  }
+}
+
+declare module Discord {
+  interface Credencials {
+    accessToken: string;
+  }
+
+  interface User {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  }
+}
+
 declare module Anilist {
   interface User {
     id: number;
@@ -6,6 +31,10 @@ declare module Anilist {
       large: string;
       medium: string;
     };
+  }
+
+  interface Credencials {
+    accessToken: string;
   }
 
   interface Media {
@@ -36,12 +65,20 @@ declare module Anilist {
     };
   }
 }
+
+interface ProviderUser {
+  id: string;
+  username: string;
+  avatarUrl: string;
+}
+
 interface User {
   id?: string;
   oauthProvider: string;
   oauthId: string;
   nickname: string;
   avatarUrl: string;
+  createdAt?: string;
 }
 
 interface PollOption {
@@ -50,23 +87,15 @@ interface PollOption {
   text?: string;
 }
 
-type PollResult = PollOption & { votes: number };
-
 interface Poll {
   id?: string;
   userId?: string;
   title: string;
-  endDate: Date;
+  endDate: string;
   multiOptions: boolean;
   options: Array<PollOption>;
+  createdAt?: string;
 }
-
-type PollWithCreator = Poll & {
-  creator: {
-    nickname: string;
-    avatarUrl: string;
-  };
-};
 
 interface PollVote {
   id?: string;
@@ -74,4 +103,19 @@ interface PollVote {
   pollId: string;
   anilistId: number;
   type: string;
+  createdAt?: string;
 }
+
+type ProviderCredencials =
+  | Anilist.Credencials
+  | Twitter.Credencials
+  | Discord.Credencials;
+
+type PollResult = PollOption & { votes: number };
+
+type PollWithCreator = Poll & {
+  creator: {
+    nickname: string;
+    avatarUrl: string;
+  };
+};

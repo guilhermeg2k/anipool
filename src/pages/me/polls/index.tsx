@@ -69,51 +69,55 @@ const MyPolls: NextPage = () => {
       <Head>
         <title>My polls</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-3xl flex-col gap-6">
         <PageHeader />
-        <Box className="flex flex-col gap-5 pb-7">
+        <Box className="flex flex-col gap-5 pb-7 mb-6">
           <Title>MY POLLS</Title>
           <div className="flex flex-col gap-2">
-            {polls.length === 0 ? (
-              <div className="flex flex-col items-center justify-center uppercase">
-                <span>You don&apos;t have any poll yet</span>
-                <InternalLink href="/poll/create">
-                  Click here to create one
-                </InternalLink>
-              </div>
-            ) : (
-              polls.map(({ id, title, endDate }) => (
-                <div
-                  key={id}
-                  className="flex justify-between hover:bg-slate-100 p-2 items-center"
-                >
-                  <span className="w-[200px]">{title}</span>
-                  <span className="hidden md:inline" title="End date">
-                    {dayjs(endDate).toString()}
-                  </span>
-                  <div className="flex gap-2">
-                    <IconButton
-                      onClick={() => copyPollVoteLink(id!)}
-                      title="Copy poll vote link"
-                    >
-                      <LinkIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => openPollResultsPage(id!)}
-                      title="Open poll results page"
-                    >
-                      <ChartBarIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => openPollVotePage(id!)}
-                      title="Open poll vote page"
-                    >
-                      <ArrowTopRightOnSquareIcon />
-                    </IconButton>
-                  </div>
+            <div className="overflow-auto">
+              {polls.length === 0 ? (
+                <div className="flex flex-col items-center justify-center uppercase">
+                  <span>You don&apos;t have any poll yet</span>
+                  <InternalLink href="/poll/create">
+                    Click here to create one
+                  </InternalLink>
                 </div>
-              ))
-            )}
+              ) : (
+                polls.map(({ id, title, endDate }) => (
+                  <div
+                    key={id}
+                    className="flex justify-between hover:bg-slate-100 p-2 items-center"
+                  >
+                    <span className="w-[100px] md:w-[200px] break-words">
+                      {title}
+                    </span>
+                    <span className="hidden md:inline" title="End date">
+                      {dayjs(endDate).toString()}
+                    </span>
+                    <div className="flex gap-2">
+                      <IconButton
+                        onClick={() => copyPollVoteLink(id!)}
+                        title="Copy poll vote link"
+                      >
+                        <LinkIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => openPollResultsPage(id!)}
+                        title="Open poll results page"
+                      >
+                        <ChartBarIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => openPollVotePage(id!)}
+                        title="Open poll vote page"
+                      >
+                        <ArrowTopRightOnSquareIcon />
+                      </IconButton>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </Box>
       </div>

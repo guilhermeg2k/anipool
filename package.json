@@ -1,7 +1,7 @@
 {
   "name": "anipool",
-  "version": "0.4.0",
-  "versionName": "Chisato",
+  "version": "0.5.0",
+  "versionName": "Mitsuha",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -25,6 +25,7 @@
     "jose": "^4.8.3",
     "js-cookie": "^3.0.1",
     "next": "^12.3.4",
+    "oauth-1.0a": "^2.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-toastify": "^9.0.8",

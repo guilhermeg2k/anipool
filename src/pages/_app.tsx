@@ -2,7 +2,7 @@ import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import userService from '@services/userService';
 import useUserStore from '@store/userStore';
-import { AUTH_CHANNEL } from '@utils/channelUtils';
+import { AUTH_CHANNEL } from '@utils/authUtils';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
