@@ -7,7 +7,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import PackageJSON from '../../package.json';
 
-const VERSION = `Version ${PackageJSON.version}-beta (${PackageJSON.versionName})`;
+const VERSION = `${PackageJSON.version}-beta (${PackageJSON.versionName})`;
 
 const About: NextPage = () => {
   return (
@@ -15,12 +15,12 @@ const About: NextPage = () => {
       <Head>
         <title>About</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-3xl flex-col gap-6">
         <PageHeader />
         <Box className="flex flex-col gap-3">
           <Title>ABOUT</Title>
-
-          <div className="flex flex-col">
+          <section className="flex flex-col">
+            <h2 className="font-semibold">Description</h2>
             <span>
               Anipool is an&nbsp;
               <ExternalLink href="https://github.com/guilhermeg2k/anipool">
@@ -30,26 +30,36 @@ const About: NextPage = () => {
               consumes&nbsp;
               <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
               &nbsp;API but it doesn&apos;t has any relation with Anilist or its
-              creators.
+              creators
             </span>
+          </section>
+          <section className="flex flex-col">
+            <h2 className="font-semibold">Contact</h2>
             <span>
-              You can find my on&nbsp;
+              You can find me on&nbsp;
               <ExternalLink href="https://github.com/guilhermeg2k">
                 GitHub
               </ExternalLink>
-              &nbsp; and if you want to check check there&apos;s my&nbsp;
+              &nbsp;and if you want to check check there&apos;s my&nbsp;
               <ExternalLink href="https://anilist.co/user/guilhermeg2k/">
-                Anilist Profile
+                anilist profile
               </ExternalLink>
             </span>
-          </div>
-
-          <div className="text-xs font-semibold uppercase self-end flex flex-col items-end">
-            <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md">
-              Change Logs
-            </ExternalLink>
-            <span>{VERSION}</span>
-          </div>
+          </section>
+          <section className="flex flex-col">
+            <h2 className="font-semibold">Terms and Privacy Policy</h2>
+            <span>Coming soon</span>
+          </section>
+          <section className="flex flex-col">
+            <h2 className="font-semibold">Version</h2>
+            <span>
+              Current version is {VERSION} and you can check its changes
+              on&nbsp;
+              <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md">
+                change Logs
+              </ExternalLink>
+            </span>
+          </section>
         </Box>
       </div>
     </Page>
