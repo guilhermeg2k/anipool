@@ -90,7 +90,7 @@ const CreatePollForm = () => {
       setIsCreatingPoll(true);
       const poll = {
         title,
-        endDate,
+        endDate: new Date(endDate).toISOString(),
         options,
         multiOptions: shouldEnableMultipleSelection,
       };
