@@ -69,9 +69,9 @@ const MyPolls: NextPage = () => {
       <Head>
         <title>My polls</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-3xl flex-col gap-6">
         <PageHeader />
-        <Box className="flex flex-col gap-5 pb-7">
+        <Box className="flex flex-col gap-5 pb-7 mb-7 md:mb-0">
           <Title>MY POLLS</Title>
           <div className="flex flex-col gap-2">
             {polls.length === 0 ? (
@@ -87,7 +87,9 @@ const MyPolls: NextPage = () => {
                   key={id}
                   className="flex justify-between hover:bg-slate-100 p-2 items-center"
                 >
-                  <span className="w-[200px]">{title}</span>
+                  <span className="w-[100px] md:w-[200px] break-words">
+                    {title}
+                  </span>
                   <span className="hidden md:inline" title="End date">
                     {dayjs(endDate).toString()}
                   </span>
