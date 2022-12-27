@@ -55,8 +55,8 @@ const About: NextPage = () => {
             <span>
               Current version is {VERSION} and you can check its changes
               on&nbsp;
-              <ExternalLink href="https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md">
-                change Logs
+              <ExternalLink href="https://github.com/guilhermeg2k/anipool/releases">
+                releases
               </ExternalLink>
             </span>
           </section>
