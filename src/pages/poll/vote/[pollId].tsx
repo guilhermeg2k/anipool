@@ -126,7 +126,7 @@ const Vote: NextPage = () => {
   const loadPollOrRedirectToResultsIfUserHasAlreadyVoted = async () => {
     if (isUserLogged && (await hasUserAlreadyVoted())) {
       toastWarning('You already has voted on this poll');
-      goToResults();
+      await goToResults();
     } else {
       await loadPoll();
     }
@@ -250,10 +250,10 @@ const Vote: NextPage = () => {
       <Head>
         <title>Vote on {poll?.title}</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
-        <Box className="flex flex-col gap-5">
-          <div className="flex flex-col items-center justify-between md:flex-row">
+        <Box className="flex flex-col gap-5 mb-7 sm:mb-0">
+          <div className="flex flex-col md:items-center justify-between md:flex-row">
             <div>
               <Title>{poll?.title}</Title>
               <h2 className="text-xs">
@@ -273,7 +273,7 @@ const Vote: NextPage = () => {
                 {new Date(poll?.endDate!).toLocaleString()}
               </h2>
             </div>
-            <div>
+            <div className="flex w-full sm:w-auto justify-center">
               <Button
                 color="white"
                 onClick={() => router.push(`/poll/result/${pollId}`)}
