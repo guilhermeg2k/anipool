@@ -1,22 +1,17 @@
 import pollService from '@backend/service/pollService';
-import {
-  CreatePollBody,
-  GetQueryParams,
-  GetResultQueryParams,
-  ListByUserIdQueryParams,
-  validateCreatePollBody,
-  validateGetQueryParams,
-  validateGetResultQueryParams,
-  validateListByUserIdQueryParams,
-} from '@backend/controller/validators/pollControllerValidators';
 import { getTokenPayload } from '@backend/utils/authUtils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
+import {
+  createPollBodySchema,
+  getQueryParamsSchema,
+  getResultQueryParamsSchema,
+  listByUserIdQueryParamsSchema,
+} from './validators/pollControllerValidators';
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateGetQueryParams(req.query);
-    const { id } = req.query as GetQueryParams;
+    const { id } = getQueryParamsSchema.parse(req.query);
     const poll = await pollService.get(String(id));
     return res.status(200).send(poll);
   } catch (error) {
@@ -26,8 +21,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateListByUserIdQueryParams(req.query);
-    const { userId } = req.query as ListByUserIdQueryParams;
+    const { userId } = listByUserIdQueryParamsSchema.parse(req.query);
     const poll = await pollService.listByUserId(String(userId));
     return res.status(200).send(poll);
   } catch (error) {
@@ -37,8 +31,7 @@ const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateGetResultQueryParams(req.query);
-    const { pollId } = req.query as GetResultQueryParams;
+    const { pollId } = getResultQueryParamsSchema.parse(req.query);
     const pollResults = await pollService.getResult(String(pollId));
     return res.status(200).send(pollResults);
   } catch (error) {
@@ -48,17 +41,15 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateCreatePollBody(req.body);
-
     const { title, endDate, options, multiOptions } =
-      req.body as CreatePollBody;
+      createPollBodySchema.parse(req.body);
     const { userToken } = req.cookies;
     const { id: userId } = await getTokenPayload(String(userToken));
 
     const pollId = await pollService.createAndReturnId({
       userId,
       title,
-      endDate,
+      endDate: endDate.toISOString(),
       options,
       multiOptions,
     });
