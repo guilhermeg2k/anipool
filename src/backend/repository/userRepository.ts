@@ -48,7 +48,7 @@ const createAndReturnId = async (user: User) => {
       oauthId: user.oauthId,
       nickname: user.nickname,
       avatarUrl: user.avatarUrl,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     },
   };
 

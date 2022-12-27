@@ -19,7 +19,13 @@ const get = async (id: string) => {
 
 const listByUserId = async (userId: string) => {
   const polls = await pollRepository.listByUserId(userId);
-  return polls;
+  const pollSortedByCreatedAt = polls.sort((pollA, pollB) => {
+    const createdAtA = new Date(pollA.createdAt!).getTime();
+    const createdAtB = new Date(pollB.createdAt!).getTime();
+    return createdAtB - createdAtA;
+  });
+
+  return pollSortedByCreatedAt;
 };
 
 const getResult = async (id: string) => {

@@ -17,7 +17,7 @@ const create = async (votes: Array<PollVote>) => {
         Item: {
           id,
           ...vote,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
         },
       },
     });

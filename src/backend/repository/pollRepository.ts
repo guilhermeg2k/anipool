@@ -35,7 +35,7 @@ const createAndReturnId = async (poll: Poll) => {
     Item: {
       id,
       ...poll,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     },
   };
 
