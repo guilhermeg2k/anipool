@@ -1,6 +1,6 @@
 import AutoAnimate from '@components/core/AutoAnimate';
 import Box from '@components/core/Box';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import CheckBox from '@components/core/CheckBox';
 import DataDisplay from '@components/core/DataDisplay';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
@@ -90,7 +90,7 @@ const CreatePollForm = () => {
       setIsCreatingPoll(true);
       const poll = {
         title,
-        endDate,
+        endDate: new Date(endDate).toISOString(),
         options,
         multiOptions: shouldEnableMultipleSelection,
       };
@@ -107,7 +107,7 @@ const CreatePollForm = () => {
   };
 
   return (
-    <Box>
+    <Box className="mb-6">
       {isSearchModalOpen && (
         <SearchOptionModal
           open={isSearchModalOpen}
@@ -127,7 +127,7 @@ const CreatePollForm = () => {
         value={title}
         id="poll-title"
         label="Poll title"
-        placeHolder="What anime should i watch next?"
+        placeHolder="What was the best anime of the year?"
         className="w-full"
         onChange={(title) => setTitle(title)}
       />

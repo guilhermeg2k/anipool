@@ -2,7 +2,7 @@ import graphqlClient from '@libs/graphql';
 import { gql } from 'graphql-request';
 import { OptionType } from 'src/enums';
 
-const getUserByAccessToken = async (accessToken: string) => {
+const getUser = async ({ accessToken }: Anilist.Credencials) => {
   const query = gql`
     {
       Viewer {
@@ -187,7 +187,7 @@ const listCharacterBySearch = async (
 };
 
 const anilistService = {
-  getUserByAccessToken,
+  getUser,
   getMediasByIds,
   getCharactersByIds,
   listMediaBySearchAndType,

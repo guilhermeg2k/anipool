@@ -1,9 +1,10 @@
-import Button from '@components/core/Button';
+import AnilistSignInButton from '@components/core/Button/AnilistSignInButton';
+import DiscordSignInButton from '@components/core/Button/DiscordSignInButton';
+import TwitterSignInButton from '@components/core/Button/TwitterSignINButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Logo from '@components/core/Logo';
 import Page from '@components/core/Page';
 import useUserStore from '@store/userStore';
-import { openAnilistAuthUrl } from '@utils/utils';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -39,13 +40,11 @@ const Home: NextPage = () => {
             Create anime related polls and quizes and share them with your
             friends
           </span>
-          <Button
-            size="large"
-            onClick={openAnilistAuthUrl}
-            name="Sign in with anilist"
-          >
-            Login with anilist
-          </Button>
+          <div className="flex flex-col gap-2 justify-center lg:w-full">
+            <AnilistSignInButton />
+            <DiscordSignInButton />
+            <TwitterSignInButton />
+          </div>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
           <Image

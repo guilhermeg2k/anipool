@@ -30,9 +30,16 @@ const createByAnilistUser = async (anilistUser: Anilist.User) => {
   return createdUser;
 };
 
+const create = async (user: User) => {
+  const createdUserId = await userRepository.createAndReturnId(user);
+  const createdUser = await userService.get(createdUserId);
+  return createdUser;
+};
+
 const userService = {
   get,
   getByOAuthProviderAndOauthId,
+  create,
   createByAnilistUser,
 };
 

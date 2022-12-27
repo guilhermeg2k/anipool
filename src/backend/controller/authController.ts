@@ -1,29 +1,62 @@
 import { OAuthProvider } from '@backend/enums';
-import authService from '@backend/service/authService';
+import authService from '@backend/service/auth/authService';
+import anilistProvider from '@backend/service/auth/providers/anilistProvider';
+import discordProvider from '@backend/service/auth/providers/discordProvider';
+import twitterProvider from '@backend/service/auth/providers/twitterProvider';
+import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
-  SignInBody,
-  validateSignInBody,
+  signByDiscordBodySchema,
+  signInBodySchema,
+  signInByAnilistBodySchema,
+  signInByTwitterBodySchema,
 } from './validators/authControllerValidators';
 
-const signInWithAnilist = async (accessToken: string, res: NextApiResponse) => {
-  const jwtToken = await authService.signInByAnilistAccessToken(accessToken);
-  return res.status(200).send({
-    jwtToken,
-  });
+const providerControllers = {
+  [OAuthProvider.Anilist]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(anilistProvider, credencials as Anilist.Credencials),
+    validator: signInByAnilistBodySchema,
+  },
+
+  [OAuthProvider.Discord]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(discordProvider, credencials as Discord.Credencials),
+    validator: signByDiscordBodySchema,
+  },
+
+  [OAuthProvider.Twitter]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(twitterProvider, credencials as Twitter.Credencials),
+    validator: signInByTwitterBodySchema,
+  },
 };
 
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    validateSignInBody(req.body);
-    const { oathProvider, accessToken } = req.body as SignInBody;
-    switch (oathProvider) {
-      case OAuthProvider.Anilist:
-        return signInWithAnilist(accessToken, res);
-      default:
-        throw new Error('Invalid OAuth provider');
-    }
+    const { provider } = signInBodySchema.parse(req.body);
+
+    const { credencials } = providerControllers[provider].validator.parse(
+      req.body
+    );
+
+    const jwtToken = await providerControllers[provider].signIn(credencials);
+
+    return res.status(200).send({
+      jwtToken,
+    });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
+const getTwitterAuthUrl = async (_: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const twitterAuthUrl = await twitterService.getAuthUrl();
+    return res.status(200).send({
+      twitterAuthUrl,
+    });
   } catch (error) {
     return handleError(error, res);
   }
@@ -38,6 +71,7 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 
 const authController = {
   signIn,
+  getTwitterAuthUrl,
 };
 
 export default authController;

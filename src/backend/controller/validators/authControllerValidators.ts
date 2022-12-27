@@ -2,12 +2,28 @@ import { OAuthProvider } from '@backend/enums';
 import { z } from 'zod';
 
 export const signInBodySchema = z.object({
-  oathProvider: z.nativeEnum(OAuthProvider),
-  accessToken: z.string(),
+  provider: z.nativeEnum(OAuthProvider),
+  credencials: z.unknown(),
 });
 
-export type SignInBody = z.infer<typeof signInBodySchema>;
+export const signInByAnilistBodySchema = z.object({
+  provider: z.literal(OAuthProvider.Anilist),
+  credencials: z.object({
+    accessToken: z.string(),
+  }),
+});
 
-export const validateSignInBody = (body: unknown) => {
-  signInBodySchema.parse(body);
-};
+export const signInByTwitterBodySchema = z.object({
+  provider: z.literal(OAuthProvider.Twitter),
+  credencials: z.object({
+    OAuthToken: z.string(),
+    OAuthVerifier: z.string(),
+  }),
+});
+
+export const signByDiscordBodySchema = z.object({
+  provider: z.literal(OAuthProvider.Discord),
+  credencials: z.object({
+    accessToken: z.string(),
+  }),
+});

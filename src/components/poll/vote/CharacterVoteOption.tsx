@@ -21,7 +21,7 @@ const CharacterVoteOption = ({
 
   return (
     <button
-      className="w-full pr-4 md:w-auto md:pr-0"
+      className="w-full md:w-auto"
       name={`Select character ${name.full} to vote`}
       title={`Select character ${name.full} to vote`}
       onClick={onClick}
@@ -29,7 +29,7 @@ const CharacterVoteOption = ({
       <DataDisplay
         className={`flex ${activeClass} gap-2 p-2 hover:border-indigo-500 md:h-[340px] md:w-[200px] md:flex-col md:p-5`}
       >
-        <div className="w-[50px] md:w-auto">
+        <div className="min-w-[50px] w-[50px] md:w-auto">
           <Image
             src={coverUrl}
             className="rounded-sm"
@@ -39,7 +39,7 @@ const CharacterVoteOption = ({
             height={255}
           />
         </div>
-        <div className="flex flex-col items-start gap-1 overflow-hidden">
+        <div className="flex flex-col items-start gap-1 overflow-hidden w-full">
           <h2 className="font-semibold truncate w-full">{name.full}</h2>
           <h3 className="text-xs truncate w-full">{name.native}</h3>
         </div>

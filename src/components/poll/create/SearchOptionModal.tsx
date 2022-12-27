@@ -1,5 +1,5 @@
 import AutoAnimate from '@components/core/AutoAnimate';
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import DataDisplay from '@components/core/DataDisplay';
 import Modal from '@components/core/Modal';
 import Select from '@components/core/Select';

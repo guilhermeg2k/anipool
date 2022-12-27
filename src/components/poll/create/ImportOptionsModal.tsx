@@ -1,4 +1,4 @@
-import Button from '@components/core/Button';
+import Button from '@components/core/Button/Button';
 import IconButton from '@components/core/IconButton';
 import Modal from '@components/core/Modal';
 import Spinner from '@components/core/Spinner';

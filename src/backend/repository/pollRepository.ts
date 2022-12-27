@@ -21,7 +21,6 @@ const listByUserId = async (userId: string) => {
       ':userId': userId,
     },
     TableName: POLL_TABLE_NAME,
-    Limit: 20,
   };
 
   const scanResult = await dynamoDb.scan(params).promise();
@@ -36,6 +35,7 @@ const createAndReturnId = async (poll: Poll) => {
     Item: {
       id,
       ...poll,
+      createdAt: new Date().toISOString(),
     },
   };
 

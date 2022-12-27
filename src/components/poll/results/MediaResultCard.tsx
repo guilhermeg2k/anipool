@@ -26,7 +26,7 @@ const MediaResultCard: React.FC<MediaResultCardProps> = ({
       className={`flex w-full gap-2 md:h-[370px] md:w-[200px] md:flex-col md:p-5`}
       title={getMediaName({ title })}
     >
-      <div className="w-[50px] md:w-auto">
+      <div className="min-w-[50px] w-auto">
         <Image
           src={coverUrl}
           className="rounded-sm"
@@ -43,8 +43,8 @@ const MediaResultCard: React.FC<MediaResultCardProps> = ({
         <h3 className="text-xs truncate w-full">{title.english}</h3>
         <h3 className="text-xs truncate w-full">{title.native}</h3>
       </div>
-      <div className="flex flex-col items-center self-center font-roboto">
-        <span className="font-semibold">
+      <div className="flex flex-col items-center self-center font-roboto min-w-[50px]">
+        <span className="font-semibold text-center">
           {votes === 1 ? `${votes} vote` : `${votes} votes`}
         </span>
         <span className="text-sm">{votesPercentage.toFixed(0)}%</span>
