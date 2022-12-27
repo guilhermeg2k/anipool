@@ -53,7 +53,7 @@ I need to organize things but for now you can check what i'm working on [here](h
 
 ## Change Logs
 
-[Change logs](https://github.com/guilhermeg2k/anipool/blob/main/CHANGELOG.md)
+[Change logs](https://github.com/guilhermeg2k/anipool/releases)
 
 ## License
 
