@@ -23,7 +23,7 @@ const MediaVoteOption = ({
 
   return (
     <button
-      className="w-full pr-4 md:w-auto md:pr-0"
+      className="w-full md:w-auto"
       title={`Select ${getMediaName({ title })} to vote`}
       name={`Select ${getMediaName({ title })} to vote`}
       onClick={onClick}

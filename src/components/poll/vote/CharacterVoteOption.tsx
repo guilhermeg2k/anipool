@@ -21,7 +21,7 @@ const CharacterVoteOption = ({
 
   return (
     <button
-      className="w-full pr-4 md:w-auto md:pr-0"
+      className="w-full md:w-auto"
       name={`Select character ${name.full} to vote`}
       title={`Select character ${name.full} to vote`}
       onClick={onClick}
