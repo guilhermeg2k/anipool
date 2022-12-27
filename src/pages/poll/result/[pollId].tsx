@@ -180,9 +180,9 @@ const PollResult: NextPage = () => {
       <Head>
         <title>Results of {poll?.title}</title>
       </Head>
-      <div className="mx-auto mt-20 flex max-w-4xl flex-col gap-6 ">
+      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6 ">
         <PageHeader />
-        <Box className="flex flex-col gap-5 pb-7">
+        <Box className="flex flex-col gap-5 pb-7 mb-7 sm:mb-0">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <Title>{poll?.title}</Title>
