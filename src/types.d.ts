@@ -78,6 +78,7 @@ interface User {
   oauthId: string;
   nickname: string;
   avatarUrl: string;
+  createdAt?: Date;
 }
 
 interface PollOption {
@@ -93,6 +94,7 @@ interface Poll {
   endDate: Date;
   multiOptions: boolean;
   options: Array<PollOption>;
+  createdAt?: Date;
 }
 
 interface PollVote {
@@ -101,6 +103,7 @@ interface PollVote {
   pollId: string;
   anilistId: number;
   type: string;
+  createdAt?: Date;
 }
 
 type ProviderCredencials =
