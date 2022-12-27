@@ -1,7 +1,7 @@
 {
   "name": "anipool",
-  "version": "0.4.0",
-  "versionName": "Chisato",
+  "version": "0.5.0",
+  "versionName": "Mitsuha",
   "private": true,
   "scripts": {
     "dev": "next dev",
