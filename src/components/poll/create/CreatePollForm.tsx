@@ -107,7 +107,7 @@ const CreatePollForm = () => {
   };
 
   return (
-    <Box>
+    <Box className="mb-6">
       {isSearchModalOpen && (
         <SearchOptionModal
           open={isSearchModalOpen}
@@ -127,7 +127,7 @@ const CreatePollForm = () => {
         value={title}
         id="poll-title"
         label="Poll title"
-        placeHolder="What anime should i watch next?"
+        placeHolder="What was the best anime of the year?"
         className="w-full"
         onChange={(title) => setTitle(title)}
       />

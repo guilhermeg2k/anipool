@@ -38,7 +38,7 @@ const Button: React.FC<ButtonProps> = ({
       case 'small':
         return 'py-1 px-2';
       case 'normal':
-        return 'py-2 px-4';
+        return 'px-2 py-2 sm:px-4';
       case 'large':
         return 'py-4 px-8';
       default:

@@ -252,7 +252,7 @@ const Vote: NextPage = () => {
       </Head>
       <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6">
         <PageHeader />
-        <Box className="flex flex-col gap-5 mb-7 sm:mb-0">
+        <Box className="flex flex-col gap-2 md:gap-5 mb-7 sm:mb-0">
           <div className="flex flex-col md:items-center justify-between md:flex-row">
             <div>
               <Title>{poll?.title}</Title>
@@ -273,7 +273,7 @@ const Vote: NextPage = () => {
                 {new Date(poll?.endDate!).toLocaleString()}
               </h2>
             </div>
-            <div className="flex w-full sm:w-auto justify-center">
+            <div className="flex w-full sm:w-auto justify-center mt-2 md:mt-0">
               <Button
                 color="white"
                 onClick={() => router.push(`/poll/result/${pollId}`)}

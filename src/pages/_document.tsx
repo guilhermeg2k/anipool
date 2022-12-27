@@ -91,9 +91,14 @@ export default class MyDocument extends Document {
             content="/ms-icon-144x144.png "
           />
           <meta name="theme-color" content="#ffffff"></meta>
+          <meta name="application-name" content="Anipool"></meta>
+          <meta
+            name="keywords"
+            content="anime,polls,quizes,anilist,twitter,discord"
+          ></meta>
           <meta
             name="description"
-            content="Create anime related polls and quizes and share them with your friends"
+            content="Anipool is a webapp to create anime related polls and quizes and share them with your friends"
           />
         </Head>
         <body className="text-sm font-normal text-neutral-700 md:text-base">
