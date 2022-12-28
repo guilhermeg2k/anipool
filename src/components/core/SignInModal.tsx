@@ -1,5 +1,6 @@
 import AnilistSignInButton from './Button/AnilistSignInButton';
 import DiscordSignInButton from './Button/DiscordSignInButton';
+import MyAnimeListSignInButton from './Button/MyAnimeListSignInButton';
 import TwitterSignInButton from './Button/TwitterSignINButton';
 import Modal from './Modal';
 
@@ -18,6 +19,7 @@ const SignInModal = ({ open, onClose }: SignInModalProps) => {
     >
       <div className="flex justify-center w-full">
         <div className="flex flex-col gap-2 w-full lg:w-[80%]">
+          <MyAnimeListSignInButton />
           <AnilistSignInButton />
           <DiscordSignInButton />
           <TwitterSignInButton />

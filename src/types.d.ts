@@ -1,3 +1,16 @@
+declare module MyAnimeList {
+  interface Credencials {
+    code: string;
+    codeVerifier: string;
+  }
+
+  interface User {
+    id: string;
+    name: string;
+    picture: string;
+  }
+}
+
 declare module Twitter {
   interface Credencials {
     OAuthToken: string;
@@ -109,7 +122,8 @@ interface PollVote {
 type ProviderCredencials =
   | Anilist.Credencials
   | Twitter.Credencials
-  | Discord.Credencials;
+  | Discord.Credencials
+  | MyAnimeList.Credencials;
 
 type PollResult = PollOption & { votes: number };
 

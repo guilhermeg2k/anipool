@@ -1,5 +1,6 @@
 import AnilistSignInButton from '@components/core/Button/AnilistSignInButton';
 import DiscordSignInButton from '@components/core/Button/DiscordSignInButton';
+import MyAnimeListSignInButton from '@components/core/Button/MyAnimeListSignInButton';
 import TwitterSignInButton from '@components/core/Button/TwitterSignINButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Logo from '@components/core/Logo';
@@ -41,6 +42,7 @@ const Home: NextPage = () => {
             friends
           </span>
           <div className="flex flex-col gap-2 justify-center lg:w-full">
+            <MyAnimeListSignInButton />
             <AnilistSignInButton />
             <DiscordSignInButton />
             <TwitterSignInButton />
