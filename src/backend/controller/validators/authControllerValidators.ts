@@ -27,3 +27,11 @@ export const signByDiscordBodySchema = z.object({
     accessToken: z.string(),
   }),
 });
+
+export const signByMyAnimeListBodySchema = z.object({
+  provider: z.literal(OAuthProvider.MyAnimeList),
+  credencials: z.object({
+    code: z.string(),
+    codeVerifier: z.string(),
+  }),
+});

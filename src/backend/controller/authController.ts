@@ -2,12 +2,14 @@ import { OAuthProvider } from '@backend/enums';
 import authService from '@backend/service/auth/authService';
 import anilistProvider from '@backend/service/auth/providers/anilistProvider';
 import discordProvider from '@backend/service/auth/providers/discordProvider';
+import myAnimelistProvider from '@backend/service/auth/providers/myAnimeListProvider';
 import twitterProvider from '@backend/service/auth/providers/twitterProvider';
 import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
   signByDiscordBodySchema,
+  signByMyAnimeListBodySchema,
   signInBodySchema,
   signInByAnilistBodySchema,
   signInByTwitterBodySchema,
@@ -30,6 +32,15 @@ const providerControllers = {
     signIn: (credencials: ProviderCredencials) =>
       authService.signIn(twitterProvider, credencials as Twitter.Credencials),
     validator: signInByTwitterBodySchema,
+  },
+
+  [OAuthProvider.MyAnimeList]: {
+    signIn: (credencials: ProviderCredencials) =>
+      authService.signIn(
+        myAnimelistProvider,
+        credencials as MyAnimeList.Credencials
+      ),
+    validator: signByMyAnimeListBodySchema,
   },
 };
 
