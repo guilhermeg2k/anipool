@@ -2,10 +2,12 @@ import { OAuthProvider } from '@backend/enums';
 import LoadingPage from '@components/core/LoadingPage';
 import { toastError } from '@libs/toastify';
 import authService from '@services/authService';
+import myAnimelistService from '@services/myAnimeListService';
 import {
   authenticateUser,
   getAnilistCredencials,
   getDiscordCredencials,
+  getMALCredencials,
   getTwitterCredencials,
 } from '@utils/authUtils';
 import { NextPage } from 'next';
@@ -43,6 +45,14 @@ const providers: {
       window.open(twitterAuthUrl, '_self');
     },
     getCredencials: getTwitterCredencials,
+  },
+
+  [OAuthProvider.MyAnimeList]: {
+    openAuthUrl: async () => {
+      const authUrl = await myAnimelistService.getAuthUrl();
+      window.open(authUrl, '_self');
+    },
+    getCredencials: getMALCredencials,
   },
 };
 
