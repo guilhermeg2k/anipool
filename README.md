@@ -28,6 +28,12 @@ TWITTER_CONSUMER_SECRET: Twitter consumer secret, you can get it [here](https://
 
 TWITTER_CALLBACK_URL: Twitter callback url, you can get it [here](https://developer.twitter.com/en/portal/dashboard)
 
+NEXT_PUBLIC_MAL_CLIENT_ID: My Anime List client id, you can get it [here](https://myanimelist.net/apiconfig)
+
+NEXT_PUBLIC_MAL_REDIRECT_URL: My Anime List redirect url, you can get it [here](https://myanimelist.net/apiconfig)
+
+MAL_CLIENT_SECRET: My Anime List client secret, you can get it [here](https://myanimelist.net/apiconfig)
+
 ## Developing
 
 Clone the repository, set the environment variables and run the following commands:
