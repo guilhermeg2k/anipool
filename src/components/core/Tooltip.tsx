@@ -57,7 +57,7 @@ const Tooltip = ({ title = '', children }: TooltipProps) => {
               }px))`,
             }}
           >
-            <div className="whitespace-nowrap rounded bg-black bg-opacity-75 py-[6px] px-4 text-sm font-semibold">
+            <div className="bg-gray-900 whitespace-nowrap rounded bg-opacity-75 py-[6px] px-4 text-sm font-semibold">
               <span className="text-white">{title}</span>
             </div>
           </div>,

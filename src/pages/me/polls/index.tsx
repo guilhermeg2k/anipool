@@ -86,7 +86,7 @@ const MyPolls: NextPage = () => {
                 polls.map(({ id, title, endDate }) => (
                   <div
                     key={id}
-                    className="flex items-center justify-between p-2 hover:bg-slate-100"
+                    className="flex items-center justify-between p-2 hover:bg-gray-100"
                   >
                     <span className="w-[100px] break-words md:w-[200px]">
                       {title}

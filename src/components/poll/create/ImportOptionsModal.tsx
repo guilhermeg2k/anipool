@@ -33,7 +33,7 @@ const OptionsListModal = ({
           <h1 className="font-semibold uppercase">
             The following options will be imported:
           </h1>
-          <div className="overflow-y-auto max-h-[400px]">
+          <div className="max-h-[400px] overflow-y-auto">
             {options.map((option) => (
               <div key={`${option.type}-${option.anilistId}`}>
                 {option.text}
@@ -41,7 +41,7 @@ const OptionsListModal = ({
             ))}
           </div>
         </div>
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end gap-2">
           <Button color="gray" name="Cancel import" onClick={onClose}>
             Cancel
           </Button>
@@ -120,19 +120,19 @@ const ImportOptionsModal = ({
         />
       )}
       {isLoading ? (
-        <div className="flex flex-col w-full h-[200px] items-center justify-center">
+        <div className="flex h-[200px] w-full flex-col items-center justify-center">
           <Spinner />
         </div>
       ) : polls.length === 0 ? (
-        <div className="flex flex-col h-[200px] items-center justify-center uppercase">
+        <div className="flex h-[200px] flex-col items-center justify-center uppercase">
           <span>You don&apos;t have any poll to import from</span>
         </div>
       ) : (
-        <div className="overflow-y-auto max-h-[400px]">
+        <div className="max-h-[400px] overflow-y-auto">
           {polls.map((poll) => (
             <div
               key={poll.id}
-              className="flex justify-between hover:bg-slate-100 p-2 items-center cursor-pointer"
+              className="flex cursor-pointer items-center justify-between p-2 hover:bg-slate-100"
               onClick={() => importPoll(poll)}
             >
               <span className="w-[200px]">{poll.title}</span>

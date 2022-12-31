@@ -9,7 +9,7 @@ const IconButton = ({
   return (
     <Tooltip title={title}>
       <button
-        className="rounded-full border-2 border-transparent p-2 hover:bg-slate-200"
+        className="rounded-full border-2 border-transparent p-2 hover:bg-gray-200"
         {...rest}
       >
         <div className="h-5 w-5">{children}</div>
