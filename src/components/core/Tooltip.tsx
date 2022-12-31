@@ -1,5 +1,7 @@
-import { MouseEvent, ReactNode, useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+const TOOLTIP_PORTAL_ID = 'tooltip-portal';
 
 interface TooltipProps {
   title?: string;
@@ -8,36 +10,31 @@ interface TooltipProps {
 
 const Tooltip = ({ title = '', children }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const tooltipPosition = useRef({
-    x: 0,
-    y: 0,
-  });
-  const childrenWidth = useRef(0);
-  const portalElement = document.getElementById('tooltip-portal');
+  const ref = useRef<HTMLDivElement>(null);
 
-  if (!portalElement) {
-    const newToolTipPortalElement = document.createElement('div');
-    newToolTipPortalElement.id = 'tooltip-portal';
-    document.body.appendChild(newToolTipPortalElement);
-  }
+  const { x, y, width, height } = ref.current
+    ? ref.current.getBoundingClientRect()
+    : { x: 0, y: 0, width: 0, height: 0 };
 
-  const handleMouseEnter = (e: MouseEvent) => {
-    const target = e.target as HTMLDivElement;
-    const { left, bottom } = target.getBoundingClientRect();
-
-    childrenWidth.current = target.offsetWidth;
-    tooltipPosition.current = {
-      x: left + window.pageXOffset,
-      y: bottom + window.pageYOffset,
-    };
-
-    setIsVisible(true);
+  const position = {
+    left: x + window.pageXOffset,
+    top: y + window.pageYOffset + height,
   };
+
+  let portalElement = document.getElementById(TOOLTIP_PORTAL_ID);
+  if (!portalElement) {
+    portalElement = document.createElement('div');
+    portalElement.id = TOOLTIP_PORTAL_ID;
+    document.body.appendChild(portalElement);
+  }
 
   return (
     <div
-      className="group relative inline-block"
-      onMouseEnter={handleMouseEnter}
+      className="relative"
+      ref={ref}
+      onMouseEnter={() => {
+        setIsVisible(true);
+      }}
       onMouseLeave={() => {
         setIsVisible(false);
       }}
@@ -47,17 +44,15 @@ const Tooltip = ({ title = '', children }: TooltipProps) => {
         portalElement &&
         createPortal(
           <div
-            className="absolute z-20 mt-2"
+            className="absolute z-20"
             style={{
-              left: `${tooltipPosition.current.x}px`,
-              top: `${tooltipPosition.current.y}px`,
+              left: `${position.left}px`,
+              top: `${position.top}px`,
               display: isVisible ? 'block' : 'none',
-              transform: `translateX(calc(-50% + ${
-                childrenWidth.current / 2
-              }px))`,
+              transform: `translateX(calc(-50% + ${width / 2}px))`,
             }}
           >
-            <div className="bg-gray-900 whitespace-nowrap rounded bg-opacity-75 py-[6px] px-4 text-sm font-semibold">
+            <div className="mt-2 whitespace-nowrap rounded bg-gray-900 bg-opacity-75 py-1.5 px-4 text-sm font-semibold">
               <span className="text-white">{title}</span>
             </div>
           </div>,
