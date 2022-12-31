@@ -7,8 +7,8 @@ import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import {
   ArrowTopRightOnSquareIcon,
-  LinkIcon,
   ChartBarIcon,
+  LinkIcon,
 } from '@heroicons/react/24/outline';
 import { toastError, toastSuccess } from '@libs/toastify';
 import pollService from '@services/pollService';
@@ -69,12 +69,12 @@ const MyPolls: NextPage = () => {
       <Head>
         <title>My polls</title>
       </Head>
-      <div className="mx-auto mt-10 sm:mt-20 flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto mt-10 flex max-w-3xl flex-col gap-6 sm:mt-20">
         <PageHeader />
-        <Box className="flex flex-col gap-5 pb-7 mb-6">
+        <Box className="mb-6 flex flex-col gap-5 pb-7">
           <Title>MY POLLS</Title>
           <div className="flex flex-col gap-2">
-            <div className="overflow-auto">
+            <div>
               {polls.length === 0 ? (
                 <div className="flex flex-col items-center justify-center uppercase">
                   <span>You don&apos;t have any poll yet</span>
@@ -86,9 +86,9 @@ const MyPolls: NextPage = () => {
                 polls.map(({ id, title, endDate }) => (
                   <div
                     key={id}
-                    className="flex justify-between hover:bg-slate-100 p-2 items-center"
+                    className="flex items-center justify-between p-2 hover:bg-slate-100"
                   >
-                    <span className="w-[100px] md:w-[200px] break-words">
+                    <span className="w-[100px] break-words md:w-[200px]">
                       {title}
                     </span>
                     <span className="hidden md:inline" title="End date">
