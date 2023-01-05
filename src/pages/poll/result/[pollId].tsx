@@ -1,10 +1,7 @@
-import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
 import LoadingPage from '@components/core/LoadingPage';
-import Page from '@components/core/Page';
-import PageHeader from '@components/core/PageHeader';
-import Title from '@components/core/Title';
+import PageLayout from '@components/core/PageLayout';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
 import {
@@ -16,7 +13,6 @@ import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -136,32 +132,47 @@ const PollResult: NextPage = () => {
     toastSuccess('Results link copied to clipboard');
   };
 
-  const renderResultsCards = () =>
-    results.map((result) => {
-      if (result.type === OptionType.Character) {
-        const characterResult = result as CharacterResult;
-        return (
-          <CharacterResultCard
-            key={characterResult.id}
-            coverUrl={characterResult.image.large}
-            name={characterResult.name}
-            totalVotes={totalVotes}
-            votes={characterResult.votes}
-          />
-        );
-      }
-
-      const mediaResult = result as MediaResult;
-      return (
-        <MediaResultCard
-          key={mediaResult.id}
-          coverUrl={mediaResult.coverImage.extraLarge}
-          title={mediaResult.title}
-          totalVotes={totalVotes}
-          votes={mediaResult.votes}
+  const pageDescription = (
+    <h2 className="text-xs">
+      <div className="flex items-center gap-1">
+        <span className="font-semibold">Author:</span>
+        <span>{poll?.creator.nickname}</span>
+        <Image
+          className="rounded-full"
+          src={poll?.creator.avatarUrl || ''}
+          alt="Profile picture"
+          layout="fixed"
+          width={25}
+          height={25}
         />
-      );
-    });
+      </div>
+      <div className="flex gap-1">
+        <span className="font-semibold">Ends at:</span>
+        <DateDisplay date={poll?.endDate} />
+      </div>
+    </h2>
+  );
+
+  const pageActions = (
+    <div className="flex w-full flex-wrap items-center justify-between self-center md:mt-0 md:block md:w-auto">
+      <Button color="white" name="refresh" onClick={() => loadPollAndResult()}>
+        <span>Refresh</span>
+        <ArrowPathIcon className="w-5" />
+      </Button>
+      <Button color="white" name="share" onClick={onCopyLinkHandler}>
+        <span>Copy link</span>
+        <LinkIcon className="w-5" />
+      </Button>
+      <Button
+        color="white"
+        name="Create new poll"
+        onClick={() => router.push(`/poll/vote/${pollId}`)}
+      >
+        <span>Vote</span>
+        <ArrowTopRightOnSquareIcon className="w-5" />
+      </Button>
+    </div>
+  );
 
   useEffect(() => {
     loadPollAndResult();
@@ -177,64 +188,41 @@ const PollResult: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/background.jpg">
-      <Head>
-        <title>Results of {poll?.title}</title>
-      </Head>
-      <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-6 sm:mt-20 ">
-        <PageHeader />
-        <Box className="mb-7 flex flex-col gap-2 pb-7 sm:mb-0 md:gap-5">
-          <div className="flex flex-col justify-between md:flex-row md:items-center">
-            <div>
-              <Title>{poll?.title}</Title>
-              <h2 className="text-xs">
-                <div className="flex items-center  gap-1">
-                  <span className="font-semibold">Author:</span>
-                  <span>{poll?.creator.nickname}</span>
-                  <Image
-                    className="rounded-full"
-                    src={poll?.creator.avatarUrl || ''}
-                    alt="Profile picture"
-                    layout="fixed"
-                    width={25}
-                    height={25}
-                  />
-                </div>
-                <div className="flex gap-1">
-                  <span className="font-semibold">Ends at:</span>
-                  <DateDisplay date={poll?.endDate} />
-                </div>
-              </h2>
-            </div>
-            <div className="mt-2 flex w-full flex-wrap items-center justify-between self-center md:mt-0 md:block md:w-auto">
-              <Button
-                color="white"
-                name="refresh"
-                onClick={() => loadPollAndResult()}
-              >
-                <span>Refresh</span>
-                <ArrowPathIcon className="w-5" />
-              </Button>
-              <Button color="white" name="share" onClick={onCopyLinkHandler}>
-                <span>Copy link</span>
-                <LinkIcon className="w-5" />
-              </Button>
-              <Button
-                color="white"
-                name="Create new poll"
-                onClick={() => router.push(`/poll/vote/${pollId}`)}
-              >
-                <span>Vote</span>
-                <ArrowTopRightOnSquareIcon className="w-5" />
-              </Button>
-            </div>
-          </div>
-          <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-            {renderResultsCards()}
-          </div>
-        </Box>
+    <PageLayout
+      headTitle={`Results of ${poll?.title}`}
+      title={poll?.title}
+      className="flex flex-col gap-3"
+      description={pageDescription}
+      actions={pageActions}
+    >
+      <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+        {results.map((result) => {
+          if (result.type === OptionType.Character) {
+            const characterResult = result as CharacterResult;
+            return (
+              <CharacterResultCard
+                key={characterResult.id}
+                coverUrl={characterResult.image.large}
+                name={characterResult.name}
+                totalVotes={totalVotes}
+                votes={characterResult.votes}
+              />
+            );
+          } else {
+            const mediaResult = result as MediaResult;
+            return (
+              <MediaResultCard
+                key={mediaResult.id}
+                coverUrl={mediaResult.coverImage.extraLarge}
+                title={mediaResult.title}
+                totalVotes={totalVotes}
+                votes={mediaResult.votes}
+              />
+            );
+          }
+        })}
       </div>
-    </Page>
+    </PageLayout>
   );
 };
 

@@ -1,10 +1,7 @@
-import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
 import LoadingPage from '@components/core/LoadingPage';
-import Page from '@components/core/Page';
-import PageHeader from '@components/core/PageHeader';
-import Title from '@components/core/Title';
+import PageLayout from '@components/core/PageLayout';
 import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/24/outline';
@@ -14,7 +11,6 @@ import pollService from '@services/pollService';
 import useUserStore from '@store/userStore';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -230,6 +226,44 @@ const Vote: NextPage = () => {
       return renderMediaVoteOption(mediaOption);
     });
 
+  const pageDescription = (
+    <h2 className="text-xs">
+      <div className="flex items-center gap-1">
+        <span className="font-semibold">Author:</span>
+        <span>{poll?.creator.nickname}</span>
+        <Image
+          className="rounded-full"
+          src={poll?.creator.avatarUrl || ''}
+          alt="Profile picture"
+          layout="fixed"
+          width={25}
+          height={25}
+        />
+      </div>
+      <div className="flex gap-1">
+        <span className="font-semibold">Ends at:</span>
+        <DateDisplay date={poll?.endDate} />
+      </div>
+    </h2>
+  );
+
+  const pageActions = (
+    <div className="mt-2 flex w-full justify-center sm:w-auto md:mt-0">
+      <Button
+        color="white"
+        onClick={() => router.push(`/poll/result/${pollId}`)}
+        name="Results"
+      >
+        <span>Results</span>
+        <ChartBarIcon className="w-5" />
+      </Button>
+      <Button color="white" onClick={onShareHandler} name="share">
+        <span>Copy vote link</span>
+        <LinkIcon className="w-5" />
+      </Button>
+    </div>
+  );
+
   useEffect(() => {
     loadPollOrRedirectToResultsIfUserHasAlreadyVoted();
   }, [pollId]);
@@ -247,66 +281,27 @@ const Vote: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/background.jpg">
-      <Head>
-        <title>Vote on {poll?.title}</title>
-      </Head>
-      <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-6 sm:mt-20">
-        <PageHeader />
-        <Box className="mb-7 flex flex-col gap-2 sm:mb-0 md:gap-5">
-          <div className="flex flex-col justify-between md:flex-row md:items-center">
-            <div>
-              <Title>{poll?.title}</Title>
-              <h2 className="text-xs">
-                <div className="flex items-center  gap-1">
-                  <span className="font-semibold">Author:</span>
-                  <span>{poll?.creator.nickname}</span>
-                  <Image
-                    className="rounded-full"
-                    src={poll?.creator.avatarUrl || ''}
-                    alt="Profile picture"
-                    layout="fixed"
-                    width={25}
-                    height={25}
-                  />
-                </div>
-                <div className="flex gap-1">
-                  <span className="font-semibold">Ends at:</span>
-                  <DateDisplay date={poll?.endDate} />
-                </div>
-              </h2>
-            </div>
-            <div className="mt-2 flex w-full justify-center sm:w-auto md:mt-0">
-              <Button
-                color="white"
-                onClick={() => router.push(`/poll/result/${pollId}`)}
-                name="Results"
-              >
-                <span>Results</span>
-                <ChartBarIcon className="w-5" />
-              </Button>
-              <Button color="white" onClick={onShareHandler} name="share">
-                <span>Copy vote link</span>
-                <LinkIcon className="w-5" />
-              </Button>
-            </div>
-          </div>
-          <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-            {renderOptions()}
-          </div>
-          <div className="self-end">
-            <Button
-              color="green"
-              disabled={!canSubmit}
-              name="vote"
-              onClick={() => submitVotes(votes)}
-            >
-              vote
-            </Button>
-          </div>
-        </Box>
+    <PageLayout
+      headTitle={`Vote on ${poll?.title}`}
+      title={poll?.title}
+      className="flex flex-col gap-2 md:gap-5"
+      description={pageDescription}
+      actions={pageActions}
+    >
+      <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+        {renderOptions()}
       </div>
-    </Page>
+      <div className="self-end">
+        <Button
+          color="green"
+          disabled={!canSubmit}
+          name="vote"
+          onClick={() => submitVotes(votes)}
+        >
+          vote
+        </Button>
+      </div>
+    </PageLayout>
   );
 };
 

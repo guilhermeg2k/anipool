@@ -1,5 +1,4 @@
 import AutoAnimate from '@components/core/AutoAnimate';
-import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import CheckBox from '@components/core/CheckBox';
 import DataDisplay from '@components/core/DataDisplay';
@@ -107,7 +106,7 @@ const CreatePollForm = () => {
   };
 
   return (
-    <Box className="mb-6">
+    <>
       {isSearchModalOpen && (
         <SearchOptionModal
           open={isSearchModalOpen}
@@ -135,8 +134,8 @@ const CreatePollForm = () => {
         <DataDisplay className="flex w-full flex-col">
           <AutoAnimate
             as="ul"
-            className={`flex w-full flex-col mb-2 ${
-              options.length > 0 && 'overflow-y-scroll max-h-[400px] pr-1'
+            className={`mb-2 flex w-full flex-col ${
+              options.length > 0 && 'max-h-[400px] overflow-y-scroll pr-1'
             }`}
           >
             {options.length > 0 ? (
@@ -155,9 +154,9 @@ const CreatePollForm = () => {
               </li>
             )}
           </AutoAnimate>
-          <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-col gap-2 md:flex-row">
             <Button
-              className="self-end w-full"
+              className="w-full self-end"
               color="green"
               onClick={() => setIsSearchModalOpen(true)}
               name="Open add options modal"
@@ -165,7 +164,7 @@ const CreatePollForm = () => {
               SEARCH OPTIONS
             </Button>
             <Button
-              className="self-end w-full"
+              className="w-full self-end"
               color="green"
               onClick={() => setIsImportModalOpen(true)}
               name="Open add options modal"
@@ -205,7 +204,7 @@ const CreatePollForm = () => {
           Create poll
         </Button>
       </FormGroup>
-    </Box>
+    </>
   );
 };
 

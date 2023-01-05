@@ -1,14 +1,13 @@
-import { ReactNode, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const TOOLTIP_PORTAL_ID = 'tooltip-portal';
 
-interface TooltipProps {
-  title?: string;
-  children: ReactNode;
-}
-
-const Tooltip = ({ title = '', children }: TooltipProps) => {
+const Tooltip = ({
+  title = '',
+  className = '',
+  children,
+}: React.HTMLAttributes<HTMLDivElement>) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -30,7 +29,7 @@ const Tooltip = ({ title = '', children }: TooltipProps) => {
 
   return (
     <div
-      className="relative"
+      className={`relative ${className}`}
       ref={ref}
       onMouseEnter={() => {
         setIsVisible(true);
