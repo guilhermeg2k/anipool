@@ -132,7 +132,7 @@ const ImportOptionsModal = ({
           {polls.map((poll) => (
             <div
               key={poll.id}
-              className="flex cursor-pointer items-center justify-between p-2 hover:bg-slate-100"
+              className="flex cursor-pointer items-center justify-between p-2 hover:bg-gray-100"
               onClick={() => importPoll(poll)}
             >
               <span className="w-[200px]">{poll.title}</span>

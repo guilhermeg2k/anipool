@@ -1,4 +1,5 @@
 import Box from '@components/core/Box';
+import DateDisplay from '@components/core/DateDisplay';
 import IconButton from '@components/core/IconButton';
 import InternalLink from '@components/core/InternalLink';
 import LoadingPage from '@components/core/LoadingPage';
@@ -13,7 +14,6 @@ import {
 import { toastError, toastSuccess } from '@libs/toastify';
 import pollService from '@services/pollService';
 import useUserStore from '@store/userStore';
-import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -91,9 +91,7 @@ const MyPolls: NextPage = () => {
                     <span className="w-[100px] break-words md:w-[200px]">
                       {title}
                     </span>
-                    <span className="hidden md:inline" title="End date">
-                      {dayjs(endDate).toString()}
-                    </span>
+                    <DateDisplay date={endDate} />
                     <div className="flex gap-2">
                       <IconButton
                         onClick={() => copyPollVoteLink(id!)}
@@ -103,13 +101,13 @@ const MyPolls: NextPage = () => {
                       </IconButton>
                       <IconButton
                         onClick={() => openPollResultsPage(id!)}
-                        title="Open poll results page"
+                        title="Open poll results in new tab"
                       >
                         <ChartBarIcon />
                       </IconButton>
                       <IconButton
                         onClick={() => openPollVotePage(id!)}
-                        title="Open poll vote page"
+                        title="Open poll vote page in new tab"
                       >
                         <ArrowTopRightOnSquareIcon />
                       </IconButton>

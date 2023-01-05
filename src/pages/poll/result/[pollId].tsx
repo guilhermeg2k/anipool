@@ -1,5 +1,6 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
+import DateDisplay from '@components/core/DateDisplay';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
@@ -180,9 +181,9 @@ const PollResult: NextPage = () => {
       <Head>
         <title>Results of {poll?.title}</title>
       </Head>
-      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6 ">
+      <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-6 sm:mt-20 ">
         <PageHeader />
-        <Box className="flex flex-col gap-2 md:gap-5 pb-7 mb-7 sm:mb-0">
+        <Box className="mb-7 flex flex-col gap-2 pb-7 sm:mb-0 md:gap-5">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <Title>{poll?.title}</Title>
@@ -199,11 +200,13 @@ const PollResult: NextPage = () => {
                     height={25}
                   />
                 </div>
-                <span className="font-semibold">Ends at:</span>{' '}
-                {new Date(poll?.endDate!).toLocaleString()}
+                <div className="flex gap-1">
+                  <span className="font-semibold">Ends at:</span>
+                  <DateDisplay date={poll?.endDate} />
+                </div>
               </h2>
             </div>
-            <div className="self-center w-full flex justify-between items-center md:block mt-2 md:mt-0 md:w-auto flex-wrap">
+            <div className="mt-2 flex w-full flex-wrap items-center justify-between self-center md:mt-0 md:block md:w-auto">
               <Button
                 color="white"
                 name="refresh"

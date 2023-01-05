@@ -1,5 +1,6 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
+import DateDisplay from '@components/core/DateDisplay';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import PageHeader from '@components/core/PageHeader';
@@ -250,10 +251,10 @@ const Vote: NextPage = () => {
       <Head>
         <title>Vote on {poll?.title}</title>
       </Head>
-      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6">
+      <div className="mx-auto mt-10 flex max-w-4xl flex-col gap-6 sm:mt-20">
         <PageHeader />
-        <Box className="flex flex-col gap-2 md:gap-5 mb-7 sm:mb-0">
-          <div className="flex flex-col md:items-center justify-between md:flex-row">
+        <Box className="mb-7 flex flex-col gap-2 sm:mb-0 md:gap-5">
+          <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <Title>{poll?.title}</Title>
               <h2 className="text-xs">
@@ -269,11 +270,13 @@ const Vote: NextPage = () => {
                     height={25}
                   />
                 </div>
-                <span className="font-semibold">Ends at:</span>{' '}
-                {new Date(poll?.endDate!).toLocaleString()}
+                <div className="flex gap-1">
+                  <span className="font-semibold">Ends at:</span>
+                  <DateDisplay date={poll?.endDate} />
+                </div>
               </h2>
             </div>
-            <div className="flex w-full sm:w-auto justify-center mt-2 md:mt-0">
+            <div className="mt-2 flex w-full justify-center sm:w-auto md:mt-0">
               <Button
                 color="white"
                 onClick={() => router.push(`/poll/result/${pollId}`)}
