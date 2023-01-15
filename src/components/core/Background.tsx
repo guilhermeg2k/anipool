@@ -14,7 +14,7 @@ const Background = ({
         className="fixed z-0 h-full w-full bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('${imageURL}')` }}
       />
-      <div className={`absolute h-full w-full ${className}`} {...rest}>
+      <div className={`absolute ${className}`} {...rest}>
         {children}
       </div>
     </>

@@ -16,18 +16,20 @@ const Page = ({
   ...rest
 }: PageProps) => {
   return (
-    <Background imageURL={backgroundURL}>
+    <>
       <Head>
         <title>{title}</title>
       </Head>
-      <div
-        className="mx-auto mt-10 flex max-w-4xl flex-col gap-6 pb-4 sm:mt-20"
-        {...rest}
-      >
-        <PageHeader />
-        <main className={className}>{children}</main>
-      </div>
-    </Background>
+      <Background imageURL={backgroundURL} className="h-screen w-full">
+        <div
+          className={`mx-auto flex max-w-4xl flex-col gap-6 px-4 pt-10 pb-4 sm:pb-8 sm:pt-20 ${className}`}
+          {...rest}
+        >
+          <PageHeader />
+          {children}
+        </div>
+      </Background>
+    </>
   );
 };
 
