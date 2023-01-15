@@ -1,11 +1,11 @@
-import { HTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import Tooltip from './Tooltip';
 
 const IconButton = ({
   children,
   title,
   ...rest
-}: HTMLAttributes<HTMLButtonElement>) => {
+}: ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <Tooltip title={title}>
       <button

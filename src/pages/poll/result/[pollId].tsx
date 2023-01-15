@@ -1,7 +1,10 @@
+import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
+import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
-import PageLayout from '@components/core/PageLayout';
+import Page from '@components/core/Page';
+import Tooltip from '@components/core/Tooltip';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
 import {
@@ -21,55 +24,56 @@ import { OptionType } from 'src/enums';
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
 
+const buildCharactersResults = (
+  characters: Array<Anilist.Character>,
+  results: Array<PollResult>
+) => {
+  const charactersResults = characters.map((character) => {
+    const result = results.find(
+      ({ anilistId, type }) =>
+        anilistId === character.id && type === OptionType.Character
+    );
+
+    return {
+      ...character,
+      ...result,
+    } as CharacterResult;
+  });
+
+  return charactersResults;
+};
+
+const buildMediasResults = (
+  medias: Array<Anilist.Media>,
+  results: Array<PollResult>
+) => {
+  const mediasWithVotes = medias.map((media) => {
+    const result = results.find(
+      ({ anilistId, type }) =>
+        anilistId === media.id &&
+        (type === OptionType.Manga || type === OptionType.Anime)
+    );
+
+    return {
+      ...media,
+      ...result,
+    } as MediaResult;
+  });
+
+  return mediasWithVotes;
+};
+
 const PollResult: NextPage = () => {
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
+
   const router = useRouter();
   const { pollId } = router.query;
   const totalVotes = results.reduce(
     (totalVotes, option) => totalVotes + option.votes,
     0
   );
-
-  const buildCharactersResults = (
-    characters: Array<Anilist.Character>,
-    results: Array<PollResult>
-  ) => {
-    const charactersResults = characters.map((character) => {
-      const result = results.find(
-        ({ anilistId, type }) =>
-          anilistId === character.id && type === OptionType.Character
-      );
-
-      return {
-        ...character,
-        ...result,
-      } as CharacterResult;
-    });
-
-    return charactersResults;
-  };
-
-  const buildMediasResults = (
-    medias: Array<Anilist.Media>,
-    results: Array<PollResult>
-  ) => {
-    const mediasWithVotes = medias.map((media) => {
-      const result = results.find(
-        ({ anilistId, type }) =>
-          anilistId === media.id &&
-          (type === OptionType.Manga || type === OptionType.Anime)
-      );
-
-      return {
-        ...media,
-        ...result,
-      } as MediaResult;
-    });
-
-    return mediasWithVotes;
-  };
 
   const loadCharactersResults = async (results: Array<PollResult>) => {
     const characterOptionIds = results
@@ -132,7 +136,7 @@ const PollResult: NextPage = () => {
     toastSuccess('Results link copied to clipboard');
   };
 
-  const pageDescription = (
+  const authorAndEndDate = (
     <h2 className="text-xs">
       <div className="flex items-center gap-1">
         <span className="font-semibold">Author:</span>
@@ -153,24 +157,24 @@ const PollResult: NextPage = () => {
     </h2>
   );
 
-  const pageActions = (
-    <div className="flex w-full flex-wrap items-center justify-between self-center md:mt-0 md:block md:w-auto">
-      <Button color="white" name="refresh" onClick={() => loadPollAndResult()}>
-        <span>Refresh</span>
+  const actions = (
+    <div className="flex w-full flex-wrap items-center justify-end self-center sm:justify-between">
+      <IconButton title="Refresh results" onClick={() => loadPollAndResult()}>
         <ArrowPathIcon className="w-5" />
-      </Button>
-      <Button color="white" name="share" onClick={onCopyLinkHandler}>
-        <span>Copy link</span>
+      </IconButton>
+      <IconButton title="Copy results link" onClick={onCopyLinkHandler}>
         <LinkIcon className="w-5" />
-      </Button>
-      <Button
-        color="white"
-        name="Create new poll"
-        onClick={() => router.push(`/poll/vote/${pollId}`)}
-      >
-        <span>Vote</span>
-        <ArrowTopRightOnSquareIcon className="w-5" />
-      </Button>
+      </IconButton>
+      <Tooltip title="Open vote page">
+        <Button
+          color="white"
+          name="Create new poll"
+          onClick={() => router.push(`/poll/vote/${pollId}`)}
+        >
+          <span>Vote</span>
+          <ArrowTopRightOnSquareIcon className="w-5" />
+        </Button>
+      </Tooltip>
     </div>
   );
 
@@ -188,41 +192,42 @@ const PollResult: NextPage = () => {
   }
 
   return (
-    <PageLayout
-      headTitle={`Results of ${poll?.title}`}
-      title={poll?.title}
-      className="flex flex-col gap-3"
-      description={pageDescription}
-      actions={pageActions}
-    >
-      <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-        {results.map((result) => {
-          if (result.type === OptionType.Character) {
-            const characterResult = result as CharacterResult;
-            return (
-              <CharacterResultCard
-                key={characterResult.id}
-                coverUrl={characterResult.image.large}
-                name={characterResult.name}
-                totalVotes={totalVotes}
-                votes={characterResult.votes}
-              />
-            );
-          } else {
-            const mediaResult = result as MediaResult;
-            return (
-              <MediaResultCard
-                key={mediaResult.id}
-                coverUrl={mediaResult.coverImage.extraLarge}
-                title={mediaResult.title}
-                totalVotes={totalVotes}
-                votes={mediaResult.votes}
-              />
-            );
-          }
-        })}
-      </div>
-    </PageLayout>
+    <Page title={`Results of ${poll?.title}`}>
+      <Box
+        className="flex flex-col gap-3"
+        title={poll?.title}
+        description={authorAndEndDate}
+        actions={actions}
+      >
+        <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+          {results.map((result) => {
+            if (result.type === OptionType.Character) {
+              const characterResult = result as CharacterResult;
+              return (
+                <CharacterResultCard
+                  key={characterResult.id}
+                  coverUrl={characterResult.image.large}
+                  name={characterResult.name}
+                  totalVotes={totalVotes}
+                  votes={characterResult.votes}
+                />
+              );
+            } else {
+              const mediaResult = result as MediaResult;
+              return (
+                <MediaResultCard
+                  key={mediaResult.id}
+                  coverUrl={mediaResult.coverImage.extraLarge}
+                  title={mediaResult.title}
+                  totalVotes={totalVotes}
+                  votes={mediaResult.votes}
+                />
+              );
+            }
+          })}
+        </div>
+      </Box>
+    </Page>
   );
 };
 

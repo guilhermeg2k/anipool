@@ -7,7 +7,7 @@ interface DateDisplayProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const DateDisplay = ({ date, ...rest }: DateDisplayProps) => {
   return (
-    <Tooltip title="yyyy-mm-dd hh:mm" {...rest}>
+    <Tooltip title="YYYY-MM-DD HH:mm" {...rest}>
       <time>{getFormattedDateTime(date)}</time>
     </Tooltip>
   );

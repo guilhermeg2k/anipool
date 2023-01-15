@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode } from 'react';
+import Tooltip from '../Tooltip';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -10,6 +11,7 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   size = 'normal',
   color = 'indigo',
+  title,
   disabled,
   children,
   ...rest
@@ -47,13 +49,15 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <button
-      className={`${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] font-roboto font-bold uppercase text-white duration-200 ease-in-out rounded-sm ${className}`}
-      disabled={disabled}
-      {...rest}
-    >
-      <div className="flex items-center justify-center gap-1">{children}</div>
-    </button>
+    <Tooltip title={title}>
+      <button
+        className={`${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] rounded-sm font-roboto font-bold uppercase text-white duration-200 ease-in-out ${className}`}
+        disabled={disabled}
+        {...rest}
+      >
+        <div className="flex items-center justify-center gap-1">{children}</div>
+      </button>
+    </Tooltip>
   );
 };
 

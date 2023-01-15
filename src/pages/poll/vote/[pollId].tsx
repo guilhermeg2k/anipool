@@ -1,7 +1,9 @@
+import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
+import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
-import PageLayout from '@components/core/PageLayout';
+import Page from '@components/core/Page';
 import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/24/outline';
@@ -171,7 +173,7 @@ const Vote: NextPage = () => {
     }
   };
 
-  const onShareHandler = () => {
+  const onCopyVoteLinkHandler = () => {
     navigator.clipboard.writeText(window.location.href);
     toastSuccess('Vote link copied to clipboard');
   };
@@ -248,18 +250,22 @@ const Vote: NextPage = () => {
   );
 
   const pageActions = (
-    <div className="mt-2 flex w-full justify-center sm:w-auto md:mt-0">
+    <div className="mt-2 flex w-full justify-end">
+      <IconButton
+        onClick={onCopyVoteLinkHandler}
+        title="Copy vote link"
+        name="Copy vote"
+      >
+        <LinkIcon className="w-5" />
+      </IconButton>
       <Button
         color="white"
         onClick={() => router.push(`/poll/result/${pollId}`)}
-        name="Results"
+        name="Go to results"
+        title="Go to results"
       >
-        <span>Results</span>
         <ChartBarIcon className="w-5" />
-      </Button>
-      <Button color="white" onClick={onShareHandler} name="share">
-        <span>Copy vote link</span>
-        <LinkIcon className="w-5" />
+        <span>Results</span>
       </Button>
     </div>
   );
@@ -281,27 +287,28 @@ const Vote: NextPage = () => {
   }
 
   return (
-    <PageLayout
-      headTitle={`Vote on ${poll?.title}`}
-      title={poll?.title}
-      className="flex flex-col gap-2 md:gap-5"
-      description={pageDescription}
-      actions={pageActions}
-    >
-      <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-        {renderOptions()}
-      </div>
-      <div className="self-end">
-        <Button
-          color="green"
-          disabled={!canSubmit}
-          name="vote"
-          onClick={() => submitVotes(votes)}
-        >
-          vote
-        </Button>
-      </div>
-    </PageLayout>
+    <Page title={`Vote on ${poll?.title}`}>
+      <Box
+        className="flex flex-col gap-2 md:gap-5"
+        description={pageDescription}
+        title={poll?.title}
+        actions={pageActions}
+      >
+        <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+          {renderOptions()}
+        </div>
+        <div className="self-end">
+          <Button
+            color="green"
+            disabled={!canSubmit}
+            name="vote"
+            onClick={() => submitVotes(votes)}
+          >
+            vote
+          </Button>
+        </div>
+      </Box>
+    </Page>
   );
 };
 
