@@ -4,6 +4,7 @@ import DateDisplay from '@components/core/DateDisplay';
 import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
+import Title from '@components/core/Title';
 import CharacterVoteOption from '@components/poll/vote/CharacterVoteOption';
 import MediaVoteOption from '@components/poll/vote/MediaVoteOption';
 import { ChartBarIcon, LinkIcon } from '@heroicons/react/24/outline';
@@ -228,48 +229,6 @@ const Vote: NextPage = () => {
       return renderMediaVoteOption(mediaOption);
     });
 
-  const pageDescription = (
-    <h2 className="text-xs">
-      <div className="flex items-center gap-1">
-        <span className="font-semibold">Author:</span>
-        <span>{poll?.creator.nickname}</span>
-        <Image
-          className="rounded-full"
-          src={poll?.creator.avatarUrl || ''}
-          alt="Profile picture"
-          layout="fixed"
-          width={25}
-          height={25}
-        />
-      </div>
-      <div className="flex gap-1">
-        <span className="font-semibold">Ends at:</span>
-        <DateDisplay date={poll?.endDate} />
-      </div>
-    </h2>
-  );
-
-  const actions = (
-    <div className="mt-2 flex w-full justify-end">
-      <IconButton
-        onClick={onCopyVoteLinkHandler}
-        title="Copy vote link"
-        name="Copy vote"
-      >
-        <LinkIcon className="w-5" />
-      </IconButton>
-      <Button
-        color="white"
-        onClick={() => router.push(`/poll/result/${pollId}`)}
-        name="Go to results"
-        title="Go to results"
-      >
-        <span>Results</span>
-        <ChartBarIcon className="w-5" />
-      </Button>
-    </div>
-  );
-
   useEffect(() => {
     loadPollOrRedirectToResultsIfUserHasAlreadyVoted();
   }, [pollId]);
@@ -288,12 +247,48 @@ const Vote: NextPage = () => {
 
   return (
     <Page title={`Vote on ${poll?.title}`}>
-      <Box
-        className="flex flex-col gap-2 md:gap-5"
-        description={pageDescription}
-        title={poll?.title}
-        actions={actions}
-      >
+      <Box className="flex flex-col gap-2 md:gap-5">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-3">
+          <div className="col-span-1 flex flex-col sm:col-span-2">
+            <Title>{poll?.title}</Title>
+            <h2 className="text-xs">
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Author:</span>
+                <span>{poll?.creator.nickname}</span>
+                <Image
+                  className="rounded-full"
+                  src={poll?.creator.avatarUrl || ''}
+                  alt="Profile picture"
+                  layout="fixed"
+                  width={25}
+                  height={25}
+                />
+              </div>
+              <div className="flex gap-1">
+                <span className="font-semibold">Ends at:</span>
+                <DateDisplay date={poll?.endDate} />
+              </div>
+            </h2>
+          </div>
+          <div className="mt-2 flex w-full justify-end">
+            <IconButton
+              onClick={onCopyVoteLinkHandler}
+              title="Copy vote link"
+              name="Copy vote"
+            >
+              <LinkIcon className="w-5" />
+            </IconButton>
+            <Button
+              color="white"
+              onClick={() => router.push(`/poll/result/${pollId}`)}
+              name="Go to results"
+              title="Go to results"
+            >
+              <span>Results</span>
+              <ChartBarIcon className="w-5" />
+            </Button>
+          </div>
+        </div>
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {renderOptions()}
         </div>

@@ -4,6 +4,7 @@ import DateDisplay from '@components/core/DateDisplay';
 import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
+import Title from '@components/core/Title';
 import Tooltip from '@components/core/Tooltip';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
@@ -136,48 +137,6 @@ const PollResult: NextPage = () => {
     toastSuccess('Results link copied to clipboard');
   };
 
-  const authorAndEndDate = (
-    <h2 className="text-xs">
-      <div className="flex items-center gap-1">
-        <span className="font-semibold">Author:</span>
-        <span>{poll?.creator.nickname}</span>
-        <Image
-          className="rounded-full"
-          src={poll?.creator.avatarUrl || ''}
-          alt="Profile picture"
-          layout="fixed"
-          width={25}
-          height={25}
-        />
-      </div>
-      <div className="flex gap-1">
-        <span className="font-semibold">Ends at:</span>
-        <DateDisplay date={poll?.endDate} />
-      </div>
-    </h2>
-  );
-
-  const actions = (
-    <div className="flex w-full flex-wrap items-center justify-end self-center sm:justify-between">
-      <IconButton title="Refresh results" onClick={() => loadPollAndResult()}>
-        <ArrowPathIcon className="w-5" />
-      </IconButton>
-      <IconButton title="Copy results link" onClick={onCopyLinkHandler}>
-        <LinkIcon className="w-5" />
-      </IconButton>
-      <Tooltip title="Open vote page">
-        <Button
-          color="white"
-          name="Create new poll"
-          onClick={() => router.push(`/poll/vote/${pollId}`)}
-        >
-          <span>Vote</span>
-          <ArrowTopRightOnSquareIcon className="w-5" />
-        </Button>
-      </Tooltip>
-    </div>
-  );
-
   useEffect(() => {
     loadPollAndResult();
   }, [pollId]);
@@ -193,12 +152,51 @@ const PollResult: NextPage = () => {
 
   return (
     <Page title={`Results of ${poll?.title}`}>
-      <Box
-        className="flex flex-col gap-3"
-        title={poll?.title}
-        description={authorAndEndDate}
-        actions={actions}
-      >
+      <Box className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-3">
+          <div className="col-span-1 flex flex-col sm:col-span-2">
+            <Title className="max-h-28 overflow-auto">{poll?.title}</Title>
+            <h2 className="text-xs">
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Author:</span>
+                <span>{poll?.creator.nickname}</span>
+                <Image
+                  className="rounded-full"
+                  src={poll?.creator.avatarUrl || ''}
+                  alt="Profile picture"
+                  layout="fixed"
+                  width={25}
+                  height={25}
+                />
+              </div>
+              <div className="flex gap-1">
+                <span className="font-semibold">Ends at:</span>
+                <DateDisplay date={poll?.endDate} />
+              </div>
+            </h2>
+          </div>
+          <div className="flex w-full flex-wrap items-center justify-end self-center ">
+            <IconButton
+              title="Refresh results"
+              onClick={() => loadPollAndResult()}
+            >
+              <ArrowPathIcon className="w-5" />
+            </IconButton>
+            <IconButton title="Copy results link" onClick={onCopyLinkHandler}>
+              <LinkIcon className="w-5" />
+            </IconButton>
+            <Tooltip title="Open vote page">
+              <Button
+                color="white"
+                name="Create new poll"
+                onClick={() => router.push(`/poll/vote/${pollId}`)}
+              >
+                <span>Vote</span>
+                <ArrowTopRightOnSquareIcon className="w-5" />
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {results.map((result) => {
             if (result.type === OptionType.Character) {

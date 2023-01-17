@@ -22,7 +22,7 @@ const Page = ({
       </Head>
       <Background imageURL={backgroundURL} className="h-screen w-full">
         <div
-          className={`mx-auto flex max-w-4xl flex-col gap-6 px-4 pt-10 pb-4 sm:pb-8 sm:pt-20 ${className}`}
+          className={`mx-auto flex max-w-4xl flex-col gap-6 px-4 pt-10 pb-4 sm:pb-8 sm:pt-20 lg:px-0 ${className}`}
           {...rest}
         >
           <PageHeader />
