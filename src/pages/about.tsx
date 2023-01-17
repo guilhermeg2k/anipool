@@ -1,6 +1,7 @@
 import Box from '@components/core/Box';
 import ExternalLink from '@components/core/ExternalLink';
 import Page from '@components/core/Page';
+import Title from '@components/core/Title';
 import { NextPage } from 'next';
 import PackageJSON from '../../package.json';
 
@@ -9,7 +10,8 @@ const VERSION = `${PackageJSON.version}-beta (${PackageJSON.versionName})`;
 const About: NextPage = () => {
   return (
     <Page title="About">
-      <Box title="About" className="flex flex-col gap-3">
+      <Box className="flex flex-col gap-3">
+        <Title>About</Title>
         <section className="flex flex-col">
           <h2 className="font-semibold">Description</h2>
           <span>

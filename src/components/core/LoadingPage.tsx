@@ -14,7 +14,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
   return (
     <Background
       imageURL="/images/background.jpg"
-      className="flex flex-col items-center justify-center gap-4 text-white"
+      className="flex h-screen w-screen flex-col items-center justify-center gap-4 text-white"
     >
       <Head>
         <title>{title}</title>

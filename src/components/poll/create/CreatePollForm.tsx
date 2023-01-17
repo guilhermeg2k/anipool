@@ -154,7 +154,7 @@ const CreatePollForm = () => {
               </li>
             )}
           </AutoAnimate>
-          <div className="flex flex-col gap-2 md:flex-row">
+          <div className="flex flex-grow flex-col gap-2 md:flex-row">
             <Button
               className="w-full self-end"
               color="green"

@@ -249,7 +249,7 @@ const Vote: NextPage = () => {
     </h2>
   );
 
-  const pageActions = (
+  const actions = (
     <div className="mt-2 flex w-full justify-end">
       <IconButton
         onClick={onCopyVoteLinkHandler}
@@ -264,8 +264,8 @@ const Vote: NextPage = () => {
         name="Go to results"
         title="Go to results"
       >
-        <ChartBarIcon className="w-5" />
         <span>Results</span>
+        <ChartBarIcon className="w-5" />
       </Button>
     </div>
   );
@@ -292,7 +292,7 @@ const Vote: NextPage = () => {
         className="flex flex-col gap-2 md:gap-5"
         description={pageDescription}
         title={poll?.title}
-        actions={pageActions}
+        actions={actions}
       >
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {renderOptions()}

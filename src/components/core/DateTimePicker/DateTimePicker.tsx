@@ -107,7 +107,7 @@ const DateTimePicker = ({
   const renderPopoverPanelBody = (open: boolean, onClose: Function) => {
     if (open) {
       return (
-        <div className="text-neutral-60 absolute max-h-[340px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
+        <div className="text-neutral-60 absolute bottom-[45px] max-h-[340px] w-[270px] overflow-y-auto rounded-sm bg-white p-2 shadow-md">
           <div className="flex flex-col justify-center p-2">
             {renderPickerView(onClose)}
           </div>

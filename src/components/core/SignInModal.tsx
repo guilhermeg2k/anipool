@@ -17,10 +17,10 @@ const SignInModal = ({ open, onClose }: SignInModalProps) => {
       disableBackdropClick
       onClose={onClose}
     >
-      <div className="flex justify-center w-full">
-        <div className="flex flex-col gap-2 w-full lg:w-[80%]">
-          <MyAnimeListSignInButton />
+      <div className="flex w-full justify-center">
+        <div className="flex w-full flex-col gap-2 lg:w-[80%]">
           <AnilistSignInButton />
+          <MyAnimeListSignInButton />
           <DiscordSignInButton />
           <TwitterSignInButton />
         </div>

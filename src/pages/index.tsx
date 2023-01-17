@@ -30,7 +30,10 @@ const Home: NextPage = () => {
   }
 
   return (
-    <Background imageURL="/images/background.jpg">
+    <Background
+      imageURL="/images/background.jpg"
+      className="h-full w-full px-4"
+    >
       <Head>
         <title>Anipool</title>
       </Head>
@@ -42,8 +45,8 @@ const Home: NextPage = () => {
             friends
           </span>
           <div className="flex flex-col justify-center gap-2 lg:w-full">
-            <MyAnimeListSignInButton />
             <AnilistSignInButton />
+            <MyAnimeListSignInButton />
             <DiscordSignInButton />
             <TwitterSignInButton />
           </div>
