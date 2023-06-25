@@ -28,38 +28,52 @@ const getUser = async ({ accessToken }: Anilist.Credencials) => {
 };
 
 const getMediasByIds = async (ids: Array<number>) => {
-  const query = gql`
-    query getMedias($ids: [Int]!, $size: Int!) {
-      Page(page: 1, perPage: $size) {
-        pageInfo {
-          total
-          currentPage
-          lastPage
-          hasNextPage
-          perPage
-        }
-        media(id_in: $ids) {
-          id
-          type
-          title {
-            romaji
-            english
-            native
+  let page = 1;
+  let hasNextPage = true;
+  const medias: Anilist.Media[] = [];
+
+  const paginatedRequest = async (ids: Array<number>, page: number) => {
+    const query = gql`
+      query getMedias($ids: [Int]!, $page: Int!) {
+        Page(page: $page, perPage: 50) {
+          pageInfo {
+            total
+            currentPage
+            lastPage
+            hasNextPage
+            perPage
           }
-          coverImage {
-            extraLarge
+          media(id_in: $ids) {
+            id
+            type
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              extraLarge
+            }
           }
         }
       }
-    }
-  `;
-  const size = ids.length;
-  const queryResult = await graphqlClient.request(query, {
-    ids,
-    size,
-  });
+    `;
+    const queryResult = await graphqlClient.request(query, {
+      ids,
+      page,
+    });
 
-  return queryResult.Page.media as Array<Anilist.Media>;
+    return queryResult.Page;
+  };
+
+  while (hasNextPage) {
+    const queryResult = await paginatedRequest(ids, page);
+    medias.push(...(queryResult.media as Array<Anilist.Media>));
+    page++;
+    hasNextPage = queryResult.pageInfo.hasNextPage;
+  }
+
+  return medias;
 };
 
 const getCharactersByIds = async (ids: Array<number>) => {

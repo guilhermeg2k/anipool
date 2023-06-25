@@ -117,7 +117,7 @@ const Vote: NextPage = () => {
         setOptions(options);
       }
     } catch (error) {
-      toastError('Failed  to load poll');
+      toastError('Failed to load poll');
     } finally {
       setIsLoadingPoll(false);
     }
@@ -212,7 +212,7 @@ const Vote: NextPage = () => {
       <MediaVoteOption
         key={`media-${mediaOption.id}`}
         onClick={() => onSelectedHandler(mediaOption)}
-        coverUrl={mediaOption.coverImage.extraLarge}
+        coverUrl={mediaOption.coverImage?.extraLarge}
         title={mediaOption.title}
         selected={isSelected}
       />
@@ -220,7 +220,7 @@ const Vote: NextPage = () => {
   };
 
   const renderOptions = () =>
-    options?.map((option) => {
+    options.map((option) => {
       if (option.type === OptionType.Character) {
         const characterOption = option as CharacterOption;
         return renderCharacterVoteOption(characterOption);
