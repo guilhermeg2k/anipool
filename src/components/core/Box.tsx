@@ -1,11 +1,13 @@
 interface BoxProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
-const Box = ({ children, className }: BoxProps) => {
+const Box = ({ children, className = '' }: BoxProps) => {
   return (
-    <div className={`rounded-sm bg-white p-4 ${className}`}>{children}</div>
+    <div className={`flex flex-col gap-3 rounded-sm bg-white p-4 ${className}`}>
+      {children}
+    </div>
   );
 };
 

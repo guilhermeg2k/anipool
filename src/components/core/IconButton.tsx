@@ -1,16 +1,22 @@
-import { HTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
+import Tooltip from './Tooltip';
 
 const IconButton = ({
   children,
+  title,
+  disabled,
   ...rest
-}: HTMLAttributes<HTMLButtonElement>) => {
+}: ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const className = disabled
+    ? 'rounded-full border-2 border-transparent p-2 text-gray-400'
+    : 'rounded-full border-2 border-transparent p-2 hover:bg-gray-200';
+
   return (
-    <button
-      className="rounded-full border-2 p-2 border-transparent hover:bg-slate-200"
-      {...rest}
-    >
-      <div className="w-5 h-5">{children}</div>
-    </button>
+    <Tooltip title={title}>
+      <button className={className} disabled={disabled} {...rest}>
+        <div className="h-5 w-5">{children}</div>
+      </button>
+    </Tooltip>
   );
 };
 

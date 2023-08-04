@@ -1,10 +1,9 @@
+import Background from '@components/core/Background';
 import AnilistSignInButton from '@components/core/Button/AnilistSignInButton';
 import DiscordSignInButton from '@components/core/Button/DiscordSignInButton';
 import MyAnimeListSignInButton from '@components/core/Button/MyAnimeListSignInButton';
-import TwitterSignInButton from '@components/core/Button/TwitterSignINButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Logo from '@components/core/Logo';
-import Page from '@components/core/Page';
 import useUserStore from '@store/userStore';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -30,7 +29,10 @@ const Home: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/background.jpg">
+    <Background
+      imageURL="/images/background.jpg"
+      className="h-full w-full px-4"
+    >
       <Head>
         <title>Anipool</title>
       </Head>
@@ -41,11 +43,10 @@ const Home: NextPage = () => {
             Create anime related polls and quizes and share them with your
             friends
           </span>
-          <div className="flex flex-col gap-2 justify-center lg:w-full">
-            <MyAnimeListSignInButton />
+          <div className="flex flex-col justify-center gap-2 lg:w-full">
             <AnilistSignInButton />
+            <MyAnimeListSignInButton />
             <DiscordSignInButton />
-            <TwitterSignInButton />
           </div>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
@@ -58,7 +59,7 @@ const Home: NextPage = () => {
           />
         </div>
       </div>
-    </Page>
+    </Background>
   );
 };
 

@@ -1,8 +1,9 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
+import DateDisplay from '@components/core/DateDisplay';
+import { LinkButton } from '@components/core/LinkButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
-import PageHeader from '@components/core/PageHeader';
 import Title from '@components/core/Title';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
@@ -15,7 +16,6 @@ import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -24,55 +24,56 @@ import { OptionType } from 'src/enums';
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
 
+const buildCharactersResults = (
+  characters: Array<Anilist.Character>,
+  results: Array<PollResult>
+) => {
+  const charactersResults = characters.map((character) => {
+    const result = results.find(
+      ({ anilistId, type }) =>
+        anilistId === character.id && type === OptionType.Character
+    );
+
+    return {
+      ...character,
+      ...result,
+    } as CharacterResult;
+  });
+
+  return charactersResults;
+};
+
+const buildMediasResults = (
+  medias: Array<Anilist.Media>,
+  results: Array<PollResult>
+) => {
+  const mediasWithVotes = medias.map((media) => {
+    const result = results.find(
+      ({ anilistId, type }) =>
+        anilistId === media.id &&
+        (type === OptionType.Manga || type === OptionType.Anime)
+    );
+
+    return {
+      ...media,
+      ...result,
+    } as MediaResult;
+  });
+
+  return mediasWithVotes;
+};
+
 const PollResult: NextPage = () => {
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
+
   const router = useRouter();
   const { pollId } = router.query;
   const totalVotes = results.reduce(
     (totalVotes, option) => totalVotes + option.votes,
     0
   );
-
-  const buildCharactersResults = (
-    characters: Array<Anilist.Character>,
-    results: Array<PollResult>
-  ) => {
-    const charactersResults = characters.map((character) => {
-      const result = results.find(
-        ({ anilistId, type }) =>
-          anilistId === character.id && type === OptionType.Character
-      );
-
-      return {
-        ...character,
-        ...result,
-      } as CharacterResult;
-    });
-
-    return charactersResults;
-  };
-
-  const buildMediasResults = (
-    medias: Array<Anilist.Media>,
-    results: Array<PollResult>
-  ) => {
-    const mediasWithVotes = medias.map((media) => {
-      const result = results.find(
-        ({ anilistId, type }) =>
-          anilistId === media.id &&
-          (type === OptionType.Manga || type === OptionType.Anime)
-      );
-
-      return {
-        ...media,
-        ...result,
-      } as MediaResult;
-    });
-
-    return mediasWithVotes;
-  };
 
   const loadCharactersResults = async (results: Array<PollResult>) => {
     const characterOptionIds = results
@@ -135,33 +136,6 @@ const PollResult: NextPage = () => {
     toastSuccess('Results link copied to clipboard');
   };
 
-  const renderResultsCards = () =>
-    results.map((result) => {
-      if (result.type === OptionType.Character) {
-        const characterResult = result as CharacterResult;
-        return (
-          <CharacterResultCard
-            key={characterResult.id}
-            coverUrl={characterResult.image.large}
-            name={characterResult.name}
-            totalVotes={totalVotes}
-            votes={characterResult.votes}
-          />
-        );
-      }
-
-      const mediaResult = result as MediaResult;
-      return (
-        <MediaResultCard
-          key={mediaResult.id}
-          coverUrl={mediaResult.coverImage.extraLarge}
-          title={mediaResult.title}
-          totalVotes={totalVotes}
-          votes={mediaResult.votes}
-        />
-      );
-    });
-
   useEffect(() => {
     loadPollAndResult();
   }, [pollId]);
@@ -176,61 +150,88 @@ const PollResult: NextPage = () => {
   }
 
   return (
-    <Page bgImage="/images/background.jpg">
-      <Head>
-        <title>Results of {poll?.title}</title>
-      </Head>
-      <div className="mx-auto mt-10 sm:mt-20 flex max-w-4xl flex-col gap-6 ">
-        <PageHeader />
-        <Box className="flex flex-col gap-2 md:gap-5 pb-7 mb-7 sm:mb-0">
-          <div className="flex flex-col justify-between md:flex-row md:items-center">
-            <div>
-              <Title>{poll?.title}</Title>
-              <h2 className="text-xs">
-                <div className="flex items-center  gap-1">
-                  <span className="font-semibold">Author:</span>
-                  <span>{poll?.creator.nickname}</span>
-                  <Image
-                    className="rounded-full"
-                    src={poll?.creator.avatarUrl || ''}
-                    alt="Profile picture"
-                    layout="fixed"
-                    width={25}
-                    height={25}
-                  />
-                </div>
-                <span className="font-semibold">Ends at:</span>{' '}
-                {new Date(poll?.endDate!).toLocaleString()}
-              </h2>
-            </div>
-            <div className="self-center w-full flex justify-between items-center md:block mt-2 md:mt-0 md:w-auto flex-wrap">
-              <Button
-                color="white"
-                name="refresh"
-                onClick={() => loadPollAndResult()}
-              >
-                <span>Refresh</span>
-                <ArrowPathIcon className="w-5" />
-              </Button>
-              <Button color="white" name="share" onClick={onCopyLinkHandler}>
-                <span>Copy link</span>
-                <LinkIcon className="w-5" />
-              </Button>
-              <Button
-                color="white"
-                name="Create new poll"
-                onClick={() => router.push(`/poll/vote/${pollId}`)}
-              >
-                <span>Vote</span>
-                <ArrowTopRightOnSquareIcon className="w-5" />
-              </Button>
-            </div>
+    <Page title={`Results of ${poll?.title}`}>
+      <Box className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-2">
+          <div className="col-span-1 flex flex-col">
+            <Title className="max-h-28 overflow-auto">{poll?.title}</Title>
+            <h2 className="text-xs">
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Author:</span>
+                <span>{poll?.creator.nickname}</span>
+                <Image
+                  className="rounded-full"
+                  src={poll?.creator.avatarUrl || ''}
+                  alt="Profile picture"
+                  layout="fixed"
+                  width={25}
+                  height={25}
+                />
+              </div>
+              <div className="flex gap-1">
+                <span className="font-semibold">Ends at:</span>
+                <DateDisplay date={poll?.endDate} />
+              </div>
+            </h2>
           </div>
-          <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
-            {renderResultsCards()}
+          <div className="flex w-full flex-wrap items-center justify-around md:justify-end self-center ">
+            <Button
+              color="white"
+              title="Refresh results"
+              name="Refresh results"
+              onClick={() => loadPollAndResult()}
+            >
+              <span>Refresh</span>
+              <ArrowPathIcon className="w-5" />
+            </Button>
+            <Button
+              color="white"
+              name="Copy results link"
+              title="Copy results link"
+              onClick={onCopyLinkHandler}
+            >
+              <span>Copy link</span>
+              <LinkIcon className="w-5" />
+            </Button>
+            <LinkButton
+              color="white"
+              name="Open vote page"
+              title="Open vote page"
+              href={`/poll/vote/${pollId}`}
+            >
+              <span>Vote</span>
+              <ArrowTopRightOnSquareIcon className="w-5" />
+            </LinkButton>
           </div>
-        </Box>
-      </div>
+        </div>
+        <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
+          {results.map((result) => {
+            if (result.type === OptionType.Character) {
+              const characterResult = result as CharacterResult;
+              return (
+                <CharacterResultCard
+                  key={characterResult.id}
+                  coverUrl={characterResult.image.large}
+                  name={characterResult.name}
+                  totalVotes={totalVotes}
+                  votes={characterResult.votes}
+                />
+              );
+            } else {
+              const mediaResult = result as MediaResult;
+              return (
+                <MediaResultCard
+                  key={mediaResult.id}
+                  coverUrl={mediaResult.coverImage.extraLarge}
+                  title={mediaResult.title}
+                  totalVotes={totalVotes}
+                  votes={mediaResult.votes}
+                />
+              );
+            }
+          })}
+        </div>
+      </Box>
     </Page>
   );
 };
