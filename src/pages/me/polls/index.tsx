@@ -2,6 +2,7 @@ import Box from '@components/core/Box';
 import DateDisplay from '@components/core/DateDisplay';
 import IconButton from '@components/core/IconButton';
 import InternalLink from '@components/core/InternalLink';
+import { LinkIconButton } from '@components/core/LinkIconButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
@@ -18,7 +19,7 @@ import useUserStore from '@store/userStore';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
-const getPollVoteLinkById = (id: string) => `/poll/vote/${id}`;
+const getPollVoteLinkById = (id?: string) => `/poll/vote/${id}`;
 
 const copyPollVoteLink = (id: string) => {
   let link = getPollVoteLinkById(id);
@@ -26,15 +27,6 @@ const copyPollVoteLink = (id: string) => {
 
   navigator.clipboard.writeText(link);
   toastSuccess('Vote link copied to clipboard');
-};
-
-const openPollVotePage = (id: string) => {
-  const link = getPollVoteLinkById(id);
-  window.open(link, '_blank');
-};
-
-const openPollResultsPage = (id: string) => {
-  window.open(`/poll/result/${id}`, '_blank');
 };
 
 const POLLS_PER_PAGE = 12;
@@ -142,18 +134,18 @@ const MyPolls: NextPage = () => {
                   >
                     <LinkIcon />
                   </IconButton>
-                  <IconButton
-                    onClick={() => openPollResultsPage(id!)}
-                    title="Open poll results in new tab"
+                  <LinkIconButton
+                    href={`/poll/result/${id}`}
+                    title="Open poll results"
                   >
                     <ChartBarIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => openPollVotePage(id!)}
-                    title="Open poll vote page in new tab"
+                  </LinkIconButton>
+                  <LinkIconButton
+                    title="Open poll vote"
+                    href={getPollVoteLinkById(id)}
                   >
                     <ArrowTopRightOnSquareIcon />
-                  </IconButton>
+                  </LinkIconButton>
                 </div>
               </div>
             ))

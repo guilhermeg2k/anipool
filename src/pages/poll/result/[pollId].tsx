@@ -1,10 +1,10 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
+import { LinkButton } from '@components/core/LinkButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
-import Tooltip from '@components/core/Tooltip';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
 import {
@@ -184,20 +184,24 @@ const PollResult: NextPage = () => {
               <span>Refresh</span>
               <ArrowPathIcon className="w-5" />
             </Button>
-            <Button color="white" name="Copy results link" title="Copy results link" onClick={onCopyLinkHandler}>
+            <Button
+              color="white"
+              name="Copy results link"
+              title="Copy results link"
+              onClick={onCopyLinkHandler}
+            >
               <span>Copy link</span>
               <LinkIcon className="w-5" />
             </Button>
-            <Tooltip title="Open vote page">
-              <Button
-                color="white"
-                name="Create new poll"
-                onClick={() => router.push(`/poll/vote/${pollId}`)}
-              >
-                <span>Vote</span>
-                <ArrowTopRightOnSquareIcon className="w-5" />
-              </Button>
-            </Tooltip>
+            <LinkButton
+              color="white"
+              name="Open vote page"
+              title="Open vote page"
+              href={`/poll/vote/${pollId}`}
+            >
+              <span>Vote</span>
+              <ArrowTopRightOnSquareIcon className="w-5" />
+            </LinkButton>
           </div>
         </div>
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">

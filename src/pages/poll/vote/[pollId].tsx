@@ -1,6 +1,7 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
+import { LinkButton } from '@components/core/LinkButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
@@ -276,18 +277,18 @@ const Vote: NextPage = () => {
               name="Copy vote"
               title="Copy vote link"
             >
-              <span>Copy vote link</span>
+              <span>Copy link</span>
               <LinkIcon className="w-5" />
             </Button>
-            <Button
+            <LinkButton
               color="white"
-              onClick={() => router.push(`/poll/result/${pollId}`)}
+              href={`/poll/result/${pollId}`}
               name="Go to results"
               title="Go to results"
             >
               <span>Results</span>
               <ChartBarIcon className="w-5" />
-            </Button>
+            </LinkButton>
           </div>
         </div>
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
