@@ -1,7 +1,7 @@
 {
   "name": "anipool",
   "version": "0.6.0",
-  "versionName": "Himeno-dev",
+  "versionName": "Himeno",
   "private": true,
   "scripts": {
     "dev": "next dev",
