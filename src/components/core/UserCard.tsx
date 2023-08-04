@@ -28,9 +28,9 @@ const UserCard = () => {
 
   const menuItems = MENU_LINKS.map((link) => (
     <Menu.Item as={Link} key={link.id} href={link.path}>
-      <span className="cursor-pointer rounded-sm p-2 hover:bg-indigo-500 hover:text-white">
+      <a className="cursor-pointer rounded-sm p-2 hover:bg-indigo-500 hover:text-white">
         {link.label}
-      </span>
+      </a>
     </Menu.Item>
   ));
 

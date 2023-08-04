@@ -1,10 +1,15 @@
-interface TitleProps {
-  children: React.ReactNode;
-}
+import { HTMLAttributes } from 'react';
 
-const Title = ({ children }: TitleProps) => {
+const Title = ({
+  children,
+  className = '',
+  ...rest
+}: HTMLAttributes<HTMLHeadingElement>) => {
   return (
-    <h1 className="font-roboto text-base font-semibold text-indigo-800 md:text-xl">
+    <h1
+      className={`font-roboto text-base font-semibold uppercase text-indigo-800 md:text-xl ${className}`}
+      {...rest}
+    >
       {children}
     </h1>
   );

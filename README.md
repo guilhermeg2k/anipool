@@ -1,6 +1,6 @@
 # Anipool
 
-[Anipool](https://www.anipool.app/) is a webapp to create anime related polls and quizes, it was created using [NextJS](https://nextjs.org/) on both front and backend, [TailwindCSS](https://tailwindcss.com/) was used as CSS framework and [DynamoDB](https://aws.amazon.com/pt/dynamodb/) as database
+[Anipool](https://www.anipool.app/) is a webapp to create anime related polls and quizes. It uses [NextJS](https://nextjs.org/) on both front and backend, [TailwindCSS](https://tailwindcss.com/) is used as CSS framework and [DynamoDB](https://aws.amazon.com/pt/dynamodb/) as database
 
 ## Dependencies
 
@@ -12,7 +12,7 @@ You need to create a .env.local file, [as the example](https://github.com/guilhe
 
 ANIPOOL_AWS_ACCESS_KEY_ID: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
-ANIPOOL_AWS_SECRET_ACCESS_KEY : AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
+ANIPOOL_AWS_SECRET_ACCESS_KEY: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
 ANIPOOL_AWS_REGION: AWS access key id to access DynamoDB (you can get it [here](https://console.aws.amazon.com/iam/home?#/security_credentials))
 
