@@ -50,15 +50,15 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <Tooltip title={title}>
-      <button
-        className={`${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] rounded-sm font-roboto font-bold uppercase text-white duration-200 ease-in-out ${className}`}
-        disabled={disabled}
-        {...rest}
-      >
+    <button
+      className={`${buildSizeClasses()} ${buildColorClasses()} min-w-[100px] rounded-sm font-roboto font-bold uppercase text-white duration-200 ease-in-out ${className}`}
+      disabled={disabled}
+      {...rest}
+    >
+      <Tooltip title={title}>
         <div className="flex items-center justify-center gap-1">{children}</div>
-      </button>
-    </Tooltip>
+      </Tooltip>
+    </button>
   );
 };
 

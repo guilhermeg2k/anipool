@@ -6,7 +6,7 @@ import { NextPage } from 'next';
 const CreatePoll: NextPage = () => {
   return (
     <Page title="Create Poll">
-      <Box title="Create poll">
+      <Box>
         <CreatePollForm />
       </Box>
     </Page>
