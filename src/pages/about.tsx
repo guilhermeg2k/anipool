@@ -26,10 +26,10 @@ const About: NextPage = () => {
               <ExternalLink href="https://github.com/guilhermeg2k/anipool">
                 open source
               </ExternalLink>
-              &nbsp;platform to create anime related quizes and polls. It
+              &nbsp;platform that creates anime related quizzes and polls. It
               consumes&nbsp;
               <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
-              &nbsp;API but it doesn&apos;t has any relation with Anilist or its
+              &nbsp;API but doesn&apos;t have any relation with Anilist or its
               creators
             </span>
           </section>
@@ -40,7 +40,7 @@ const About: NextPage = () => {
               <ExternalLink href="https://github.com/guilhermeg2k">
                 GitHub
               </ExternalLink>
-              &nbsp;and if you want to check check there&apos;s my&nbsp;
+              &nbsp;and if you want to check, there&apos;s my&nbsp;
               <ExternalLink href="https://anilist.co/user/guilhermeg2k/">
                 anilist profile
               </ExternalLink>
@@ -48,12 +48,12 @@ const About: NextPage = () => {
           </section>
           <section className="flex flex-col">
             <h2 className="font-semibold">Terms and Privacy Policy</h2>
-            <span>Coming soon</span>
+            <span>Coming soon.</span>
           </section>
           <section className="flex flex-col">
             <h2 className="font-semibold">Version</h2>
             <span>
-              Current version is {VERSION} and you can check its changes
+              The current version is {VERSION} and you can check its changes
               on&nbsp;
               <ExternalLink href="https://github.com/guilhermeg2k/anipool/releases">
                 releases
