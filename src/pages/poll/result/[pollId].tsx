@@ -1,7 +1,6 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
-import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
@@ -153,8 +152,8 @@ const PollResult: NextPage = () => {
   return (
     <Page title={`Results of ${poll?.title}`}>
       <Box className="flex flex-col gap-3">
-        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-3">
-          <div className="col-span-1 flex flex-col sm:col-span-2">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-2">
+          <div className="col-span-1 flex flex-col">
             <Title className="max-h-28 overflow-auto">{poll?.title}</Title>
             <h2 className="text-xs">
               <div className="flex items-center gap-1">
@@ -175,16 +174,20 @@ const PollResult: NextPage = () => {
               </div>
             </h2>
           </div>
-          <div className="flex w-full flex-wrap items-center justify-end self-center ">
-            <IconButton
+          <div className="flex w-full flex-wrap items-center justify-around md:justify-end self-center ">
+            <Button
+              color="white"
               title="Refresh results"
+              name="Refresh results"
               onClick={() => loadPollAndResult()}
             >
+              <span>Refresh</span>
               <ArrowPathIcon className="w-5" />
-            </IconButton>
-            <IconButton title="Copy results link" onClick={onCopyLinkHandler}>
+            </Button>
+            <Button color="white" name="Copy results link" title="Copy results link" onClick={onCopyLinkHandler}>
+              <span>Copy link</span>
               <LinkIcon className="w-5" />
-            </IconButton>
+            </Button>
             <Tooltip title="Open vote page">
               <Button
                 color="white"

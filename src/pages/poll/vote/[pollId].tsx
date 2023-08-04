@@ -1,7 +1,6 @@
 import Box from '@components/core/Box';
 import Button from '@components/core/Button/Button';
 import DateDisplay from '@components/core/DateDisplay';
-import IconButton from '@components/core/IconButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
@@ -248,8 +247,8 @@ const Vote: NextPage = () => {
   return (
     <Page title={`Vote on ${poll?.title}`}>
       <Box className="flex flex-col gap-2 md:gap-5">
-        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-3">
-          <div className="col-span-1 flex flex-col sm:col-span-2">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-2">
+          <div className="col-span-1 flex flex-col">
             <Title>{poll?.title}</Title>
             <h2 className="text-xs">
               <div className="flex items-center gap-1">
@@ -270,14 +269,16 @@ const Vote: NextPage = () => {
               </div>
             </h2>
           </div>
-          <div className="mt-2 flex w-full justify-end">
-            <IconButton
+          <div className="mt-2 flex w-full justify-around md:justify-end">
+            <Button
+              color="white"
               onClick={onCopyVoteLinkHandler}
-              title="Copy vote link"
               name="Copy vote"
+              title="Copy vote link"
             >
+              <span>Copy vote link</span>
               <LinkIcon className="w-5" />
-            </IconButton>
+            </Button>
             <Button
               color="white"
               onClick={() => router.push(`/poll/result/${pollId}`)}

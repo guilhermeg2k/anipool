@@ -17,7 +17,7 @@ import { z } from 'zod';
 
 interface Provider {
   openAuthUrl: () => void;
-  getCredencials: (router: NextRouter) => ProviderCredencials | null;
+  getCredentials: (router: NextRouter) => ProviderCredencials | null;
 }
 
 const providers: {
@@ -28,7 +28,7 @@ const providers: {
       const authUrl = process.env.NEXT_PUBLIC_ANILIST_AUTH_URL || '';
       window.open(authUrl, '_self');
     },
-    getCredencials: getAnilistCredencials,
+    getCredentials: getAnilistCredencials,
   },
 
   [OAuthProvider.Discord]: {
@@ -36,7 +36,7 @@ const providers: {
       const authUrl = process.env.NEXT_PUBLIC_DISCORD_AUTH_URL || '';
       window.open(authUrl, '_self');
     },
-    getCredencials: getDiscordCredencials,
+    getCredentials: getDiscordCredencials,
   },
 
   [OAuthProvider.Twitter]: {
@@ -44,7 +44,7 @@ const providers: {
       const twitterAuthUrl = await authService.getTwitterAuthUrl();
       window.open(twitterAuthUrl, '_self');
     },
-    getCredencials: getTwitterCredencials,
+    getCredentials: getTwitterCredencials,
   },
 
   [OAuthProvider.MyAnimeList]: {
@@ -52,7 +52,7 @@ const providers: {
       const authUrl = await myAnimelistService.getAuthUrl();
       window.open(authUrl, '_self');
     },
-    getCredencials: getMALCredencials,
+    getCredentials: getMALCredencials,
   },
 };
 
@@ -84,10 +84,10 @@ const Auth: NextPage = () => {
 
     try {
       const { provider } = authRouterQuerySchema.parse(router.query);
-      const credencials = providers[provider].getCredencials(router);
+      const credentials = providers[provider].getCredentials(router);
 
-      if (credencials) {
-        await signIn(provider, credencials);
+      if (credentials) {
+        await signIn(provider, credentials);
         router.push('/');
       } else {
         await providers[provider].openAuthUrl();

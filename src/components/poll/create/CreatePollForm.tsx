@@ -135,7 +135,7 @@ const CreatePollForm = () => {
           <AutoAnimate
             as="ul"
             className={`mb-2 flex w-full flex-col ${
-              options.length > 0 && 'max-h-[400px] overflow-y-scroll pr-1'
+              options.length > 0 && 'max-h-[200px] md:max-h-[370px] overflow-y-scroll pr-1'
             }`}
           >
             {options.length > 0 ? (
