@@ -1,10 +1,9 @@
+import Background from '@components/core/Background';
 import AnilistSignInButton from '@components/core/Button/AnilistSignInButton';
 import DiscordSignInButton from '@components/core/Button/DiscordSignInButton';
 import MyAnimeListSignInButton from '@components/core/Button/MyAnimeListSignInButton';
-import TwitterSignInButton from '@components/core/Button/TwitterSignINButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Logo from '@components/core/Logo';
-import Background from '@components/core/Background';
 import useUserStore from '@store/userStore';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -48,7 +47,6 @@ const Home: NextPage = () => {
             <AnilistSignInButton />
             <MyAnimeListSignInButton />
             <DiscordSignInButton />
-            <TwitterSignInButton />
           </div>
         </div>
         <div className="hidden w-[550px] self-end lg:block">
