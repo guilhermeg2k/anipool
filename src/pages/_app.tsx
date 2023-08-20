@@ -10,10 +10,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/react';
+import { AlertsElements } from '@components/core/ModalAlert';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const { setUser } = useUserStore();
   const [isLoading, setIsLoading] = useState(true);
+  const { setUser } = useUserStore();
   const router = useRouter();
 
   const loadUser = async () => {
@@ -46,6 +47,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <>
       <Component {...pageProps} />
       <ToastContainer />
+      <AlertsElements />
       <Analytics />
     </>
   );

@@ -4,6 +4,7 @@ import IconButton from '@components/core/IconButton';
 import InternalLink from '@components/core/InternalLink';
 import { LinkIconButton } from '@components/core/LinkIconButton';
 import LoadingPage from '@components/core/LoadingPage';
+import { useAlert } from '@components/core/ModalAlert';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
 import {
@@ -36,6 +37,7 @@ const MyPolls: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [polls, setPolls] = useState(Array<Poll>());
   const [page, setPage] = useState(0);
+  const alert = useAlert();
   const { id } = useUserStore();
 
   const paginatedPolls = polls.slice(
@@ -70,14 +72,22 @@ const MyPolls: NextPage = () => {
     }
   };
 
-  const onDeletePollHandler = async (id?: string) => {
+  const onDeletePollHandler = async (title: string, id?: string) => {
     if (id != null) {
-      await toastPromise(pollService.deleteById(id), {
-        pending: 'Deleting poll',
-        success: 'Poll deleted',
-        error: 'Failed to delete poll',
-      });
-      await loadPolls();
+      alert.show(
+        'CONFIRMATION',
+        `Are you sure you wanna delete the poll "${title}?"`,
+        {
+          onConfirm: async () => {
+            await toastPromise(pollService.deleteById(id), {
+              pending: 'Deleting poll',
+              success: 'Poll deleted',
+              error: 'Failed to delete poll',
+            });
+            await loadPolls();
+          },
+        }
+      );
     }
   };
 
@@ -160,7 +170,7 @@ const MyPolls: NextPage = () => {
                   </LinkIconButton>
                   <IconButton
                     title="Delete poll"
-                    onClick={() => onDeletePollHandler(id)}
+                    onClick={() => onDeletePollHandler(title, id)}
                   >
                     <TrashIcon />
                   </IconButton>
