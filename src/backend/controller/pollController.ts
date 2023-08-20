@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
   createPollBodySchema,
+  deleteByIdQueryParamsSchema,
   getQueryParamsSchema,
   getResultQueryParamsSchema,
   listByUserIdQueryParamsSchema,
@@ -60,6 +61,18 @@ const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+const deleteById = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { pollId } = deleteByIdQueryParamsSchema.parse(req.query);
+    const { userToken } = req.cookies;
+    const { id: userId } = await getTokenPayload(String(userToken));
+    await pollService.deleteById(pollId, userId);
+    return res.status(200).send('DELETED');
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
 const handleError = (error: unknown, res: NextApiResponse) => {
   if (error instanceof ZodError) {
     return res.status(400).send('Bad request');
@@ -72,6 +85,7 @@ const pollController = {
   listByUserId,
   getResult,
   createPoll,
-};
+  deleteById,
+} as const;
 
 export default pollController;

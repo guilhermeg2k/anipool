@@ -51,11 +51,19 @@ const createAndReturnId = async (poll: Poll) => {
   return id;
 };
 
+const deleteById = async (pollId: string, userId: string) => {
+  const poll = await get(pollId);
+  if (poll.userId === userId) {
+    await pollRepository.deleteById(pollId);
+  }
+};
+
 const pollService = {
   get,
   listByUserId,
   getResult,
   createAndReturnId,
-};
+  deleteById,
+} as const;
 
 export default pollService;

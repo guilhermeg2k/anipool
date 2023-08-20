@@ -43,6 +43,10 @@ const getResult = async (pollId: string) => {
   return pollResult;
 };
 
+const deleteById = async (pollId: string) => {
+  return await axiosClient.delete(`/poll/delete-by-id/${pollId}`);
+};
+
 const pollService = {
   get,
   listByUserId,
@@ -50,6 +54,7 @@ const pollService = {
   getResult,
   create,
   vote,
-};
+  deleteById,
+} as const;
 
 export default pollService;

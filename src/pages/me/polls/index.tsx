@@ -12,8 +12,9 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   LinkIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
-import { toastError, toastSuccess } from '@libs/toastify';
+import { toastError, toastSuccess, toastPromise } from '@libs/toastify';
 import pollService from '@services/pollService';
 import useUserStore from '@store/userStore';
 import { NextPage } from 'next';
@@ -66,6 +67,17 @@ const MyPolls: NextPage = () => {
   const previousPage = () => {
     if (canGoBack) {
       setPage(page - 1);
+    }
+  };
+
+  const onDeletePollHandler = async (id?: string) => {
+    if (id != null) {
+      await toastPromise(pollService.deleteById(id), {
+        pending: 'Deleting poll',
+        success: 'Poll deleted',
+        error: 'Failed to delete poll',
+      });
+      await loadPolls();
     }
   };
 
@@ -146,6 +158,12 @@ const MyPolls: NextPage = () => {
                   >
                     <ArrowTopRightOnSquareIcon />
                   </LinkIconButton>
+                  <IconButton
+                    title="Delete poll"
+                    onClick={() => onDeletePollHandler(id)}
+                  >
+                    <TrashIcon />
+                  </IconButton>
                 </div>
               </div>
             ))

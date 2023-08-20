@@ -44,10 +44,21 @@ const createAndReturnId = async (poll: Poll) => {
   return id;
 };
 
+const deleteById = async (pollId: string) => {
+  const params = {
+    TableName: POLL_TABLE_NAME,
+    Key: {
+      id: pollId,
+    },
+  };
+  await dynamoDb.delete(params).promise();
+};
+
 const pollRepository = {
   get,
-  createAndReturnId,
   listByUserId,
-};
+  createAndReturnId,
+  deleteById,
+} as const;
 
 export default pollRepository;
