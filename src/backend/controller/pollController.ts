@@ -33,17 +33,26 @@ const listByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
 const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { pollId } = getResultQueryParamsSchema.parse(req.query);
-    const pollResults = await pollService.getResult(String(pollId));
+    const { userToken } = req.cookies;
+    const user = userToken && (await getTokenPayload(String(userToken)));
+
+    const pollResults = await pollService.getResult(
+      String(pollId),
+      user && user.id
+    );
+
     return res.status(200).send(pollResults);
   } catch (error) {
+    console.log(error);
     return handleError(error, res);
   }
 };
 
 const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { title, endDate, options, multiOptions } =
+    const { title, endDate, options, multiOptions, resultsVisibility } =
       createPollBodySchema.parse(req.body);
+
     const { userToken } = req.cookies;
     const { id: userId } = await getTokenPayload(String(userToken));
 
@@ -53,6 +62,7 @@ const createPoll = async (req: NextApiRequest, res: NextApiResponse) => {
       endDate: endDate.toISOString(),
       options,
       multiOptions,
+      resultsVisibility,
     });
 
     return res.status(200).send(pollId);

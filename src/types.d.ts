@@ -100,6 +100,8 @@ interface PollOption {
   text?: string;
 }
 
+type ResultsVisibility = 'ALWAYS_VISIBLE' | 'AFTER_END';
+
 interface Poll {
   id?: string;
   userId?: string;
@@ -108,6 +110,7 @@ interface Poll {
   multiOptions: boolean;
   options: Array<PollOption>;
   createdAt?: string;
+  resultsVisibility: ResultsVisibility;
 }
 
 interface PollVote {

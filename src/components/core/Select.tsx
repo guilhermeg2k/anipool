@@ -2,31 +2,33 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 
-interface SelectOption {
+interface SelectOption<T> {
   id: number;
   label: React.ReactNode;
-  value: any;
+  value: T;
 }
 
-interface SelectProps {
-  value: any;
+interface SelectProps<T> {
+  id: string;
+  value: T;
   label?: React.ReactNode;
-  className: string;
-  options: Array<SelectOption>;
-  onChange: (value: any) => void;
+  className?: string;
+  options: Array<SelectOption<T>>;
+  onChange: (value: T) => void;
 }
 
-const Select = ({
+const Select = <T extends unknown>({
+  id = '',
   value,
   className = '',
   label = '',
   options,
   onChange = () => {},
-}: SelectProps) => {
+}: SelectProps<T>) => {
   const selectedOption = options.find((option) => option.value === value);
 
   const selectButton = (
-    <div className="flex items-center justify-between">
+    <div id={id} className="flex items-center justify-between">
       <span>{selectedOption ? selectedOption.label : label}</span>
       <ChevronUpDownIcon
         className="h-5 w-5 text-neutral-500"

@@ -15,6 +15,8 @@ import {
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
+import useUserStore from '@store/userStore';
+import { isAfter } from 'date-fns';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -23,6 +25,26 @@ import { OptionType } from 'src/enums';
 
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
+
+const CountDownItem = ({ label, value }: { label: string; value: number }) => {
+  return (
+    <div className="flex flex-col items-center">
+      <span>{value}</span>
+      <span className="text-sm">{label}</span>
+    </div>
+  );
+};
+
+const getCountdownValues = (deadline: Date) => {
+  const now = new Date().getTime();
+  const t = deadline.getTime() - now;
+  const days = Math.floor(t / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((t % (1000 * 60)) / 1000);
+
+  return { days, hours, minutes, seconds };
+};
 
 const buildCharactersResults = (
   characters: Array<Anilist.Character>,
@@ -64,9 +86,11 @@ const buildMediasResults = (
 };
 
 const PollResult: NextPage = () => {
+  const user = useUserStore();
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
+  const [countdown, setCountdown] = useState(getCountdownValues(new Date()));
 
   const router = useRouter();
   const { pollId } = router.query;
@@ -74,6 +98,16 @@ const PollResult: NextPage = () => {
     (totalVotes, option) => totalVotes + option.votes,
     0
   );
+
+  const resultsOnlyVisibleForOwner =
+    poll?.resultsVisibility === 'AFTER_END' &&
+    poll?.userId === user.id &&
+    isAfter(new Date(poll?.endDate), new Date());
+
+  const resultsIsNotVisible =
+    poll?.resultsVisibility === 'AFTER_END' &&
+    poll?.userId !== user.id &&
+    isAfter(new Date(poll?.endDate), new Date());
 
   const loadCharactersResults = async (results: Array<PollResult>) => {
     const characterOptionIds = results
@@ -135,6 +169,16 @@ const PollResult: NextPage = () => {
     navigator.clipboard.writeText(window.location.href);
     toastSuccess('Results link copied to clipboard');
   };
+
+  useEffect(() => {
+    if (resultsIsNotVisible) {
+      const timeout = setInterval(() => {
+        const countdown = getCountdownValues(new Date(poll?.endDate || 0));
+        setCountdown(countdown);
+      }, 1000);
+      return () => clearInterval(timeout);
+    }
+  }, [poll]);
 
   useEffect(() => {
     loadPollAndResult();
@@ -204,6 +248,19 @@ const PollResult: NextPage = () => {
             </LinkButton>
           </div>
         </div>
+        {resultsOnlyVisibleForOwner && (
+          <div className="uppercase font-bold text-red-400 flex items-center justify-center">
+            Results are only visible for you
+          </div>
+        )}
+        {resultsIsNotVisible && (
+          <div className="text-4xl uppercase font-bold flex gap-10 w-full justify-center flex-col sm:flex-row">
+            <CountDownItem label="Days" value={countdown.days} />
+            <CountDownItem label="Hours" value={countdown.hours} />
+            <CountDownItem label="Minutes" value={countdown.minutes} />
+            <CountDownItem label="Seconds" value={countdown.seconds} />
+          </div>
+        )}
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {results.map((result) => {
             if (result.type === OptionType.Character) {

@@ -1,4 +1,5 @@
 import pollRepository from '@backend/repository/pollRepository';
+import { isAfter } from 'date-fns';
 import pollVoteService from './pollVoteService';
 import userService from './userService';
 
@@ -28,8 +29,18 @@ const listByUserId = async (userId: string) => {
   return pollSortedByCreatedAt;
 };
 
-const getResult = async (id: string) => {
+const getResult = async (id: string, userId?: string) => {
   const poll = await pollRepository.get(id);
+
+  const shouldNotReturnResults =
+    poll.resultsVisibility === 'AFTER_END' &&
+    userId !== poll.userId &&
+    isAfter(new Date(poll.endDate), new Date());
+
+  if (shouldNotReturnResults) {
+    return [];
+  }
+
   const pollVotes = await pollVoteService.getPollVotes(id);
 
   const pollResults = poll.options.map((option) => {

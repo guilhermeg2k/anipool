@@ -4,6 +4,8 @@ import CheckBox from '@components/core/CheckBox';
 import DataDisplay from '@components/core/DataDisplay';
 import DateTimePicker from '@components/core/DateTimePicker/DateTimePicker';
 import FormGroup from '@components/core/FormGroup';
+import Label from '@components/core/Label';
+import Select from '@components/core/Select';
 import TextField from '@components/core/TextField';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { toastPromise } from '@libs/toastify';
@@ -20,6 +22,25 @@ interface PollFormOptionProps {
   text: string;
   onRemove: () => void;
 }
+
+type ResultsVisibilityOption = {
+  id: number;
+  value: ResultsVisibility;
+  label: string;
+};
+
+const RESULTS_VISIBILITY_OPTIONS: ResultsVisibilityOption[] = [
+  {
+    id: 1,
+    value: 'ALWAYS_VISIBLE',
+    label: 'Always visible',
+  },
+  {
+    id: 2,
+    value: 'AFTER_END',
+    label: 'Only visible after end',
+  },
+];
 
 const PollFormOption = ({ id, type, text, onRemove }: PollFormOptionProps) => {
   return (
@@ -45,6 +66,9 @@ const CreatePollForm = () => {
   const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState(new Date());
   const [options, setOptions] = useState<PollOption[]>([]);
+  const [resultsVisibility, setResultsVisibility] = useState(
+    'ALWAYS_VISIBLE' as ResultsVisibility
+  );
   const [shouldEnableMultipleSelection, setShouldEnableMultipleSelection] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -52,7 +76,10 @@ const CreatePollForm = () => {
   const [isCreatingPoll, setIsCreatingPoll] = useState(false);
   const router = useRouter();
   const shouldCreateButtonBeEnabled =
-    title && dayjs(endDate).isAfter(dayjs()) && options.length > 1;
+    title &&
+    dayjs(endDate).isAfter(dayjs()) &&
+    options.length > 1 &&
+    resultsVisibility;
 
   const removeAlreadyAddedOptions = (
     options: PollOption[],
@@ -92,6 +119,7 @@ const CreatePollForm = () => {
         endDate: new Date(endDate).toISOString(),
         options,
         multiOptions: shouldEnableMultipleSelection,
+        resultsVisibility,
       };
 
       const pollId = await toastPromise(pollService.create(poll), {
@@ -130,6 +158,27 @@ const CreatePollForm = () => {
         className="w-full"
         onChange={(title) => setTitle(title)}
       />
+      <div className="flex flex-col sm:flex-row w-full gap-4">
+        <div className="w-full">
+          <Label htmlFor="results-visibility">Results visibility</Label>
+          <Select
+            id="results-visibility"
+            label="Results visibility"
+            value={resultsVisibility}
+            options={RESULTS_VISIBILITY_OPTIONS}
+            onChange={(value) => setResultsVisibility(value)}
+          />
+        </div>
+        <div className="w-full">
+          <Label htmlFor="results-visibility">End date</Label>
+          <DateTimePicker
+            value={endDate}
+            className="w-full sm:w-auto"
+            onChange={(date) => setEndDate(date)}
+          />
+        </div>
+      </div>
+
       <FormGroup label="Options">
         <DataDisplay className="flex w-full flex-col">
           <AutoAnimate
@@ -175,16 +224,7 @@ const CreatePollForm = () => {
           </div>
         </DataDisplay>
       </FormGroup>
-      <FormGroup
-        id="form-end-date"
-        label="End Date"
-        className="flex-col items-start justify-between self-end sm:flex-row sm:items-center"
-      >
-        <DateTimePicker
-          value={endDate}
-          className="w-full sm:w-auto"
-          onChange={(date) => setEndDate(date)}
-        />
+      <div className="flex w-full justify-between">
         <CheckBox
           id="enable-multiple-selection"
           checked={shouldEnableMultipleSelection}
@@ -204,7 +244,7 @@ const CreatePollForm = () => {
         >
           Create poll
         </Button>
-      </FormGroup>
+      </div>
     </>
   );
 };

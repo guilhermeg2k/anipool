@@ -30,4 +30,5 @@ export const createPollBodySchema = z.object({
     })
   ),
   multiOptions: z.boolean(),
+  resultsVisibility: z.enum(['ALWAYS_VISIBLE', 'AFTER_END']),
 });
