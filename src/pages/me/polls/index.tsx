@@ -44,7 +44,7 @@ const MyPolls: NextPage = () => {
     POLLS_PER_PAGE * page,
     POLLS_PER_PAGE * page + POLLS_PER_PAGE
   );
-  const canGoNext = page < Math.floor(polls.length / POLLS_PER_PAGE);
+  const canGoNext = page + 1 < polls.length / POLLS_PER_PAGE;
   const canGoBack = page > 0;
   const hasPolls = paginatedPolls.length > 0;
 
@@ -90,6 +90,13 @@ const MyPolls: NextPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const pagesOverflow = page * POLLS_PER_PAGE >= polls.length;
+    if (pagesOverflow && !isLoading) {
+      setPage((prev) => prev - 1);
+    }
+  }, [polls, page, isLoading]);
 
   useEffect(() => {
     if (id) {
