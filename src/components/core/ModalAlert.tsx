@@ -27,11 +27,19 @@ export const useAlert = () => {
   const [alerts, setAlerts] = useAtom(alertsAtom);
 
   const hideAlert = (id: string) => {
-    const newAlerts = alerts.filter((alert) => alert.id != id);
-    setAlerts(newAlerts);
+    const updatedAlerts = alerts.filter((alert) => alert.id != id);
+    setAlerts(updatedAlerts);
   };
 
-  const showAlert = (type: AlertType, text: string, options: AlertOptions) => {
+  const showAlert = ({
+    type,
+    content,
+    options,
+  }: {
+    type: AlertType;
+    content: ReactNode;
+    options: AlertOptions;
+  }) => {
     // In the future add more alert types
     if (type) {
       const id = uuid();
@@ -43,7 +51,7 @@ export const useAlert = () => {
           component: (
             <ModalAlert
               key={id}
-              text={text}
+              content={content}
               open
               onConfirm={() => {
                 options.onConfirm();
@@ -60,19 +68,26 @@ export const useAlert = () => {
   };
 
   return {
-    show: (type: AlertType, text: string, options: AlertOptions) =>
-      showAlert(type, text, options),
+    show: ({
+      type,
+      content,
+      options,
+    }: {
+      type: AlertType;
+      content: ReactNode;
+      options: AlertOptions;
+    }) => showAlert({ type, content, options }),
   };
 };
 
 const ModalAlert = ({
   open,
-  text,
+  content,
   onConfirm,
   onClose,
 }: {
   open: boolean;
-  text: string;
+  content: ReactNode;
   onConfirm: () => void;
   onClose: () => void;
 }) => {
@@ -109,7 +124,7 @@ const ModalAlert = ({
                       <div className="w-12 h-12 text-yellow-500">
                         <ExclamationTriangleIcon />
                       </div>
-                      {text}
+                      {content}
                     </div>
                     <div className="flex justify-end gap-2">
                       <Button
