@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ImportOptionsModal from './ImportOptionsModal';
 import SearchOptionModal from './SearchOptionModal';
+import Tooltip from '@components/core/Tooltip';
 
 interface PollFormOptionProps {
   id: string;
@@ -225,15 +226,17 @@ const CreatePollForm = () => {
         </DataDisplay>
       </FormGroup>
       <div className="flex w-full justify-between">
-        <CheckBox
-          id="enable-multiple-selection"
-          checked={shouldEnableMultipleSelection}
-          onChange={(event) =>
-            setShouldEnableMultipleSelection(event.target.checked)
-          }
-        >
-          Enable multiple selection
-        </CheckBox>
+        <Tooltip title="If enabled, users will be able to select multiple options when voting.">
+          <CheckBox
+            id="enable-multiple-selection"
+            checked={shouldEnableMultipleSelection}
+            onChange={(event) =>
+              setShouldEnableMultipleSelection(event.target.checked)
+            }
+          >
+            Enable multiple selection
+          </CheckBox>
+        </Tooltip>
         <Button
           disabled={!shouldCreateButtonBeEnabled || isCreatingPoll}
           size="large"
