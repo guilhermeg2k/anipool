@@ -13,13 +13,12 @@ const About: NextPage = () => {
       <Box className="flex flex-col gap-3">
         <Title>ABOUT</Title>
         <section className="flex flex-col">
-          <h2 className="font-semibold">Description</h2>
           <span>
             Anipool is an&nbsp;
             <ExternalLink href="https://github.com/guilhermeg2k/anipool">
               open source
             </ExternalLink>
-            &nbsp;platform that creates anime related quizzes and polls. It
+            &nbsp;platform to create anime related quizzes and polls. It
             consumes&nbsp;
             <ExternalLink href="https://anilist.co/">Anilist</ExternalLink>
             &nbsp;API but doesn&apos;t have any relation with Anilist or its
@@ -33,7 +32,7 @@ const About: NextPage = () => {
             <ExternalLink href="https://github.com/guilhermeg2k">
               GitHub
             </ExternalLink>
-            &nbsp;and if you want to check, there&apos;s my&nbsp;
+            &nbsp;and on my&nbsp;
             <ExternalLink href="https://anilist.co/user/guilhermeg2k/">
               anilist profile
             </ExternalLink>

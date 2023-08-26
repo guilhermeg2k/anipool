@@ -133,7 +133,7 @@ const MyPolls: NextPage = () => {
         <div className="h-full overflow-auto">
           {paginatedPolls.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center uppercase">
-              <span>You don&apos;t have any poll yet</span>
+              <span>You don&apos;t have any polls yet</span>
               <InternalLink href="/poll/create">
                 Click here to create one
               </InternalLink>
