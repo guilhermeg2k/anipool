@@ -12,6 +12,10 @@ export const getResultQueryParamsSchema = z.object({
   pollId: z.string().uuid(),
 });
 
+export const deleteByIdQueryParamsSchema = z.object({
+  pollId: z.string().uuid(),
+});
+
 export const createPollBodySchema = z.object({
   title: z.string(),
   endDate: z.preprocess((endDate) => {
@@ -26,4 +30,5 @@ export const createPollBodySchema = z.object({
     })
   ),
   multiOptions: z.boolean(),
+  resultsVisibility: z.enum(['ALWAYS_VISIBLE', 'AFTER_END']),
 });

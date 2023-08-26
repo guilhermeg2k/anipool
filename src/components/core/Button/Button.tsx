@@ -4,7 +4,7 @@ import Tooltip from '../Tooltip';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   size?: string;
-  color?: 'indigo' | 'green' | 'white' | 'gray';
+  color?: 'indigo' | 'green' | 'white' | 'gray' | 'red';
   title?: string;
 }
 
@@ -29,6 +29,8 @@ const Button: React.FC<ButtonProps> = ({
         return 'bg-green-500 hover:bg-green-400 active:bg-green-500';
       case 'white':
         return 'bg-white hover:bg-neutral-100 active:bg-neutral-200 text-neutral-800';
+      case 'red':
+        return 'bg-red-500 hover:bg-red-400 active:bg-red-500';
       case 'gray':
         return 'bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-300';
       default:

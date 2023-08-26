@@ -8,7 +8,6 @@ import {
   getAnilistCredencials,
   getDiscordCredencials,
   getMALCredencials,
-  getTwitterCredencials,
 } from '@utils/authUtils';
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
@@ -37,14 +36,6 @@ const providers: {
       window.open(authUrl, '_self');
     },
     getCredentials: getDiscordCredencials,
-  },
-
-  [OAuthProvider.Twitter]: {
-    openAuthUrl: async () => {
-      const twitterAuthUrl = await authService.getTwitterAuthUrl();
-      window.open(twitterAuthUrl, '_self');
-    },
-    getCredentials: getTwitterCredencials,
   },
 
   [OAuthProvider.MyAnimeList]: {

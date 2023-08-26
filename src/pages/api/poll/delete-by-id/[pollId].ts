@@ -1,4 +1,4 @@
-import authController from '@backend/controller/authController';
+import pollController from '@backend/controller/pollController';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -8,8 +8,8 @@ export default async function handler(
   const { method } = req;
 
   switch (method) {
-    case 'GET':
-      await authController.getTwitterAuthUrl(req, res);
+    case 'DELETE':
+      await pollController.deleteById(req, res);
       break;
     default:
       res.status(405).end();

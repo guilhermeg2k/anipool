@@ -11,19 +11,6 @@ declare module MyAnimeList {
   }
 }
 
-declare module Twitter {
-  interface Credencials {
-    OAuthToken: string;
-    OAuthVerifier: string;
-  }
-
-  interface User {
-    id_str: string;
-    screen_name: string;
-    profile_image_url_https: string;
-  }
-}
-
 declare module Discord {
   interface Credencials {
     accessToken: string;
@@ -100,6 +87,8 @@ interface PollOption {
   text?: string;
 }
 
+type ResultsVisibility = 'ALWAYS_VISIBLE' | 'AFTER_END';
+
 interface Poll {
   id?: string;
   userId?: string;
@@ -108,6 +97,7 @@ interface Poll {
   multiOptions: boolean;
   options: Array<PollOption>;
   createdAt?: string;
+  resultsVisibility: ResultsVisibility;
 }
 
 interface PollVote {
@@ -121,7 +111,6 @@ interface PollVote {
 
 type ProviderCredencials =
   | Anilist.Credencials
-  | Twitter.Credencials
   | Discord.Credencials
   | MyAnimeList.Credencials;
 

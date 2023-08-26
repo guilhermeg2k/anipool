@@ -5,6 +5,7 @@ import { LinkButton } from '@components/core/LinkButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
+import { CountDown } from '@components/Countdown';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
 import {
@@ -15,6 +16,8 @@ import {
 import { toastError, toastSuccess } from '@libs/toastify';
 import anilistService from '@services/anilistService';
 import pollService from '@services/pollService';
+import useUserStore from '@store/userStore';
+import { isAfter } from 'date-fns';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -64,16 +67,27 @@ const buildMediasResults = (
 };
 
 const PollResult: NextPage = () => {
+  const user = useUserStore();
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
-
   const router = useRouter();
   const { pollId } = router.query;
+
   const totalVotes = results.reduce(
     (totalVotes, option) => totalVotes + option.votes,
     0
   );
+
+  const resultsOnlyVisibleForOwner =
+    poll?.resultsVisibility === 'AFTER_END' &&
+    poll?.userId === user.id &&
+    isAfter(new Date(poll?.endDate), new Date());
+
+  const resultsIsNotVisible =
+    poll?.resultsVisibility === 'AFTER_END' &&
+    poll?.userId !== user.id &&
+    isAfter(new Date(poll?.endDate), new Date());
 
   const loadCharactersResults = async (results: Array<PollResult>) => {
     const characterOptionIds = results
@@ -104,8 +118,8 @@ const PollResult: NextPage = () => {
   };
 
   const loadPollAndResult = async () => {
-    setIsLoadingPollAndResults(true);
     try {
+      setIsLoadingPollAndResults(true);
       if (pollId) {
         const [poll, pollOptionsResult] = await Promise.all([
           pollService.get(String(pollId)),
@@ -204,6 +218,17 @@ const PollResult: NextPage = () => {
             </LinkButton>
           </div>
         </div>
+        {resultsOnlyVisibleForOwner && (
+          <div className="uppercase font-bold text-red-400 flex items-center justify-center">
+            Results are only visible for you
+          </div>
+        )}
+        {resultsIsNotVisible && (
+          <CountDown
+            from={new Date(poll.endDate)}
+            onFinish={loadPollAndResult}
+          />
+        )}
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {results.map((result) => {
             if (result.type === OptionType.Character) {

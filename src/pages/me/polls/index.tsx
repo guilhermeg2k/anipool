@@ -4,6 +4,7 @@ import IconButton from '@components/core/IconButton';
 import InternalLink from '@components/core/InternalLink';
 import { LinkIconButton } from '@components/core/LinkIconButton';
 import LoadingPage from '@components/core/LoadingPage';
+import { useAlert } from '@components/core/ModalAlert';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
 import {
@@ -12,8 +13,9 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   LinkIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
-import { toastError, toastSuccess } from '@libs/toastify';
+import { toastError, toastSuccess, toastPromise } from '@libs/toastify';
 import pollService from '@services/pollService';
 import useUserStore from '@store/userStore';
 import { NextPage } from 'next';
@@ -35,6 +37,7 @@ const MyPolls: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [polls, setPolls] = useState(Array<Poll>());
   const [page, setPage] = useState(0);
+  const alert = useAlert();
   const { id } = useUserStore();
 
   const paginatedPolls = polls.slice(
@@ -66,6 +69,25 @@ const MyPolls: NextPage = () => {
   const previousPage = () => {
     if (canGoBack) {
       setPage(page - 1);
+    }
+  };
+
+  const onDeletePollHandler = async (title: string, id?: string) => {
+    if (id != null) {
+      alert.show({
+        type: 'CONFIRMATION',
+        content: `Are you sure that you wanna delete the poll "${title}?"`,
+        options: {
+          onConfirm: async () => {
+            await toastPromise(pollService.deleteById(id), {
+              pending: 'Deleting poll',
+              success: 'Poll deleted',
+              error: 'Failed to delete poll',
+            });
+            await loadPolls();
+          },
+        },
+      });
     }
   };
 
@@ -111,7 +133,7 @@ const MyPolls: NextPage = () => {
         <div className="h-full overflow-auto">
           {paginatedPolls.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center uppercase">
-              <span>You don&apos;t have any poll yet</span>
+              <span>You don&apos;t have any polls yet</span>
               <InternalLink href="/poll/create">
                 Click here to create one
               </InternalLink>
@@ -146,6 +168,12 @@ const MyPolls: NextPage = () => {
                   >
                     <ArrowTopRightOnSquareIcon />
                   </LinkIconButton>
+                  <IconButton
+                    title="Delete poll"
+                    onClick={() => onDeletePollHandler(title, id)}
+                  >
+                    <TrashIcon />
+                  </IconButton>
                 </div>
               </div>
             ))

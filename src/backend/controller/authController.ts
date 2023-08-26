@@ -3,8 +3,6 @@ import authService from '@backend/service/auth/authService';
 import anilistProvider from '@backend/service/auth/providers/anilistProvider';
 import discordProvider from '@backend/service/auth/providers/discordProvider';
 import myAnimelistProvider from '@backend/service/auth/providers/myAnimeListProvider';
-import twitterProvider from '@backend/service/auth/providers/twitterProvider';
-import twitterService from '@services/twitterService';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ZodError } from 'zod';
 import {
@@ -12,7 +10,6 @@ import {
   signByMyAnimeListBodySchema,
   signInBodySchema,
   signInByAnilistBodySchema,
-  signInByTwitterBodySchema,
 } from './validators/authControllerValidators';
 
 const providerControllers = {
@@ -26,12 +23,6 @@ const providerControllers = {
     signIn: (credencials: ProviderCredencials) =>
       authService.signIn(discordProvider, credencials as Discord.Credencials),
     validator: signByDiscordBodySchema,
-  },
-
-  [OAuthProvider.Twitter]: {
-    signIn: (credencials: ProviderCredencials) =>
-      authService.signIn(twitterProvider, credencials as Twitter.Credencials),
-    validator: signInByTwitterBodySchema,
   },
 
   [OAuthProvider.MyAnimeList]: {
@@ -62,17 +53,6 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const getTwitterAuthUrl = async (_: NextApiRequest, res: NextApiResponse) => {
-  try {
-    const twitterAuthUrl = await twitterService.getAuthUrl();
-    return res.status(200).send({
-      twitterAuthUrl,
-    });
-  } catch (error) {
-    return handleError(error, res);
-  }
-};
-
 const handleError = (error: unknown, res: NextApiResponse) => {
   if (error instanceof ZodError) {
     return res.status(400).send('Bad request');
@@ -82,7 +62,6 @@ const handleError = (error: unknown, res: NextApiResponse) => {
 
 const authController = {
   signIn,
-  getTwitterAuthUrl,
 };
 
 export default authController;

@@ -125,7 +125,7 @@ const ImportOptionsModal = ({
         </div>
       ) : polls.length === 0 ? (
         <div className="flex h-[200px] flex-col items-center justify-center uppercase">
-          <span>You don&apos;t have any poll to import from</span>
+          <span>You don&apos;t have any polls to import from</span>
         </div>
       ) : (
         <div className="max-h-[400px] overflow-y-auto">
