@@ -44,7 +44,7 @@ export const useAlert = () => {
     if (type) {
       const id = uuid();
 
-      const newAlerts = [
+      const updatedAlerts = [
         ...alerts,
         {
           id,
@@ -63,7 +63,7 @@ export const useAlert = () => {
         },
       ];
 
-      setAlerts(newAlerts);
+      setAlerts(updatedAlerts);
     }
   };
 

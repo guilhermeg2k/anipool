@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export const useInterval = () => {
+export const useInterval = (cb: () => void, interval: number) => {
+  const cbRef = useRef(() => {});
+
   useEffect(() => {
-    if (resultsIsNotVisible) {
-      const timeout = setInterval(() => {
-        const countdown = getCountdownValues(new Date(poll?.endDate || 0));
-        setCountdown(countdown);
-      }, 1000);
-      return () => clearInterval(timeout);
-    }
-  }, [poll]);
+    cbRef.current = cb;
+  }, [cb]);
+
+  useEffect(() => {
+    const timeout = setInterval(cbRef.current, interval);
+    return () => clearInterval(timeout);
+  }, [interval]);
 };

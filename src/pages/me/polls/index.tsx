@@ -74,10 +74,10 @@ const MyPolls: NextPage = () => {
 
   const onDeletePollHandler = async (title: string, id?: string) => {
     if (id != null) {
-      alert.show(
-        'CONFIRMATION',
-        `Are you sure that you wanna delete the poll "${title}?"`,
-        {
+      alert.show({
+        type: 'CONFIRMATION',
+        content: `Are you sure that you wanna delete the poll "${title}?"`,
+        options: {
           onConfirm: async () => {
             await toastPromise(pollService.deleteById(id), {
               pending: 'Deleting poll',
@@ -86,8 +86,8 @@ const MyPolls: NextPage = () => {
             });
             await loadPolls();
           },
-        }
-      );
+        },
+      });
     }
   };
 

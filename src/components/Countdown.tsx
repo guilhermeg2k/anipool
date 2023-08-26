@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useInterval } from '@src/hooks/useInterval';
+import { useCallback, useState } from 'react';
 
 const getCountdownValues = (from: Date) => {
   const now = new Date();
@@ -23,14 +24,12 @@ const CountDownItem = ({ label, value }: { label: string; value: number }) => {
 export const CountDown = ({ from }: { from: Date }) => {
   const [countdown, setCountdown] = useState(getCountdownValues(from));
 
-  useEffect(() => {
-    const timeout = setInterval(() => {
-      const countdown = getCountdownValues(from);
-      setCountdown(countdown);
-    }, 1000);
-
-    return () => clearInterval(timeout);
+  const updateCountTime = useCallback(() => {
+    const countdown = getCountdownValues(from);
+    setCountdown(countdown);
   }, [from]);
+
+  useInterval(updateCountTime, 1000);
 
   return (
     <div className="text-4xl uppercase font-bold flex gap-10 w-full justify-center flex-col sm:flex-row">
