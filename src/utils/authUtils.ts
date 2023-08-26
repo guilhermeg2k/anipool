@@ -56,19 +56,6 @@ export const getDiscordCredencials = (
   return null;
 };
 
-export const getTwitterCredencials = (
-  router: NextRouter
-): Twitter.Credencials | null => {
-  const { oauth_token, oauth_verifier } = router.query;
-  if (oauth_token && oauth_verifier) {
-    return {
-      OAuthToken: String(oauth_token),
-      OAuthVerifier: String(oauth_verifier),
-    };
-  }
-  return null;
-};
-
 export const getMALCredencials = (
   router: NextRouter
 ): MyAnimeList.Credencials | null => {

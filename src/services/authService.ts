@@ -13,15 +13,8 @@ const signIn = async (
   return userToken;
 };
 
-const getTwitterAuthUrl = async () => {
-  const response = await axiosClient.get('/auth/get-twitter-auth-url');
-  const twitterAuthUrl = <string>response.data.twitterAuthUrl;
-  return twitterAuthUrl;
-};
-
 const authService = {
   signIn,
-  getTwitterAuthUrl,
 };
 
 export default authService;

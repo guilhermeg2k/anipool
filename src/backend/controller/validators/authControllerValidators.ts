@@ -13,14 +13,6 @@ export const signInByAnilistBodySchema = z.object({
   }),
 });
 
-export const signInByTwitterBodySchema = z.object({
-  provider: z.literal(OAuthProvider.Twitter),
-  credencials: z.object({
-    OAuthToken: z.string(),
-    OAuthVerifier: z.string(),
-  }),
-});
-
 export const signByDiscordBodySchema = z.object({
   provider: z.literal(OAuthProvider.Discord),
   credencials: z.object({

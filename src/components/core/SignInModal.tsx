@@ -1,7 +1,6 @@
 import AnilistSignInButton from './Button/AnilistSignInButton';
 import DiscordSignInButton from './Button/DiscordSignInButton';
 import MyAnimeListSignInButton from './Button/MyAnimeListSignInButton';
-import TwitterSignInButton from './Button/TwitterSignINButton';
 import Modal from './Modal';
 
 interface SignInModalProps {
@@ -22,7 +21,6 @@ const SignInModal = ({ open, onClose }: SignInModalProps) => {
           <AnilistSignInButton />
           <MyAnimeListSignInButton />
           <DiscordSignInButton />
-          <TwitterSignInButton />
         </div>
       </div>
     </Modal>

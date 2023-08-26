@@ -75,7 +75,7 @@ const MyPolls: NextPage = () => {
   const onDeletePollHandler = async (title: string, id?: string) => {
     if (id != null) {
       alert.show(
-        'CONFIRMATION_WARNING',
+        'CONFIRMATION',
         `Are you sure that you wanna delete the poll "${title}?"`,
         {
           onConfirm: async () => {

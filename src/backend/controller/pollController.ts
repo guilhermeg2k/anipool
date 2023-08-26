@@ -43,7 +43,6 @@ const getResult = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).send(pollResults);
   } catch (error) {
-    console.log(error);
     return handleError(error, res);
   }
 };

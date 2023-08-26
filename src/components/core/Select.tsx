@@ -9,7 +9,7 @@ interface SelectOption<T> {
 }
 
 interface SelectProps<T> {
-  id: string;
+  id?: string;
   value: T;
   label?: React.ReactNode;
   className?: string;

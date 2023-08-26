@@ -94,7 +94,7 @@ export default class MyDocument extends Document {
           <meta name="application-name" content="Anipool"></meta>
           <meta
             name="keywords"
-            content="anime,polls,quizes,anilist,twitter,discord"
+            content="anime,polls,quizes,anilist,discord"
           ></meta>
           <meta
             name="description"
