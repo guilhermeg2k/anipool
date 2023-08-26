@@ -118,8 +118,8 @@ const PollResult: NextPage = () => {
   };
 
   const loadPollAndResult = async () => {
-    setIsLoadingPollAndResults(true);
     try {
+      setIsLoadingPollAndResults(true);
       if (pollId) {
         const [poll, pollOptionsResult] = await Promise.all([
           pollService.get(String(pollId)),
@@ -223,7 +223,12 @@ const PollResult: NextPage = () => {
             Results are only visible for you
           </div>
         )}
-        {resultsIsNotVisible && <CountDown from={new Date(poll.endDate)} />}
+        {resultsIsNotVisible && (
+          <CountDown
+            from={new Date(poll.endDate)}
+            onFinish={loadPollAndResult}
+          />
+        )}
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {results.map((result) => {
             if (result.type === OptionType.Character) {

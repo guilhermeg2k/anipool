@@ -21,13 +21,27 @@ const CountDownItem = ({ label, value }: { label: string; value: number }) => {
   );
 };
 
-export const CountDown = ({ from }: { from: Date }) => {
+export const CountDown = ({
+  from,
+  onFinish,
+}: {
+  from: Date;
+  onFinish: () => void;
+}) => {
+  const [isCounting, setIsCounting] = useState(true);
   const [countdown, setCountdown] = useState(getCountdownValues(from));
 
   const updateCountTime = useCallback(() => {
-    const countdown = getCountdownValues(from);
-    setCountdown(countdown);
-  }, [from]);
+    const hasFinished = new Date().getTime() > from.getTime();
+
+    if (hasFinished && isCounting) {
+      onFinish();
+      setIsCounting(false);
+    } else if (isCounting) {
+      const countdown = getCountdownValues(from);
+      setCountdown(countdown);
+    }
+  }, [from, onFinish, isCounting]);
 
   useInterval(updateCountTime, 1000);
 
