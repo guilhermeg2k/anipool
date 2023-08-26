@@ -5,6 +5,7 @@ import { LinkButton } from '@components/core/LinkButton';
 import LoadingPage from '@components/core/LoadingPage';
 import Page from '@components/core/Page';
 import Title from '@components/core/Title';
+import { CountDown } from '@components/Countdown';
 import CharacterResultCard from '@components/poll/results/CharacterResultCard';
 import MediaResultCard from '@components/poll/results/MediaResultCard';
 import {
@@ -25,26 +26,6 @@ import { OptionType } from 'src/enums';
 
 type CharacterResult = Anilist.Character & PollResult;
 type MediaResult = Anilist.Media & PollResult;
-
-const CountDownItem = ({ label, value }: { label: string; value: number }) => {
-  return (
-    <div className="flex flex-col items-center">
-      <span>{value}</span>
-      <span className="text-sm">{label}</span>
-    </div>
-  );
-};
-
-const getCountdownValues = (deadline: Date) => {
-  const now = new Date().getTime();
-  const t = deadline.getTime() - now;
-  const days = Math.floor(t / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((t % (1000 * 60)) / 1000);
-
-  return { days, hours, minutes, seconds };
-};
 
 const buildCharactersResults = (
   characters: Array<Anilist.Character>,
@@ -90,10 +71,9 @@ const PollResult: NextPage = () => {
   const [isLoadingPollAndResults, setIsLoadingPollAndResults] = useState(true);
   const [poll, setPoll] = useState<PollWithCreator>();
   const [results, setResults] = useState(Array<PollResult>());
-  const [countdown, setCountdown] = useState(getCountdownValues(new Date()));
-
   const router = useRouter();
   const { pollId } = router.query;
+
   const totalVotes = results.reduce(
     (totalVotes, option) => totalVotes + option.votes,
     0
@@ -171,16 +151,6 @@ const PollResult: NextPage = () => {
   };
 
   useEffect(() => {
-    if (resultsIsNotVisible) {
-      const timeout = setInterval(() => {
-        const countdown = getCountdownValues(new Date(poll?.endDate || 0));
-        setCountdown(countdown);
-      }, 1000);
-      return () => clearInterval(timeout);
-    }
-  }, [poll]);
-
-  useEffect(() => {
     loadPollAndResult();
   }, [pollId]);
 
@@ -253,14 +223,7 @@ const PollResult: NextPage = () => {
             Results are only visible for you
           </div>
         )}
-        {resultsIsNotVisible && (
-          <div className="text-4xl uppercase font-bold flex gap-10 w-full justify-center flex-col sm:flex-row">
-            <CountDownItem label="Days" value={countdown.days} />
-            <CountDownItem label="Hours" value={countdown.hours} />
-            <CountDownItem label="Minutes" value={countdown.minutes} />
-            <CountDownItem label="Seconds" value={countdown.seconds} />
-          </div>
-        )}
+        {resultsIsNotVisible && <CountDown from={new Date(poll.endDate)} />}
         <div className="flex max-h-[400px] flex-wrap justify-center gap-3 overflow-auto">
           {results.map((result) => {
             if (result.type === OptionType.Character) {
