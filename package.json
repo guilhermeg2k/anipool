@@ -1,7 +1,7 @@
 {
   "name": "anipool",
   "version": "0.7.0",
-  "versionName": "Rukia-dev",
+  "versionName": "Rukia",
   "private": true,
   "scripts": {
     "dev": "next dev",
